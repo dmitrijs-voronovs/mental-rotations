@@ -11,6 +11,8 @@
   "dependencies": {
     "@babylonjs/core": "^4.2.0",
     "@babylonjs/gui": "^4.2.0",
+    "@types/dat.gui": "^0.7.7",
+    "dat.gui": "^0.7.7",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-babylonjs": "^3.0.24",
