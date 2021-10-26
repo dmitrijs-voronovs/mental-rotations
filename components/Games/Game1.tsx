@@ -15,7 +15,7 @@ const Game1 = () => {
 					width={700}
 					height={700}
 				>
-					<Scene>
+					<Scene key='scene1'>
 						<arcRotateCamera
 							name='camera1'
 							target={Vector3.Zero()}
