@@ -3,6 +3,8 @@ import * as dat from 'dat.gui';
 import React from 'react';
 import { Engine, Scene, SceneEventArgs } from 'react-babylonjs';
 import { getRandomInt } from 'utils/common';
+import { isMobile } from 'react-device-detect';
+import { createAxis, deleteAxis } from '@components/Axis/axisHelper';
 
 type GenerationConfig = {
 	spreadOnX: number;
@@ -13,8 +15,10 @@ type GenerationConfig = {
 	finalRotationX: number;
 	finalRotationY: number;
 	finalRotationZ: number;
+	showAxis: boolean;
 };
 
+const AXIS_SIZE = 5;
 const GENERATION_SETTINGS_KEY = 'Default';
 const INITIAL_SETTINGS_KEY = 'initial';
 
@@ -57,6 +61,8 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 		finalRotationZMin: 0,
 		finalRotationZMax: 360,
 		finalRotationZStep: 1,
+		// boolean
+		showAxis: true,
 		// functions
 		save: () => gui.saveAs(GENERATION_SETTINGS_KEY),
 		generateFigure() {
@@ -65,6 +71,11 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 				GENERATION_SETTINGS_KEY
 			][0];
 			generateFigure(sceneEventArgs, config);
+			if (config.showAxis) {
+				createAxis(sceneEventArgs, AXIS_SIZE);
+			} else {
+				deleteAxis(sceneEventArgs);
+			}
 		},
 		clearFigure: () => clearFigure(sceneEventArgs),
 		clearAndGenerate() {
@@ -103,20 +114,22 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 			fieldConfig[`${fieldName}Step`] ?? 1
 		);
 	});
-	['save', 'generateFigure', 'clearFigure', 'clearAndGenerate'].forEach(
-		(fieldName) => {
-			gui.add(fieldConfig, fieldName);
-		}
-	);
-
-	gui.__controllers.forEach((contr) => contr.onChange((val) => {}));
+	[
+		'showAxis',
+		'save',
+		'generateFigure',
+		'clearFigure',
+		'clearAndGenerate',
+	].forEach((fieldName) => {
+		gui.add(fieldConfig, fieldName);
+	});
 
 	return gui;
 };
 
 const SHAPE_NAME = 'box-figure';
 const SHAPE_SIZE = 2;
-const SHAPE_INITIAL_COORD = new Vector3(0, 0, 0);
+const SHAPE_INITIAL_COORD = new Vector3(0, -2, 0);
 
 const generateFigure = (
 	sceneEventArgs: SceneEventArgs,
@@ -124,7 +137,6 @@ const generateFigure = (
 ) => {
 	const { scene } = sceneEventArgs;
 	const square = scene.getMeshByName(SHAPE_NAME) as Mesh;
-	square.isVisible = false;
 	const newCoords = generateCoordinates(config);
 	const rotation = generateRotation(config);
 
@@ -139,7 +151,6 @@ const generateFigure = (
 const clearFigure = (sceneEventArgs: SceneEventArgs) => {
 	const { scene } = sceneEventArgs;
 	const square = scene.getMeshByName(SHAPE_NAME) as Mesh;
-	square.isVisible = true;
 	while (square.instances.length) {
 		square.instances.forEach((inst) => {
 			inst.dispose();
@@ -157,8 +168,7 @@ const generateRotation = (config: GenerationConfig): Vector3 => {
 };
 
 const generateCoordinates = (config: GenerationConfig): Vector3[] => {
-	const { totalBlocks, finalRotationX, finalRotationY, finalRotationZ } =
-		config;
+	const { totalBlocks } = config;
 	const allCoords: Vector3[] = [SHAPE_INITIAL_COORD];
 
 	let nBlocksToGenerate = totalBlocks - 1;
@@ -230,10 +240,13 @@ const getNewCoord = (
 
 const Game2 = () => {
 	const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
-		const { canvas, scene } = sceneEventArgs;
+		const { scene } = sceneEventArgs;
 		const gui = generateGUI(sceneEventArgs);
+		createAxis(sceneEventArgs, AXIS_SIZE);
 		scene.onDisposeObservable.add(() => gui.destroy());
 	};
+
+	const size = isMobile ? 300 : 1000;
 
 	return (
 		<div>
@@ -243,16 +256,16 @@ const Game2 = () => {
 					antialias
 					adaptToDeviceRatio
 					canvasId='babylonJS'
-					width={1000}
-					height={1000}
+					width={size}
+					height={size}
 					debug
 				>
 					<Scene key='scene2' onSceneMount={onSceneMount}>
 						<arcRotateCamera
 							name='camera1'
 							target={Vector3.Zero()}
-							alpha={Math.PI / 2}
-							beta={Math.PI / 4}
+							alpha={Math.PI / 3}
+							beta={Math.PI / 3}
 							radius={20}
 						></arcRotateCamera>
 						<hemisphericLight
@@ -261,6 +274,7 @@ const Game2 = () => {
 							direction={Vector3.Up()}
 						/>
 						<box
+							isVisible={false}
 							name={SHAPE_NAME}
 							size={SHAPE_SIZE}
 							position={new Vector3(0, 3, 0)}
