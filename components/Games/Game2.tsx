@@ -221,13 +221,10 @@ const getNewCoord = (
 		}
 
 		newCoord = existingCoords[randomExistingCordIdx].add(deltaVector);
-		// TODO: add check for no overlaps
 		isOverlapping = existingCoords.some(
 			(existingCoord) => existingCoord.toString() === newCoord.toString()
 		);
-		// noOverlaps = true;
 	}
-	if (isOverlapping) console.warn('can not add new COORD');
 	return !isOverlapping ? newCoord : null;
 };
 
