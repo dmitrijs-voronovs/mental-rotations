@@ -1,19 +1,7 @@
-import {
-	Color3,
-	Mesh,
-	Scalar,
-	Scene as SceneType,
-	Vector3,
-} from '@babylonjs/core';
-import { SpinningBox } from '@components/SpinningBox/SpinningBox';
-import React from 'react';
-import {
-	BouncingBehavior,
-	Engine,
-	Scene,
-	SceneEventArgs,
-} from 'react-babylonjs';
+import { Color3, Mesh, Scalar, Vector3 } from '@babylonjs/core';
 import * as dat from 'dat.gui';
+import React from 'react';
+import { Engine, Scene, SceneEventArgs } from 'react-babylonjs';
 import { getRandomInt } from 'utils/common';
 
 type GenerationConfig = {
@@ -21,7 +9,7 @@ type GenerationConfig = {
 	spreadOnY: number;
 	spreadOnZ: number;
 	totalBlocks: number;
-	deltaForNextBlock: number;
+	maxDeltaForNextBlock: number;
 	finalRotationX: number;
 	finalRotationY: number;
 	finalRotationZ: number;
@@ -31,7 +19,7 @@ const GENERATION_SETTINGS_KEY = 'Default';
 const INITIAL_SETTINGS_KEY = 'initial';
 
 const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
-	const { scene, canvas } = sceneEventArgs;
+	const { canvas } = sceneEventArgs;
 	const gui = new dat.GUI({ name: 'My GUI' });
 
 	// GUI placement
@@ -53,11 +41,11 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 		totalBlocksMax: 20,
 		totalBlocksMin: 2,
 		totalBlocksStep: 1,
-		deltaForNextBlock: 2,
-		deltaForNextBlockMin: 1,
-		deltaForNextBlockMax: 3,
-		deltaForNextBlockStep: 1,
-		finalRotationX: 0,
+		maxDeltaForNextBlock: 2,
+		maxDeltaForNextBlockMin: 1,
+		maxDeltaForNextBlockMax: 3,
+		maxDeltaForNextBlockStep: 1,
+		finalRotationX: 110,
 		finalRotationXMin: 0,
 		finalRotationXMax: 360,
 		finalRotationXStep: 1,
@@ -71,13 +59,18 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 		finalRotationZStep: 1,
 		// functions
 		save: () => gui.saveAs(GENERATION_SETTINGS_KEY),
-		generateFigure: () => {
+		generateFigure() {
+			this.save();
 			const config = (gui.getSaveObject() as any).remembered[
 				GENERATION_SETTINGS_KEY
 			][0];
 			generateFigure(sceneEventArgs, config);
 		},
 		clearFigure: () => clearFigure(sceneEventArgs),
+		clearAndGenerate() {
+			this.clearFigure();
+			this.generateFigure();
+		},
 	};
 
 	gui.remember(fieldConfig);
@@ -97,7 +90,7 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 		'finalRotationX',
 		'finalRotationY',
 		'finalRotationZ',
-		'deltaForNextBlock',
+		'maxDeltaForNextBlock',
 	].forEach((fieldName) => {
 		gui.add(
 			fieldConfig,
@@ -110,27 +103,20 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 			fieldConfig[`${fieldName}Step`] ?? 1
 		);
 	});
-	['save', 'generateFigure', 'clearFigure'].forEach((fieldName) => {
-		gui.add(fieldConfig, fieldName);
-	});
-
-	console.log(gui.getRoot(), gui.getSaveObject());
-
-	gui.__controllers.forEach((contr) =>
-		contr.onChange((val) => {
-			console.log(contr.property, val);
-			// if (contr.property !== 'save') gui.saveAs(GENERATION_SETTINGS_KEY);
-			console.log(gui.getSaveObject());
-		})
+	['save', 'generateFigure', 'clearFigure', 'clearAndGenerate'].forEach(
+		(fieldName) => {
+			gui.add(fieldConfig, fieldName);
+		}
 	);
 
-	console.log(gui.getSaveObject());
+	gui.__controllers.forEach((contr) => contr.onChange((val) => {}));
 
 	return gui;
 };
 
 const SHAPE_NAME = 'box-figure';
 const SHAPE_SIZE = 2;
+const SHAPE_INITIAL_COORD = new Vector3(0, 0, 0);
 
 const generateFigure = (
 	sceneEventArgs: SceneEventArgs,
@@ -140,48 +126,61 @@ const generateFigure = (
 	const square = scene.getMeshByName(SHAPE_NAME) as Mesh;
 	square.isVisible = false;
 	const newCoords = generateCoordinates(config);
-	console.log({ newCoords });
+	const rotation = generateRotation(config);
 
 	newCoords.forEach((coord, i) => {
 		const inst = square.createInstance(`${SHAPE_NAME}-${i}`);
+		inst.setParent(square);
 		inst.position = coord;
-		console.log(coord);
 	});
-	console.log(square);
+	square.rotation = rotation;
 };
 
 const clearFigure = (sceneEventArgs: SceneEventArgs) => {
 	const { scene } = sceneEventArgs;
 	const square = scene.getMeshByName(SHAPE_NAME) as Mesh;
 	square.isVisible = true;
-	square.instances.forEach((inst) => inst.dispose());
+	while (square.instances.length) {
+		square.instances.forEach((inst) => {
+			inst.dispose();
+		});
+	}
+	square.rotation = Vector3.Zero();
+};
+
+const generateRotation = (config: GenerationConfig): Vector3 => {
+	return new Vector3(
+		config.finalRotationX,
+		config.finalRotationY,
+		config.finalRotationZ
+	).scale(SHAPE_SIZE);
 };
 
 const generateCoordinates = (config: GenerationConfig): Vector3[] => {
-	console.log({ config });
-	const { totalBlocks } = config;
-	const allCoords: Vector3[] = [new Vector3(0, 5, 0)];
+	const { totalBlocks, finalRotationX, finalRotationY, finalRotationZ } =
+		config;
+	const allCoords: Vector3[] = [SHAPE_INITIAL_COORD];
 
 	let nBlocksToGenerate = totalBlocks - 1;
 	while (nBlocksToGenerate > 0) {
 		const randomDeltaVector = getRandomVector(config);
 		const newCoord = getNewCoord(allCoords, randomDeltaVector);
-		console.log('++++', { randomDeltaVector, newCoord });
-		console.log({ newCoord });
-		allCoords.push(newCoord);
-		nBlocksToGenerate--;
+		if (newCoord) {
+			allCoords.push(newCoord);
+			nBlocksToGenerate--;
+		}
 	}
 	return allCoords;
 };
 
 const getRandomVector = (config: GenerationConfig): Vector3 => {
-	const { deltaForNextBlock, spreadOnX, spreadOnY, spreadOnZ } = config;
+	const { maxDeltaForNextBlock, spreadOnX, spreadOnY, spreadOnZ } = config;
 	const getValueOfRandomVector = (n: number): Vector3 => {
 		const absN = Math.abs(n);
 		switch (true) {
-			case n < spreadOnX:
+			case absN < spreadOnX:
 				return new Vector3(1, 0, 0).scale(n >= 0 ? 1 : -1);
-			case n < spreadOnX + spreadOnY:
+			case absN < spreadOnX + spreadOnY:
 				return new Vector3(0, 1, 0).scale(n >= 0 ? 1 : -1);
 			default:
 				return new Vector3(0, 0, 1).scale(n >= 0 ? 1 : -1);
@@ -189,6 +188,7 @@ const getRandomVector = (config: GenerationConfig): Vector3 => {
 	};
 
 	let vectorsForNextPosition: Vector3[] = [];
+	const deltaForNextBlock = getRandomInt(maxDeltaForNextBlock) + 1;
 	const totalSpread = spreadOnX + spreadOnY + spreadOnZ;
 	while (vectorsForNextPosition.length < deltaForNextBlock) {
 		const randomN = Scalar.RandomRange(-totalSpread, totalSpread);
@@ -196,41 +196,46 @@ const getRandomVector = (config: GenerationConfig): Vector3 => {
 		vectorsForNextPosition.push(randomVector);
 	}
 
-	console.log({ vectorsForNextPosition });
-
-	return vectorsForNextPosition.reduce((resultingVector, vector) =>
-		(resultingVector = resultingVector.add(vector)).scale(SHAPE_SIZE)
-	);
+	return vectorsForNextPosition
+		.reduce(
+			(resultingVector, vector) =>
+				(resultingVector = resultingVector.add(vector))
+		)
+		.scale(SHAPE_SIZE);
 };
 
 const getNewCoord = (
 	existingCoords: Vector3[],
 	deltaVector: Vector3
-): Vector3 => {
-	let noOverlaps = false;
+): Vector3 | null => {
+	const usedCoords: number[] = [];
+	let isOverlapping = true;
 	let newCoord: Vector3 = Vector3.Zero();
-	while (!noOverlaps) {
+	while (isOverlapping && usedCoords.length < existingCoords.length) {
 		const randomExistingCordIdx = getRandomInt(existingCoords.length);
-		console.log('___getting new coord ___', {
-			deltaVector,
-			randomExistingCordIdx,
-			len: existingCoords.length,
-			existingCoords,
-		});
+		// TODO: improve not to restart, but to find closest non-used value
+		if (usedCoords.includes(randomExistingCordIdx)) {
+			continue;
+		} else {
+			usedCoords.push(randomExistingCordIdx);
+		}
+
 		newCoord = existingCoords[randomExistingCordIdx].add(deltaVector);
 		// TODO: add check for no overlaps
-		// noOverlaps = existingCoords.every(
-		// 	(existingCoord) => existingCoord.toString() !== newCoord.toString()
-		// );
-		noOverlaps = true;
+		isOverlapping = existingCoords.some(
+			(existingCoord) => existingCoord.toString() === newCoord.toString()
+		);
+		// noOverlaps = true;
 	}
-	return newCoord;
+	if (isOverlapping) console.warn('can not add new COORD');
+	return !isOverlapping ? newCoord : null;
 };
 
 const Game2 = () => {
 	const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
 		const { canvas, scene } = sceneEventArgs;
 		const gui = generateGUI(sceneEventArgs);
+		scene.onDisposeObservable.add(() => gui.destroy());
 	};
 
 	return (
@@ -245,11 +250,7 @@ const Game2 = () => {
 					height={1000}
 					debug
 				>
-					<Scene
-						key='scene2'
-						onSceneMount={onSceneMount}
-						onDispose={() => console.log('disposing')}
-					>
+					<Scene key='scene2' onSceneMount={onSceneMount}>
 						<arcRotateCamera
 							name='camera1'
 							target={Vector3.Zero()}
@@ -262,11 +263,6 @@ const Game2 = () => {
 							intensity={0.7}
 							direction={Vector3.Up()}
 						/>
-						<pointLight
-							name='global'
-							intensity={0.5}
-							position={new Vector3(0, 0, 0)}
-						/>
 						<box
 							name={SHAPE_NAME}
 							size={SHAPE_SIZE}
@@ -275,11 +271,22 @@ const Game2 = () => {
 						>
 							<standardMaterial
 								name={`random-box-mat`}
-								diffuseColor={Color3.Red()}
-								specularColor={Color3.Black()}
+								diffuseColor={Color3.White()}
+								specularColor={Color3.White()}
 							/>
 						</box>
-						<ground name='ground' scaling={new Vector3(10, 1, 10)} />
+						<ground
+							name='ground'
+							height={10}
+							width={10}
+							position={new Vector3(0, -5, 0)}
+						>
+							<standardMaterial
+								name={`random-box-mat`}
+								diffuseColor={Color3.Black()}
+								specularColor={Color3.Black()}
+							/>
+						</ground>
 					</Scene>
 				</Engine>
 			</div>
