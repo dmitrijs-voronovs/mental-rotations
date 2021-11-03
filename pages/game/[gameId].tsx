@@ -1,11 +1,11 @@
 import styles from '@pagestyles/Home.module.scss';
+import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/dist/client/router';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 
-const TOTAL_GAMES = 2;
+const TOTAL_GAMES = 3;
 
 const Game = () => {
 	const router = useRouter();
