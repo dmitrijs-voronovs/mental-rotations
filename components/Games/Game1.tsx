@@ -1,12 +1,13 @@
 import { Color3, Vector3 } from '@babylonjs/core';
+import { Container } from '@components/common/Container';
 import { SpinningBox } from '@components/SpinningBox/SpinningBox';
 import React from 'react';
 import { BouncingBehavior, Engine, Scene } from 'react-babylonjs';
 
 const Game1 = () => {
 	return (
-		<div>
-			<h2>Game 1</h2>
+		<Container>
+			<h2>Step 1 - Learned the basics of BabylonJS, Meshes, interaction</h2>
 			<div>
 				<Engine
 					antialias
@@ -50,7 +51,7 @@ const Game1 = () => {
 					</Scene>
 				</Engine>
 			</div>
-		</div>
+		</Container>
 	);
 };
 

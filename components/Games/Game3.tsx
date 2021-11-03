@@ -1,10 +1,11 @@
-import { Color3, Mesh, Scalar, Vector3 } from '@babylonjs/core';
+import { Color3, Mesh, Scalar, TransformNode, Vector3 } from '@babylonjs/core';
 import * as dat from 'dat.gui';
 import React from 'react';
 import { Engine, Scene, SceneEventArgs } from 'react-babylonjs';
 import { getRandomInt } from 'utils/common';
 import { isMobile } from 'react-device-detect';
 import { createAxis, deleteAxis } from '@components/Axis/axisHelper';
+import { Container } from '@components/common/Container';
 
 type GenerationConfig = {
 	spreadOnX: number;
@@ -130,6 +131,8 @@ const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {
 const SHAPE_NAME = 'box-figure';
 const SHAPE_SIZE = 2;
 const SHAPE_INITIAL_COORD = new Vector3(0, -2, 0);
+const CLONE_SHAPE_NAME = 'box-figure-2';
+const SHAPE_PARENT_NAME = 'figure_parent';
 
 const generateFigure = (
 	sceneEventArgs: SceneEventArgs,
@@ -144,8 +147,16 @@ const generateFigure = (
 		const inst = square.createInstance(`${SHAPE_NAME}-${i}`);
 		inst.setParent(square);
 		inst.position = coord;
+		// inst.showBoundingBox = true;
 	});
+	// square.renderOutline = true;
 	square.rotation = rotation;
+
+	const parent = new TransformNode(SHAPE_PARENT_NAME);
+	const square2 = square.clone(CLONE_SHAPE_NAME);
+	square2.position.x += 10;
+	square.setParent(parent);
+	square2.setParent(parent);
 };
 
 const clearFigure = (sceneEventArgs: SceneEventArgs) => {
@@ -249,8 +260,8 @@ const Game2 = () => {
 	const size = isMobile ? 300 : 1000;
 
 	return (
-		<div>
-			<h2>Game 2</h2>
+		<Container>
+			<h2>Stage 3 - Created basic Game UI</h2>
 			<div>
 				<Engine
 					antialias
@@ -301,7 +312,7 @@ const Game2 = () => {
 					</Scene>
 				</Engine>
 			</div>
-		</div>
+		</Container>
 	);
 };
 

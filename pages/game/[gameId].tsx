@@ -41,7 +41,9 @@ const Game = () => {
 					Get started by editing{' '}
 					<code className={styles.code}>pages/index.js</code>
 				</p>
-				{GameComponent && React.cloneElement(GameComponent)}
+				<div className={styles.gameCanvas}>
+					{GameComponent && React.cloneElement(GameComponent)}
+				</div>
 				<div className={styles.links}>
 					<Link
 						href={`/game/${

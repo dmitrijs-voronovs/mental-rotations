@@ -5,6 +5,7 @@ import { Engine, Scene, SceneEventArgs } from 'react-babylonjs';
 import { getRandomInt } from 'utils/common';
 import { isMobile } from 'react-device-detect';
 import { createAxis, deleteAxis } from '@components/Axis/axisHelper';
+import { Container } from '@components/common/Container';
 
 type GenerationConfig = {
 	spreadOnX: number;
@@ -249,8 +250,11 @@ const Game2 = () => {
 	const size = isMobile ? 300 : 1000;
 
 	return (
-		<div>
-			<h2>Game 2</h2>
+		<Container>
+			<h2>
+				Stage 2 - Created algorithm for generation random 3d Shapes and its
+				dynamic configuration
+			</h2>
 			<div>
 				<Engine
 					antialias
@@ -301,7 +305,7 @@ const Game2 = () => {
 					</Scene>
 				</Engine>
 			</div>
-		</div>
+		</Container>
 	);
 };
 
