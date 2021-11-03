@@ -1,7 +1,16 @@
-import { Color3, Mesh, Scalar, TransformNode, Vector3 } from '@babylonjs/core';
+import {
+	Camera,
+	Color3,
+	Color4,
+	Mesh,
+	Scalar,
+	Scene as SceneType,
+	TransformNode,
+	Vector3,
+} from '@babylonjs/core';
 import * as dat from 'dat.gui';
-import React from 'react';
-import { Engine, Scene, SceneEventArgs } from 'react-babylonjs';
+import React, { useRef } from 'react';
+import { Engine, Scene, SceneEventArgs, useScene } from 'react-babylonjs';
 import { getRandomInt } from 'utils/common';
 import { isMobile } from 'react-device-detect';
 import { createAxis, deleteAxis } from '@components/Axis/axisHelper';
@@ -146,17 +155,23 @@ const generateFigure = (
 	newCoords.forEach((coord, i) => {
 		const inst = square.createInstance(`${SHAPE_NAME}-${i}`);
 		inst.setParent(square);
+		inst.scalingDeterminant = 0.99;
 		inst.position = coord;
-		// inst.showBoundingBox = true;
 	});
-	// square.renderOutline = true;
+	square.edgesShareWithInstances = true;
 	square.rotation = rotation;
 
-	const parent = new TransformNode(SHAPE_PARENT_NAME);
-	const square2 = square.clone(CLONE_SHAPE_NAME);
-	square2.position.x += 10;
+	const parent =
+		scene.getTransformNodeByName(SHAPE_PARENT_NAME) ||
+		new TransformNode(SHAPE_PARENT_NAME);
+	const square2 = square.clone(CLONE_SHAPE_NAME, parent, false, true);
+	square2.position.x = 12;
+	square2.rotate(
+		new Vector3(Math.random() * 360, Math.random() * 360, Math.random() * 360),
+		1
+	);
 	square.setParent(parent);
-	square2.setParent(parent);
+	parent.position.x = -6;
 };
 
 const clearFigure = (sceneEventArgs: SceneEventArgs) => {
@@ -168,6 +183,8 @@ const clearFigure = (sceneEventArgs: SceneEventArgs) => {
 		});
 	}
 	square.rotation = Vector3.Zero();
+	const square2 = scene.getMeshByName(CLONE_SHAPE_NAME) as Mesh;
+	square2?.dispose();
 };
 
 const generateRotation = (config: GenerationConfig): Vector3 => {
@@ -249,6 +266,41 @@ const getNewCoord = (
 	return !isOverlapping ? newCoord : null;
 };
 
+const Cameras = () => {
+	const scene = useScene();
+
+	const alwaysActive = (camera: Camera) => {
+		if (scene) scene.activeCameras = [...(scene.activeCameras || []), camera];
+		console.log(scene);
+	};
+
+	return (
+		<>
+			<arcRotateCamera
+				name='camera1'
+				alpha={(5 * Math.PI) / 8}
+				beta={(5 * Math.PI) / 8}
+				radius={50}
+				target={new Vector3(0, 0, 0)}
+				onCreated={alwaysActive}
+			>
+				<viewport x={0} y={0} height={0.5} width={1} />
+			</arcRotateCamera>
+
+			<arcRotateCamera
+				name='camera2'
+				alpha={(3 * Math.PI) / 8}
+				beta={(3 * Math.PI) / 8}
+				radius={30}
+				target={new Vector3(0, 0, 0)}
+				onCreated={alwaysActive}
+			>
+				<viewport x={0} y={0.5} height={0.5} width={1} />
+			</arcRotateCamera>
+		</>
+	);
+};
+
 const Game2 = () => {
 	const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
 		const { scene } = sceneEventArgs;
@@ -256,6 +308,9 @@ const Game2 = () => {
 		createAxis(sceneEventArgs, AXIS_SIZE);
 		scene.onDisposeObservable.add(() => gui.destroy());
 	};
+
+	// const scene = useScene();
+	// scene?.debugLayer.show();
 
 	const size = isMobile ? 300 : 1000;
 
@@ -271,18 +326,26 @@ const Game2 = () => {
 					height={size}
 					debug
 				>
-					<Scene key='scene2' onSceneMount={onSceneMount}>
-						<arcRotateCamera
+					<Scene
+						key='scene3'
+						onSceneMount={onSceneMount}
+						clearColor={Color4.FromColor3(Color3.White())}
+					>
+						{/* <arcRotateCamera
 							name='camera1'
 							target={Vector3.Zero()}
 							alpha={Math.PI / 3}
 							beta={Math.PI / 3}
 							radius={20}
-						></arcRotateCamera>
+						></arcRotateCamera> */}
+						<Cameras />
 						<hemisphericLight
 							name='light1'
-							intensity={0.7}
+							intensity={1}
 							direction={Vector3.Up()}
+							// direction={new Vector3(0, 0, 0)}
+							groundColor={Color3.White()}
+							specular={Color3.Black()}
 						/>
 						<box
 							isVisible={false}
@@ -290,14 +353,17 @@ const Game2 = () => {
 							size={SHAPE_SIZE}
 							position={new Vector3(0, 3, 0)}
 							scaling={new Vector3(1, 1, 1)}
+							enableEdgesRendering
+							edgesWidth={5}
+							edgesColor={Color4.FromColor3(Color3.Black(), 1)}
 						>
 							<standardMaterial
 								name={`random-box-mat`}
-								diffuseColor={Color3.White()}
-								specularColor={Color3.White()}
+								diffuseColor={Color3.Gray()}
+								// specularColor={Color3.White()}
 							/>
 						</box>
-						<ground
+						{/* <ground
 							name='ground'
 							height={10}
 							width={10}
@@ -308,7 +374,7 @@ const Game2 = () => {
 								diffuseColor={Color3.Black()}
 								specularColor={Color3.Black()}
 							/>
-						</ground>
+						</ground> */}
 					</Scene>
 				</Engine>
 			</div>
