@@ -1,4 +1,4 @@
-import styles from '@pagestyles/Home.module.css';
+import styles from '@pagestyles/Home.module.scss';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/dist/client/router';
@@ -42,7 +42,7 @@ const Game = () => {
 					<code className={styles.code}>pages/index.js</code>
 				</p>
 				{GameComponent && React.cloneElement(GameComponent)}
-				<div>
+				<div className={styles.links}>
 					<Link
 						href={`/game/${
 							(Number(gameId) || 1) - 1 < 1
@@ -50,7 +50,7 @@ const Game = () => {
 								: (Number(gameId) || 1) - 1
 						}`}
 					>
-						<a>prev</a>
+						<a className={styles.link}>prev</a>
 					</Link>
 					<Link
 						href={`/game/${
@@ -59,7 +59,7 @@ const Game = () => {
 								: (Number(gameId) || 1) + 1
 						}`}
 					>
-						<a>next</a>
+						<a className={styles.link}>next</a>
 					</Link>
 				</div>
 			</main>
