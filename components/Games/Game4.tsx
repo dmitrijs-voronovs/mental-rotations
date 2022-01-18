@@ -1,28 +1,22 @@
 import "@babylonjs/inspector";
 import {
   ArcRotateCamera,
-  Camera,
   Color3,
   Color4,
-  Mesh,
   MeshBuilder,
   Scalar,
   StandardMaterial,
   TransformNode,
-  Vector2,
   Vector3,
   Viewport,
 } from "@babylonjs/core";
 import React from "react";
-import { Box, Engine, Scene, SceneEventArgs, useScene } from "react-babylonjs";
-import { createAxis } from "@components/Axis/axisHelper";
-import { AXIS_SIZE, generateGUI } from "../../utils/GenerateGUI";
+import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import {
   defaultConfig,
   generateFigure,
   generateRotation,
   GenerationConfig,
-  SHAPE_NAME,
   SHAPE_SIZE,
 } from "../../utils/GenerateFigure";
 import s from "../../styles/Proto.App.module.scss";
@@ -34,7 +28,7 @@ const defaultCameraConfig: CameraConfig = {
   name: "camera-r",
   alpha: Math.PI * 0.25,
   beta: Math.PI * 0.3,
-  radius: 15,
+  radius: 25,
   target: new Vector3(0, 0, 0),
   height: 0.33,
   width: 0.2,
@@ -137,33 +131,38 @@ function createScene(sceneEventArgs: SceneEventArgs) {
     return rotationTimes * 90;
   }
 
-  const rotateReferenceShape = () => {
-    const baseFigureConfig: GenerationConfig = {
-      ...defaultConfig,
-      originX: shapes[0].position.x,
-      originY: shapes[0].position.y,
-    };
+  const getBaseFigureConfig = (sourceIdx: number): GenerationConfig => ({
+    ...defaultConfig,
+    originX: shapes[sourceIdx].position.x,
+    originY: shapes[sourceIdx].position.y,
+  });
 
-    generateFigure(sceneEventArgs, baseFigureConfig, shapes[0].name);
+  const rotateReferenceShape = (sourceIdx: number, targetIdx: number) => {
+    const { position } = shapes[targetIdx];
+    shapes[targetIdx].dispose();
+    shapes[targetIdx] = shapes[sourceIdx].clone(getBoxName(targetIdx));
 
-    const { position } = shapes[1];
-    shapes[1].dispose();
-    shapes[1] = shapes[0].clone(getBoxName(1));
-    console.log({ position });
+    // shapes[targetIdx].parent = new TransformNode(
+    //   `transform-${getBoxName(targetIdx)}`
+    // );
+    shapes[targetIdx].position = position;
 
-    const transformParent = new TransformNode(`transform-${getBoxName(1)}`);
-    shapes[1].parent = transformParent;
-    shapes[1].position = position;
-
-    const rotation = generateRotation({
+    shapes[targetIdx].rotation = generateRotation({
       finalRotationX: getRandomAngle(),
       finalRotationY: getRandomAngle(),
       finalRotationZ: getRandomAngle(),
     });
-    shapes[1].rotation = rotation;
   };
 
-  rotateReferenceShape();
+  generateFigure(sceneEventArgs, getBaseFigureConfig(0), shapes[0].name);
+  rotateReferenceShape(0, 1);
+
+  generateFigure(sceneEventArgs, getBaseFigureConfig(2), shapes[2].name);
+  rotateReferenceShape(2, 3);
+  rotateReferenceShape(2, 4);
+  rotateReferenceShape(2, 5);
+  rotateReferenceShape(2, 6);
+  rotateReferenceShape(2, 7);
 }
 
 const Game4 = () => {

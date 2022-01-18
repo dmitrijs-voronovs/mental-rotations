@@ -1,6 +1,7 @@
 import { Mesh, Scalar, TransformNode, Vector3 } from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
 import { getRandomInt } from "./common";
+import { shape } from "prop-types";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
@@ -58,8 +59,8 @@ export const generateFigure = (
 
   square.position = new Vector3(config.originX, config.originY, config.originZ);
   const parent =
-    scene.getTransformNodeByName(SHAPE_PARENT_NAME) ||
-    new TransformNode(SHAPE_PARENT_NAME);
+    scene.getTransformNodeByName(`transform-${shapeName}`) ||
+    new TransformNode(`transform-${shapeName}`);
   square.setParent(parent);
   // parent.position.x = -6
 };
