@@ -1,4 +1,6 @@
 # 3D Mental Rotations
-Available [here](https://mental-rotations.vercel.app/game/1)
+Try out yourself:
+1. [generating algorithm](https://mental-rotations.vercel.app/game/1)
+2. [mental rotations](http://localhost:3000/proto/App)
 
-![image](https://user-images.githubusercontent.com/53301511/136109084-0214da05-346c-4437-9de8-32e3ec83fa55.png)
+![image](https://user-images.githubusercontent.com/53301511/150037762-814bdba3-e212-479e-a11e-0f3c11f4ca83.png)
