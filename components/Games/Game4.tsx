@@ -13,6 +13,7 @@ import {
 import React from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import {
+  clearFigure,
   defaultConfig,
   generateFigure,
   generateRotation,
@@ -102,29 +103,36 @@ function createScene(sceneEventArgs: SceneEventArgs) {
     return `box-${i}`;
   }
 
-  const shapes = camerasConfig.map((configRaw, i) => {
-    const config = { ...configRaw, ...defaultCameraConfig };
-    const box = MeshBuilder.CreateBox(getBoxName(i), {
-      size: SHAPE_SIZE,
+  function createShapes() {
+    const shapes = camerasConfig.map((configRaw, i) => {
+      const config = { ...configRaw, ...defaultCameraConfig };
+      const box = MeshBuilder.CreateBox(getBoxName(i), {
+        size: SHAPE_SIZE,
+      });
+      box.scaling = new Vector3(1, 1, 1);
+      box.position = new Vector3(
+        config.x! * POSITION_MULTIPLIER,
+        config.y! * POSITION_MULTIPLIER,
+        0
+      );
+      box.isVisible = false;
+      box.enableEdgesRendering();
+      box.edgesWidth = 5;
+      box.edgesColor = Color4.FromColor3(Color3.Black(), 1);
+
+      const material =
+        (scene.getMaterialByName(`box-material`) as StandardMaterial) ||
+        new StandardMaterial(`box-material`, scene);
+      material.diffuseColor = new Color3(0.82, 0.82, 0.82);
+      material.specularColor = Color3.White();
+
+      box.material = material;
+      return box;
     });
-    box.scaling = new Vector3(1, 1, 1);
-    box.position = new Vector3(
-      config.x! * POSITION_MULTIPLIER,
-      config.y! * POSITION_MULTIPLIER,
-      0
-    );
-    box.isVisible = false;
-    box.enableEdgesRendering();
-    box.edgesWidth = 5;
-    box.edgesColor = Color4.FromColor3(Color3.Black(), 1);
+    return shapes;
+  }
 
-    const material = new StandardMaterial(`box-material-${1}`, scene);
-    material.diffuseColor = new Color3(0.82, 0.82, 0.82);
-    material.specularColor = Color3.White();
-
-    box.material = material;
-    return box;
-  });
+  const shapes = createShapes();
 
   function getRandomAngle() {
     const rotationTimes = Math.floor(Scalar.RandomRange(0, 4));
@@ -154,15 +162,41 @@ function createScene(sceneEventArgs: SceneEventArgs) {
     });
   };
 
-  generateFigure(sceneEventArgs, getBaseFigureConfig(0), shapes[0].name);
-  rotateReferenceShape(0, 1);
+  const cleanUp = () => {
+    // shapes.forEach((shape) => {
+    //   // clearFigure(sceneEventArgs, mesh.name);
+    //   // shape.instances.forEach((instance) => {
+    //   //   if (instance.material) scene.removeMaterial(instance.material);
+    //   //   scene.removeMesh(instance, true);
+    //   // });
+    //   scene.removeMesh(shape, true);
+    // });
+    const shapeNames = [getBoxName(0), getBoxName(2)];
+    shapeNames.forEach((shapeName) =>
+      scene.getTransformNodeByName(`transform-${shapeName}`)
+    );
+  };
 
-  generateFigure(sceneEventArgs, getBaseFigureConfig(2), shapes[2].name);
-  rotateReferenceShape(2, 3);
-  rotateReferenceShape(2, 4);
-  rotateReferenceShape(2, 5);
-  rotateReferenceShape(2, 6);
-  rotateReferenceShape(2, 7);
+  const generateAll = () => {
+    generateFigure(sceneEventArgs, getBaseFigureConfig(0), shapes[0].name);
+    rotateReferenceShape(0, 1);
+
+    generateFigure(sceneEventArgs, getBaseFigureConfig(2), shapes[2].name);
+    rotateReferenceShape(2, 3);
+    rotateReferenceShape(2, 4);
+    rotateReferenceShape(2, 5);
+    rotateReferenceShape(2, 6);
+    rotateReferenceShape(2, 7);
+  };
+
+  generateAll();
+
+  scene.onKeyboardObservable.add((event, state) => {
+    const key = event.event.key;
+    cleanUp();
+    // createShapes();
+    generateAll();
+  });
 }
 
 const Game4 = () => {
@@ -172,7 +206,7 @@ const Game4 = () => {
     // scene.onDisposeObservable.add(() => gui.destroy());
     // createAxis(sceneEventArgs, AXIS_SIZE);
     createScene(sceneEventArgs);
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
   };
 
   return (

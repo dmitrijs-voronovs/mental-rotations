@@ -49,7 +49,7 @@ export const generateFigure = (
 
   const rotation = generateRotation(config);
   newCoords.forEach((coord, i) => {
-    const inst = square.createInstance(`${shapeName}-${i}`);
+    const inst = square.createInstance(`${shapeName}-inst-${i}`);
     inst.setParent(square);
     inst.scalingDeterminant = 0.99;
     inst.position = coord;
@@ -70,12 +70,15 @@ export const clearFigure = (
 ) => {
   const { scene } = sceneEventArgs;
   const square = scene.getMeshByName(shapeName) as Mesh;
-  while (square.instances.length) {
+  while (square.instances?.length) {
     square.instances.forEach((inst) => {
       inst.dispose();
     });
   }
   square.rotation = Vector3.Zero();
+  square.material?.dispose();
+  square.parent?.dispose();
+  square.dispose();
 };
 
 export const generateRotation = (
