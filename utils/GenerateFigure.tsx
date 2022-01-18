@@ -1,13 +1,27 @@
-import { Mesh, Scalar, TransformNode, Vector3 } from '@babylonjs/core'
-import { SceneEventArgs } from 'react-babylonjs'
-import { getRandomInt } from './common'
-import { GenerationConfig } from './GenerateGUI'
+import {Mesh, Scalar, TransformNode, Vector3} from '@babylonjs/core'
+import {SceneEventArgs} from 'react-babylonjs'
+import {getRandomInt} from './common'
 
 export const SHAPE_NAME = 'box-figure'
 export const SHAPE_SIZE = 2
 const SHAPE_INITIAL_COORD = new Vector3(0, -2, 0)
 
 const SHAPE_PARENT_NAME = 'figure_parent'
+
+export type GenerationConfig = {
+  spreadOnX: number
+  spreadOnY: number
+  spreadOnZ: number
+  totalBlocks: number
+  maxDeltaForNextBlock: number
+  finalRotationX: number
+  finalRotationY: number
+  finalRotationZ: number
+  originX: number,
+  originY: number,
+  originZ: number,
+  showAxis: boolean,
+}
 
 export const generateFigure = (
   sceneEventArgs: SceneEventArgs,
@@ -25,14 +39,16 @@ export const generateFigure = (
     inst.scalingDeterminant = 0.99
     inst.position = coord
   })
+
   square.edgesShareWithInstances = true
   square.rotation = rotation
+  square.position = new Vector3(config.originX, config.originY, config.originZ);
 
   const parent =
     scene.getTransformNodeByName(SHAPE_PARENT_NAME) ||
     new TransformNode(SHAPE_PARENT_NAME)
   square.setParent(parent)
-  parent.position.x = -6
+  // parent.position.x = -6
 }
 
 export const clearFigure = (sceneEventArgs: SceneEventArgs, shapeName = SHAPE_NAME) => {

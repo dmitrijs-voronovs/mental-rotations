@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
-  reactStrictMode: true,
-}
+const withTM = require('next-transpile-modules')(["@babylonjs/core", "dat.gui"]);
+
+module.exports = withTM({
+  reactStrictMode: true
+})

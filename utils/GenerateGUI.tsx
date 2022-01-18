@@ -1,52 +1,31 @@
 import {SceneEventArgs} from 'react-babylonjs'
 import {createAxis, deleteAxis} from '@components/Axis/axisHelper'
-import {clearFigure, generateFigure} from './GenerateFigure'
+import {clearFigure, generateFigure, GenerationConfig} from './GenerateFigure'
 import {GUI} from 'dat.gui'
 
-export type GenerationConfig = {
-    spreadOnX: number
-    spreadOnY: number
-    spreadOnZ: number
-    totalBlocks: number
-    maxDeltaForNextBlock: number
-    finalRotationX: number
-    finalRotationY: number
-    finalRotationZ: number
-    showAxis: boolean
-}
-
-export type GenerationConfigDefinition = {
-    spreadOnX: number
-    spreadOnY: number
-    finalRotationZMax: number
+export type GuiConfigDefinition = GenerationConfig & {
     clearAndGenerate(): void
     save: () => void
-    finalRotationZ: number
-    finalRotationY: number
-    finalRotationX: number
-    spreadOnZ: number
-    finalRotationZStep: number
     generateFigure(): void
-    finalRotationZMin: number
-    spreadMax: number
-    finalRotationXMin: number
-    totalBlocksStep: number
-    totalBlocks: number
-    maxDeltaForNextBlockStep: number
     clearFigure: () => void
-    finalRotationYStep: number
-    spreadStep: number
-    finalRotationYMax: number
-    maxDeltaForNextBlockMin: number
-    totalBlocksMax: number
-    maxDeltaForNextBlock: number
-    finalRotationYMin: number
-    finalRotationXMax: number
-    finalRotationXStep: number
-    spreadMin: number
-    totalBlocksMin: number
-    maxDeltaForNextBlockMax: number
-    showAxis: boolean
+    spreadMin: number;
+    spreadMax: number;
+    spreadStep: number;
+    totalBlocksMax: number;
+    totalBlocksMin: number;
+    totalBlocksStep: number;
+    maxDeltaForNextBlockMin: number;
+    maxDeltaForNextBlockMax: number;
+    maxDeltaForNextBlockStep: number;
+    finalRotationXMin: number;
+    finalRotationXMax: number;
+    finalRotationXStep: number;
+    finalRotationYMin: number;
+    finalRotationYMax: number;
+    finalRotationYStep: number;
+    finalRotationZMin: number;
+    finalRotationZMax: number;
+    finalRotationZStep: number;
 }
 
 export const AXIS_SIZE = 5
@@ -63,38 +42,43 @@ function placeGui(gui: GUI, canvas: HTMLCanvasElement) {
     gui.domElement.style.marginRight = `${canvasPlacement.left + 30}px`
 }
 
+export const defaultGuiConfig = {
+    spreadMin: 0,
+    spreadMax: 1,
+    spreadStep: 0.01,
+    totalBlocksMax: 20,
+    totalBlocksMin: 2,
+    totalBlocksStep: 1,
+    maxDeltaForNextBlockMin: 1,
+    maxDeltaForNextBlockMax: 3,
+    maxDeltaForNextBlockStep: 1,
+    finalRotationXMin: 0,
+    finalRotationXMax: 360,
+    finalRotationXStep: 1,
+    finalRotationYMin: 0,
+    finalRotationYMax: 360,
+    finalRotationYStep: 1,
+    finalRotationZMin: 0,
+    finalRotationZMax: 360,
+    finalRotationZStep: 1,
+}
+
 export const defaultConfig = {
     spreadOnX: 0.5,
     spreadOnY: 0.5,
     spreadOnZ: 0.5,
-    spreadMin: 0,
-    spreadMax: 1,
-    spreadStep: 0.01,
     totalBlocks: 8,
-    totalBlocksMax: 20,
-    totalBlocksMin: 2,
-    totalBlocksStep: 1,
     maxDeltaForNextBlock: 1,
-    maxDeltaForNextBlockMin: 1,
-    maxDeltaForNextBlockMax: 3,
-    maxDeltaForNextBlockStep: 1,
-    finalRotationX: 110,
-    finalRotationXMin: 0,
-    finalRotationXMax: 360,
-    finalRotationXStep: 1,
+    finalRotationX: 0,
     finalRotationY: 0,
-    finalRotationYMin: 0,
-    finalRotationYMax: 360,
-    finalRotationYStep: 1,
     finalRotationZ: 0,
-    finalRotationZMin: 0,
-    finalRotationZMax: 360,
-    finalRotationZStep: 1,
-    // boolean
+    originX: 0,
+    originY: 0,
+    originZ: 0,
     showAxis: true,
 }
 
-function populateGui(gui: GUI, fieldConfig: GenerationConfigDefinition) {
+function populateGui(gui: GUI, fieldConfig: GuiConfigDefinition) {
     ;['spreadOnX', 'spreadOnY', 'spreadOnZ'].forEach((fieldName) => {
         gui.add(
             fieldConfig,
@@ -133,14 +117,22 @@ function populateGui(gui: GUI, fieldConfig: GenerationConfigDefinition) {
     })
 }
 
+declare global {
+    interface Window {
+        me: string;
+    }
+}
+
 export const generateGUI = (sceneEventArgs: SceneEventArgs): GUI => {
     const {canvas} = sceneEventArgs
 
+    window.me = "123124";
     const gui = new GUI({name: 'My GUI'})
 
     placeGui(gui, canvas)
     // GUI values
     const fieldConfig = {
+        ...defaultGuiConfig,
         ...defaultConfig,
         // functions
         save: () => gui.saveAs(GENERATION_SETTINGS_KEY),
