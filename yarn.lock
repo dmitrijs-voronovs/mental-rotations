@@ -72,12 +72,66 @@
   dependencies:
     tslib ">=1.10.0"
 
+"@babylonjs/core@4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-4.2.1.tgz#9dc57dabf41d259a2343da308ec52575b368e588"
+  integrity sha512-Z2ZVNRKPB1UvmMeqQtxCJKrQtQ/hb5FcAZi66YEEE0MKBQlLmf6oZEM9vS1RljPK7NZoV/dZSdwjJgiQlGsuhA==
+  dependencies:
+    tslib ">=1.10.0"
+
+"@babylonjs/gui@4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-4.2.1.tgz#e22e0ddfc456cc816500dd72ad034e1b41a53218"
+  integrity sha512-6gOolbWYFO5lrRWKunawYWQkX4a47dvuiIBrEmY6eKRN97e4f7YrR7oYolqeWFHLXzbn0JR0blOYQyUB5jQqmg==
+  dependencies:
+    "@babylonjs/core" "4.2.1"
+    tslib ">=1.10.0"
+
 "@babylonjs/gui@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-4.2.0.tgz#c2a35ca6724759731fe0c4ddbfe2490301847f93"
   integrity sha512-AQnqwFDmQ05FAw4B0BPVUFqWgdSKVI23qVHm/uOOMBQhMo8+WE2pTNATm6Qw/HDVLCp5qUjwIij/3JtG5s0fBw==
   dependencies:
     "@babylonjs/core" "4.2.0"
+    tslib ">=1.10.0"
+
+"@babylonjs/inspector@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-4.2.1.tgz#fa6092f22656c23d79b489aef7b2e72e982a9326"
+  integrity sha512-P0l3oAVniyxYJIgpZsAJ3veJnA9Sq02HLsy7Dr3y5UOA8WP0n7X1Uv2T1MbONdTkXJ1YoX/KBfAYVAA81FXhbg==
+  dependencies:
+    "@babylonjs/core" "4.2.1"
+    "@babylonjs/gui" "4.2.1"
+    "@babylonjs/loaders" "4.2.1"
+    "@babylonjs/materials" "4.2.1"
+    "@babylonjs/serializers" "4.2.1"
+    babylonjs-gltf2interface "4.2.1"
+    tslib ">=1.10.0"
+
+"@babylonjs/loaders@4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-4.2.1.tgz#34bcdf688f6bcb92bcf66de3d8fc297e9830026b"
+  integrity sha512-huLdk18nTqwXHYIbxpXRTo1smcL1eCD8TvvyWiHciRjPttpRNjoACSR/G2J2FD0ymSBu8ZS8cdMvq1by7x2DsA==
+  dependencies:
+    "@babylonjs/core" "4.2.1"
+    babylonjs-gltf2interface "4.2.1"
+    tslib ">=1.10.0"
+
+"@babylonjs/materials@4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-4.2.1.tgz#a44ef5c8a4c3d99e16dce27895e5ce4f7d178393"
+  integrity sha512-G4mfmixt2BnATaa2/uhf7xfZv4fqD6bGHocbEWT1Iu0KOJcpU7Q0EYjN8bqx78hVFjd94e4g0/7Bey2JaGrakA==
+  dependencies:
+    "@babylonjs/core" "4.2.1"
+    tslib ">=1.10.0"
+
+"@babylonjs/serializers@4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-4.2.1.tgz#b7971f89ddbea5382edcd7ef62f6d04e962b63e4"
+  integrity sha512-G4Jw9ILUJp8hO49Jg+sxVAKfYMZlgxGClNrUKCOcsIGWg5Yy0hKd1BZd86wEiyJAYt+MDpuocWCShzkEV2mJhA==
+  dependencies:
+    "@babylonjs/core" "4.2.1"
+    babylonjs-gltf2interface "4.2.1"
     tslib ">=1.10.0"
 
 "@eslint/eslintrc@^0.4.3":
@@ -225,6 +279,13 @@
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.0.7.tgz#82f83dcc2eb9b1e1d559b3aca96783e285eb8592"
   integrity sha512-3Zi2LGbCLDz4IIL7ir6wD0u/ggHotLkK5SlVzFzTcYaNgPR4MAt/9JYZqXWKcofPWEoptfpnCJU8Bq9sxw8QUg==
+
+"@types/classnames@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.3.1.tgz#3c2467aa0f1a93f1f021e3b9bcf938bd5dfdc0dd"
+  integrity sha512-zeOWb0JGBoVmlQoznvqXbE0tEC/HONsnoUNH19Hc96NFsTAwTXbTqb8FMYkru1F/iqp7a18Ws3nWJvtA1sHD1A==
+  dependencies:
+    classnames "*"
 
 "@types/dat.gui@^0.7.7":
   version "0.7.7"
@@ -478,6 +539,11 @@ axobject-query@^2.2.0:
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
   integrity sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==
 
+babylonjs-gltf2interface@4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/babylonjs-gltf2interface/-/babylonjs-gltf2interface-4.2.1.tgz#d23c78a23a16771ad9e7f8f6d20b7c00b5ce0c33"
+  integrity sha512-ZBfKgIoztO1x1nyf9aPQJ+WXmB6Kw0VlyxvcKchIixbICqeeExiN8nmjvypwXC4hl+5ZDMnUKQNrIhh7uzulnA==
+
 balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
@@ -712,6 +778,11 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+classnames@*, classnames@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
 
 classnames@2.2.6:
   version "2.2.6"
@@ -1005,6 +1076,14 @@ encoding@0.1.13:
   integrity sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==
   dependencies:
     iconv-lite "^0.6.2"
+
+enhanced-resolve@^5.7.0:
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.8.3.tgz#6d552d465cce0423f5b3d718511ea53826a7b2f0"
+  integrity sha512-EGAbGvH7j7Xt2nc0E7D99La1OiEs8LnyimkRgwExpUMScN6O+3x9tIWs7PLQZVNx4YD+00skHXPXi1yQHpAmZA==
+  dependencies:
+    graceful-fs "^4.2.4"
+    tapable "^2.2.0"
 
 enquirer@^2.3.5:
   version "2.3.6"
@@ -1504,6 +1583,11 @@ graceful-fs@^4.1.2:
   version "4.2.8"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
   integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
+
+graceful-fs@^4.2.4:
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
+  integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
 
 has-bigints@^1.0.1:
   version "1.0.1"
@@ -2071,6 +2155,14 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
+next-transpile-modules@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/next-transpile-modules/-/next-transpile-modules-9.0.0.tgz#133b1742af082e61cc76b02a0f12ffd40ce2bf90"
+  integrity sha512-VCNFOazIAnXn1hvgYYSTYMnoWgKgwlYh4lm1pKbSfiB3kj5ZYLcKVhfh3jkPOg1cnd9DP+pte9yCUocdPEUBTQ==
+  dependencies:
+    enhanced-resolve "^5.7.0"
+    escalade "^3.1.1"
+
 next@11.1.2:
   version "11.1.2"
   resolved "https://registry.yarnpkg.com/next/-/next-11.1.2.tgz#527475787a9a362f1bc916962b0c0655cc05bc91"
@@ -2476,6 +2568,11 @@ prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
+
+prettier@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
+  integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -3106,6 +3203,11 @@ table@^6.0.9:
     slice-ansi "^4.0.0"
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
+
+tapable@^2.2.0:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.2.1.tgz#1967a73ef4060a82f12ab96af86d52fdb76eeca0"
+  integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
 text-table@^0.2.0:
   version "0.2.0"

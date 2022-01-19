@@ -278,13 +278,15 @@ const Cameras = () => {
 		<>
 			<arcRotateCamera
 				name='camera1'
-				alpha={(5 * Math.PI) / 8}
-				beta={(5 * Math.PI) / 8}
+				// alpha={(5 * Math.PI) / 8}
+				// beta={(5 * Math.PI) / 8}
+				alpha={0}
+				beta={360}
 				radius={50}
 				target={new Vector3(0, 0, 0)}
 				onCreated={alwaysActive}
 			>
-				<viewport x={0} y={0} height={0.5} width={1} />
+				<viewport x={0} y={0.5} height={0.5} width={1} />
 			</arcRotateCamera>
 
 			<arcRotateCamera
@@ -295,7 +297,7 @@ const Cameras = () => {
 				target={new Vector3(0, 0, 0)}
 				onCreated={alwaysActive}
 			>
-				<viewport x={0} y={0.5} height={0.5} width={1} />
+				<viewport x={0} y={0} height={0.5} width={1} />
 			</arcRotateCamera>
 		</>
 	);
