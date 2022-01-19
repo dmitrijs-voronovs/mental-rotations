@@ -1,14 +1,7 @@
-import {
-  Angle,
-  InstancedMesh,
-  Mesh,
-  Scalar,
-  TransformNode,
-  Vector3,
-} from "@babylonjs/core";
+import { Angle, Mesh, Scalar, TransformNode, Vector3 } from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
 import { getRandomInt } from "./common";
-import { shape } from "prop-types";
+import { getInstanceName, getTransformNodeName } from "./names";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
@@ -56,16 +49,8 @@ export function updateBoundingInfo(square: Mesh) {
   const { min, max } = square.getHierarchyBoundingVectors();
 
   square.getBoundingInfo().boundingBox.reConstruct(min, max);
-  square.showBoundingBox = true;
-  square.showSubMeshesBoundingBox = true;
-}
-
-function getInstanceName(shapeName: string, i: number) {
-  return `${shapeName}-inst-${i}`;
-}
-
-export function getTransformNodeName(shapeName: string) {
-  return `transform-${shapeName}`;
+  // square.showBoundingBox = true;
+  // square.showSubMeshesBoundingBox = true;
 }
 
 export function recenterMesh(
@@ -79,7 +64,6 @@ export function recenterMesh(
     config.originY,
     config.originZ
   ).subtract(center);
-  console.log({ center, config, parent: parent.position });
   parent.position = parent.position.add(positionDiff);
 }
 
@@ -111,11 +95,6 @@ export const generateFigure = (
   square.setParent(parent);
 
   updateBoundingInfo(square);
-  console.log(
-    square.getBoundingInfo().boundingBox.center,
-    parent.position,
-    config
-  );
 
   recenterMesh(parent, square, config);
 };
@@ -131,9 +110,6 @@ export const clearFigure = (
     });
   }
   square.rotation = Vector3.Zero();
-  // square.material?.dispose();
-  // square.parent?.dispose();
-  // square.dispose();
 };
 
 export const generateRotation = (
@@ -146,7 +122,6 @@ export const generateRotation = (
     Angle.FromDegrees(config.finalRotationX).radians(),
     Angle.FromDegrees(config.finalRotationY).radians(),
     Angle.FromDegrees(config.finalRotationZ).radians()
-    // ).scale(SHAPE_SIZE);
   );
 
 const generateCoordinates = (config: GenerationConfig): Vector3[] => {
