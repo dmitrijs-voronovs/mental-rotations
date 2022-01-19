@@ -1,14 +1,7 @@
-import {
-  Angle,
-  InstancedMesh,
-  Mesh,
-  Scalar,
-  TransformNode,
-  Vector3,
-} from "@babylonjs/core";
+import { Angle, Mesh, Scalar, TransformNode, Vector3 } from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
 import { getRandomInt } from "./common";
-import { shape } from "prop-types";
+import { getInstanceName, getTransformNodeName } from "./names";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
@@ -58,14 +51,6 @@ export function updateBoundingInfo(square: Mesh) {
   square.getBoundingInfo().boundingBox.reConstruct(min, max);
   // square.showBoundingBox = true;
   // square.showSubMeshesBoundingBox = true;
-}
-
-function getInstanceName(shapeName: string, i: number) {
-  return `${shapeName}-inst-${i}`;
-}
-
-export function getTransformNodeName(shapeName: string) {
-  return `transform-${shapeName}`;
 }
 
 export function recenterMesh(
