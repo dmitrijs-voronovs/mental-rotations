@@ -113,16 +113,9 @@ function populateGui(gui: GUI, fieldConfig: GuiConfigDefinition) {
   });
 }
 
-declare global {
-  interface Window {
-    me: string;
-  }
-}
-
 export const generateGUI = (sceneEventArgs: SceneEventArgs): GUI => {
   const { canvas } = sceneEventArgs;
 
-  window.me = "123124";
   const gui = new GUI({ name: "My GUI" });
 
   placeGui(gui, canvas);

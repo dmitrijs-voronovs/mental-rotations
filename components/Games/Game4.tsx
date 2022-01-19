@@ -3,6 +3,8 @@ import {
   ArcRotateCamera,
   Color3,
   Color4,
+  KeyboardEventTypes,
+  Mesh,
   MeshBuilder,
   Scalar,
   StandardMaterial,
@@ -13,12 +15,15 @@ import {
 import React from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import {
-  clearFigure,
   defaultConfig,
   generateFigure,
   generateRotation,
   GenerationConfig,
+  getTransformNodeName,
+  recenterMesh,
+  resetBoundingInfo,
   SHAPE_SIZE,
+  updateBoundingInfo,
 } from "../../utils/GenerateFigure";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
@@ -66,6 +71,21 @@ const camerasConfig: CameraConfig[] = [
   },
 ];
 
+declare global {
+  type TestDataEntity = {
+    taskN: 0;
+    timeMs: number;
+    referenceShapeConfig: GenerationConfig;
+    resultingShapeConfig: GenerationConfig;
+    rotation: { x: number; y: number; z: number };
+    correctAnswer: number;
+  };
+
+  interface Window {
+    testData: TestDataEntity[];
+  }
+}
+
 export const POSITION_MULTIPLIER = 300;
 
 function createScene(sceneEventArgs: SceneEventArgs) {
@@ -106,9 +126,13 @@ function createScene(sceneEventArgs: SceneEventArgs) {
   function createShapes() {
     const shapes = camerasConfig.map((configRaw, i) => {
       const config = { ...configRaw, ...defaultCameraConfig };
-      const box = MeshBuilder.CreateBox(getBoxName(i), {
-        size: SHAPE_SIZE,
-      });
+      const box = MeshBuilder.CreateBox(
+        getBoxName(i),
+        {
+          size: SHAPE_SIZE,
+        },
+        scene
+      );
       box.scaling = new Vector3(1, 1, 1);
       box.position = new Vector3(
         config.x! * POSITION_MULTIPLIER,
@@ -116,6 +140,8 @@ function createScene(sceneEventArgs: SceneEventArgs) {
         0
       );
       box.isVisible = false;
+      box.showBoundingBox = true;
+      box.showSubMeshesBoundingBox = true;
       box.enableEdgesRendering();
       box.edgesWidth = 5;
       box.edgesColor = Color4.FromColor3(Color3.Black(), 1);
@@ -125,77 +151,111 @@ function createScene(sceneEventArgs: SceneEventArgs) {
         new StandardMaterial(`box-material`, scene);
       material.diffuseColor = new Color3(0.82, 0.82, 0.82);
       material.specularColor = Color3.White();
-
       box.material = material;
+
       return box;
     });
     return shapes;
   }
 
-  const shapes = createShapes();
+  let shapes = createShapes();
 
   function getRandomAngle() {
-    const rotationTimes = Math.floor(Scalar.RandomRange(0, 4));
+    const rotationTimes = Math.floor(Scalar.RandomRange(0, 2));
     return rotationTimes * 90;
   }
 
-  const getBaseFigureConfig = (sourceIdx: number): GenerationConfig => ({
+  const getBaseFigureConfig = (source: Mesh): GenerationConfig => ({
     ...defaultConfig,
-    originX: shapes[sourceIdx].position.x,
-    originY: shapes[sourceIdx].position.y,
+    originX: source.position.x,
+    originY: source.position.y,
   });
 
-  const rotateReferenceShape = (sourceIdx: number, targetIdx: number) => {
-    const { position } = shapes[targetIdx];
-    shapes[targetIdx].dispose();
-    shapes[targetIdx] = shapes[sourceIdx].clone(getBoxName(targetIdx));
+  const rotateReferenceShape = (
+    source: Mesh,
+    target: Mesh,
+    config: GenerationConfig
+  ) => {
+    resetBoundingInfo(target);
 
-    // shapes[targetIdx].parent = new TransformNode(
-    //   `transform-${getBoxName(targetIdx)}`
-    // );
-    shapes[targetIdx].position = position;
+    const { position, name } = target;
+    target.dispose();
+    const parent = new TransformNode(getTransformNodeName(name));
+    target = source.clone(target.name, parent);
 
-    shapes[targetIdx].rotation = generateRotation({
+    const rotation = generateRotation({
       finalRotationX: getRandomAngle(),
       finalRotationY: getRandomAngle(),
       finalRotationZ: getRandomAngle(),
     });
+    target.rotation = rotation;
+
+    const { x, y, z } = position;
+    updateBoundingInfo(target);
+
+    target.showSubMeshesBoundingBox = true;
+    recenterMesh(parent, target, { originX: x, originY: y, originZ: z });
   };
 
   const cleanUp = () => {
-    // shapes.forEach((shape) => {
-    //   // clearFigure(sceneEventArgs, mesh.name);
-    //   // shape.instances.forEach((instance) => {
-    //   //   if (instance.material) scene.removeMaterial(instance.material);
-    //   //   scene.removeMesh(instance, true);
-    //   // });
-    //   scene.removeMesh(shape, true);
-    // });
-    const shapeNames = [getBoxName(0), getBoxName(2)];
-    shapeNames.forEach((shapeName) =>
-      scene.getTransformNodeByName(`transform-${shapeName}`)
-    );
+    shapes.forEach((shape) => {
+      const shapeName = shape.name;
+      const transformNode = scene.getTransformNodeByName(
+        getTransformNodeName(shapeName)
+      );
+      if (transformNode) {
+        const allMeshes = transformNode.getChildMeshes(false);
+        allMeshes.forEach((mesh) => scene.removeMesh(mesh));
+        scene.removeTransformNode(transformNode);
+      }
+    });
   };
 
   const generateAll = () => {
-    generateFigure(sceneEventArgs, getBaseFigureConfig(0), shapes[0].name);
-    rotateReferenceShape(0, 1);
+    const configReferenceShape = getBaseFigureConfig(shapes[0]);
+    generateFigure(sceneEventArgs, configReferenceShape, shapes[0].name);
+    rotateReferenceShape(shapes[0], shapes[1], configReferenceShape);
 
-    generateFigure(sceneEventArgs, getBaseFigureConfig(2), shapes[2].name);
-    rotateReferenceShape(2, 3);
-    rotateReferenceShape(2, 4);
-    rotateReferenceShape(2, 5);
-    rotateReferenceShape(2, 6);
-    rotateReferenceShape(2, 7);
+    const configTestShape = getBaseFigureConfig(shapes[2]);
+    generateFigure(sceneEventArgs, configTestShape, shapes[2].name);
+    rotateReferenceShape(shapes[2], shapes[3], configTestShape);
+    rotateReferenceShape(shapes[2], shapes[4], configTestShape);
+    rotateReferenceShape(shapes[2], shapes[5], configTestShape);
+    rotateReferenceShape(shapes[2], shapes[6], configTestShape);
+    rotateReferenceShape(shapes[2], shapes[7], configTestShape);
+  };
+
+  const launchTimer = () => {
+    let startTime: number, stopTime: number;
+    startTime = Date.now();
+    return {
+      stopTimer: () => {
+        stopTime = Date.now();
+        return stopTime - startTime;
+      },
+    };
   };
 
   generateAll();
+  let timer = launchTimer();
 
-  scene.onKeyboardObservable.add((event, state) => {
-    const key = event.event.key;
-    cleanUp();
-    // createShapes();
-    generateAll();
+  scene.onKeyboardObservable.add((eventInfo, state) => {
+    if (eventInfo.type === KeyboardEventTypes.KEYDOWN) {
+      const key = Number(eventInfo.event.key);
+      switch (true) {
+        case key >= 1 && key <= 5:
+          const time = timer.stopTimer();
+          const a = Scalar.RandomRange(0, 3);
+          console.log({ key, time }, a, Math.floor(a));
+          cleanUp();
+          shapes = createShapes();
+          generateAll();
+          timer = launchTimer();
+          return;
+        default:
+          return;
+      }
+    }
   });
 }
 
@@ -206,7 +266,7 @@ const Game4 = () => {
     // scene.onDisposeObservable.add(() => gui.destroy());
     // createAxis(sceneEventArgs, AXIS_SIZE);
     createScene(sceneEventArgs);
-    // scene.debugLayer.show();
+    scene.debugLayer.show();
   };
 
   return (
@@ -223,6 +283,7 @@ const Game4 = () => {
           <div>5</div>
         </div>
       </div>
+      {/*<EventDisplay />*/}
       <Engine
         antialias
         adaptToDeviceRatio
@@ -240,9 +301,6 @@ const Game4 = () => {
           key="scene3"
           onSceneMount={onSceneMount}
           clearColor={Color4.FromColor3(Color3.White())}
-          onKeyboardObservable={(...args: any[]) => console.log(args)}
-          onPointerDown={(...args) => console.log(args)}
-          onScenePointerDown={(...args) => console.log(args)}
         >
           <hemisphericLight
             name="light1"

@@ -1,11 +1,18 @@
-import { Mesh, Scalar, TransformNode, Vector3 } from "@babylonjs/core";
+import {
+  Angle,
+  InstancedMesh,
+  Mesh,
+  Scalar,
+  TransformNode,
+  Vector3,
+} from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
 import { getRandomInt } from "./common";
 import { shape } from "prop-types";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
-const SHAPE_INITIAL_COORD = new Vector3(0, -2, 0);
+const SHAPE_INITIAL_COORD = new Vector3(0, 0, 0);
 
 const SHAPE_PARENT_NAME = "figure_parent";
 
@@ -38,6 +45,44 @@ export const defaultConfig: GenerationConfig = {
   originZ: 0,
   showAxis: true,
 };
+
+export function resetBoundingInfo(square: Mesh) {
+  square
+    .getBoundingInfo()
+    .boundingBox.reConstruct(Vector3.Zero(), Vector3.Zero());
+}
+
+export function updateBoundingInfo(square: Mesh) {
+  const { min, max } = square.getHierarchyBoundingVectors();
+
+  square.getBoundingInfo().boundingBox.reConstruct(min, max);
+  square.showBoundingBox = true;
+  square.showSubMeshesBoundingBox = true;
+}
+
+function getInstanceName(shapeName: string, i: number) {
+  return `${shapeName}-inst-${i}`;
+}
+
+export function getTransformNodeName(shapeName: string) {
+  return `transform-${shapeName}`;
+}
+
+export function recenterMesh(
+  parent: TransformNode,
+  square: Mesh,
+  config: Pick<GenerationConfig, "originX" | "originY" | "originZ">
+) {
+  const center = square.getBoundingInfo().boundingBox.center;
+  const positionDiff = new Vector3(
+    config.originX,
+    config.originY,
+    config.originZ
+  ).subtract(center);
+  console.log({ center, config, parent: parent.position });
+  parent.position = parent.position.add(positionDiff);
+}
+
 export const generateFigure = (
   sceneEventArgs: SceneEventArgs,
   config: GenerationConfig,
@@ -45,11 +90,13 @@ export const generateFigure = (
 ) => {
   const { scene } = sceneEventArgs;
   const square = scene.getMeshByName(shapeName) as Mesh;
+  resetBoundingInfo(square);
+
   const newCoords = generateCoordinates(config);
 
   const rotation = generateRotation(config);
   newCoords.forEach((coord, i) => {
-    const inst = square.createInstance(`${shapeName}-inst-${i}`);
+    const inst = square.createInstance(getInstanceName(shapeName, i));
     inst.setParent(square);
     inst.scalingDeterminant = 0.99;
     inst.position = coord;
@@ -59,10 +106,18 @@ export const generateFigure = (
 
   square.position = new Vector3(config.originX, config.originY, config.originZ);
   const parent =
-    scene.getTransformNodeByName(`transform-${shapeName}`) ||
-    new TransformNode(`transform-${shapeName}`);
+    scene.getTransformNodeByName(getTransformNodeName(shapeName)) ||
+    new TransformNode(getTransformNodeName(shapeName));
   square.setParent(parent);
-  // parent.position.x = -6
+
+  updateBoundingInfo(square);
+  console.log(
+    square.getBoundingInfo().boundingBox.center,
+    parent.position,
+    config
+  );
+
+  recenterMesh(parent, square, config);
 };
 export const clearFigure = (
   sceneEventArgs: SceneEventArgs,
@@ -76,9 +131,9 @@ export const clearFigure = (
     });
   }
   square.rotation = Vector3.Zero();
-  square.material?.dispose();
-  square.parent?.dispose();
-  square.dispose();
+  // square.material?.dispose();
+  // square.parent?.dispose();
+  // square.dispose();
 };
 
 export const generateRotation = (
@@ -88,10 +143,12 @@ export const generateRotation = (
   >
 ): Vector3 =>
   new Vector3(
-    config.finalRotationX,
-    config.finalRotationY,
-    config.finalRotationZ
-  ).scale(SHAPE_SIZE);
+    Angle.FromDegrees(config.finalRotationX).radians(),
+    Angle.FromDegrees(config.finalRotationY).radians(),
+    Angle.FromDegrees(config.finalRotationZ).radians()
+    // ).scale(SHAPE_SIZE);
+  );
+
 const generateCoordinates = (config: GenerationConfig): Vector3[] => {
   const { totalBlocks } = config;
 
