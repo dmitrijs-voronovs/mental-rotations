@@ -56,8 +56,8 @@ export function updateBoundingInfo(square: Mesh) {
   const { min, max } = square.getHierarchyBoundingVectors();
 
   square.getBoundingInfo().boundingBox.reConstruct(min, max);
-  square.showBoundingBox = true;
-  square.showSubMeshesBoundingBox = true;
+  // square.showBoundingBox = true;
+  // square.showSubMeshesBoundingBox = true;
 }
 
 function getInstanceName(shapeName: string, i: number) {
@@ -79,7 +79,6 @@ export function recenterMesh(
     config.originY,
     config.originZ
   ).subtract(center);
-  console.log({ center, config, parent: parent.position });
   parent.position = parent.position.add(positionDiff);
 }
 
@@ -111,11 +110,6 @@ export const generateFigure = (
   square.setParent(parent);
 
   updateBoundingInfo(square);
-  console.log(
-    square.getBoundingInfo().boundingBox.center,
-    parent.position,
-    config
-  );
 
   recenterMesh(parent, square, config);
 };

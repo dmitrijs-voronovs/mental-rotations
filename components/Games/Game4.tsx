@@ -46,6 +46,12 @@ const camerasConfig: CameraConfig[] = [
   { x: 0.4, y: 0.33, height: 0.33, width: 0.2 },
   { x: 0, y: 0, height: 0.33, width: 0.2 },
   {
+    x: 0.2,
+    y: 0,
+    height: 0.33,
+    width: 0.2,
+  },
+  {
     x: 0.4,
     y: 0,
     height: 0.33,
@@ -59,12 +65,6 @@ const camerasConfig: CameraConfig[] = [
   },
   {
     x: 0.8,
-    y: 0,
-    height: 0.33,
-    width: 0.2,
-  },
-  {
-    x: 0.2,
     y: 0,
     height: 0.33,
     width: 0.2,
@@ -86,11 +86,10 @@ declare global {
   }
 }
 
-export const POSITION_MULTIPLIER = 300;
+export const POSITION_MULTIPLIER = 350;
 
 function createScene(sceneEventArgs: SceneEventArgs) {
   const { scene, canvas } = sceneEventArgs;
-
   const cameras = camerasConfig.map((configRaw, i) => {
     const config = { ...configRaw, ...defaultCameraConfig };
     const camera = new ArcRotateCamera(
@@ -140,16 +139,17 @@ function createScene(sceneEventArgs: SceneEventArgs) {
         0
       );
       box.isVisible = false;
-      box.showBoundingBox = true;
-      box.showSubMeshesBoundingBox = true;
+      // box.showBoundingBox = true;
+      // box.showSubMeshesBoundingBox = true;
       box.enableEdgesRendering();
-      box.edgesWidth = 5;
+      box.edgesWidth = 6;
       box.edgesColor = Color4.FromColor3(Color3.Black(), 1);
 
       const material =
         (scene.getMaterialByName(`box-material`) as StandardMaterial) ||
         new StandardMaterial(`box-material`, scene);
-      material.diffuseColor = new Color3(0.82, 0.82, 0.82);
+      material.diffuseColor = new Color3(0.9, 0.9, 0.9);
+      // material.diffuseColor = Color3.White();
       material.specularColor = Color3.White();
       box.material = material;
 
@@ -165,37 +165,32 @@ function createScene(sceneEventArgs: SceneEventArgs) {
     return rotationTimes * 90;
   }
 
-  const getBaseFigureConfig = (source: Mesh): GenerationConfig => ({
-    ...defaultConfig,
-    originX: source.position.x,
-    originY: source.position.y,
-  });
-
-  const rotateReferenceShape = (
-    source: Mesh,
-    target: Mesh,
-    config: GenerationConfig
-  ) => {
-    resetBoundingInfo(target);
-
-    const { position, name } = target;
-    target.dispose();
-    const parent = new TransformNode(getTransformNodeName(name));
-    target = source.clone(target.name, parent);
-
-    const rotation = generateRotation({
+  function generateRandomAngle(ignoreAngles?: Vector3[]) {
+    let result = generateRotation({
       finalRotationX: getRandomAngle(),
       finalRotationY: getRandomAngle(),
       finalRotationZ: getRandomAngle(),
     });
-    target.rotation = rotation;
 
-    const { x, y, z } = position;
-    updateBoundingInfo(target);
+    if (!ignoreAngles) return result;
 
-    target.showSubMeshesBoundingBox = true;
-    recenterMesh(parent, target, { originX: x, originY: y, originZ: z });
-  };
+    while (ignoreAngles.find((toIgnore) => result.equals(toIgnore))) {
+      result = generateRotation({
+        finalRotationX: getRandomAngle(),
+        finalRotationY: getRandomAngle(),
+        finalRotationZ: getRandomAngle(),
+      });
+    }
+    return result;
+  }
+
+  const getBaseFigureConfig = (source: Mesh): GenerationConfig => ({
+    ...defaultConfig,
+    // maxDeltaForNextBlock: 3,
+    // totalBlocks: 22,
+    originX: source.position.x,
+    originY: source.position.y,
+  });
 
   const cleanUp = () => {
     shapes.forEach((shape) => {
@@ -211,18 +206,70 @@ function createScene(sceneEventArgs: SceneEventArgs) {
     });
   };
 
+  const rotateReferenceShape = (
+    source: Mesh,
+    target: Mesh,
+    options?: { toAngle?: Vector3; ignoreAngles?: Vector3[] }
+  ): Vector3 => {
+    resetBoundingInfo(target);
+
+    const { position, name } = target;
+    target.dispose();
+    const parent = new TransformNode(getTransformNodeName(name));
+    target = source.clone(target.name, parent);
+
+    const rotation =
+      options?.toAngle || generateRandomAngle(options?.ignoreAngles);
+    target
+      .addRotation(0, 0, rotation.z)
+      .addRotation(rotation.x, 0, 0)
+      .addRotation(0, rotation.y, 0);
+
+    const { x, y, z } = position;
+    updateBoundingInfo(target);
+
+    target.showSubMeshesBoundingBox = true;
+    recenterMesh(parent, target, { originX: x, originY: y, originZ: z });
+
+    return rotation;
+  };
+
+  const rotateReferenceShapes = (
+    source: Mesh,
+    targets: Mesh[],
+    correctRotation: Vector3
+  ) => {
+    const correctShapeIdx = Math.floor(Scalar.RandomRange(0, targets.length));
+    console.log({ correctShapeIdx, correctAnswer: correctShapeIdx + 1 });
+
+    const existingAngles = [correctRotation, Vector3.Zero()];
+    targets.forEach((target, idx) => {
+      existingAngles.push(
+        rotateReferenceShape(
+          source,
+          target,
+          idx === correctShapeIdx
+            ? { toAngle: correctRotation }
+            : { ignoreAngles: existingAngles }
+        )
+      );
+    });
+  };
+
   const generateAll = () => {
     const configReferenceShape = getBaseFigureConfig(shapes[0]);
     generateFigure(sceneEventArgs, configReferenceShape, shapes[0].name);
-    rotateReferenceShape(shapes[0], shapes[1], configReferenceShape);
+    const correctAngle = rotateReferenceShape(shapes[0], shapes[1], {
+      ignoreAngles: [Vector3.Zero()],
+    });
 
     const configTestShape = getBaseFigureConfig(shapes[2]);
     generateFigure(sceneEventArgs, configTestShape, shapes[2].name);
-    rotateReferenceShape(shapes[2], shapes[3], configTestShape);
-    rotateReferenceShape(shapes[2], shapes[4], configTestShape);
-    rotateReferenceShape(shapes[2], shapes[5], configTestShape);
-    rotateReferenceShape(shapes[2], shapes[6], configTestShape);
-    rotateReferenceShape(shapes[2], shapes[7], configTestShape);
+    rotateReferenceShapes(
+      shapes[2],
+      [shapes[3], shapes[4], shapes[5], shapes[6], shapes[7]],
+      correctAngle
+    );
   };
 
   const launchTimer = () => {
@@ -266,7 +313,7 @@ const Game4 = () => {
     // scene.onDisposeObservable.add(() => gui.destroy());
     // createAxis(sceneEventArgs, AXIS_SIZE);
     createScene(sceneEventArgs);
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
   };
 
   return (

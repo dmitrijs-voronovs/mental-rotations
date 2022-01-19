@@ -46,7 +46,7 @@ const Game2 = () => {
               alpha={Math.PI / 3}
               beta={Math.PI / 3}
               radius={20}
-            ></arcRotateCamera>
+            />
             <hemisphericLight
               name="light1"
               intensity={0.7}
@@ -54,8 +54,8 @@ const Game2 = () => {
             />
             <box
               onReady={(node) => {
-                (node as Mesh).showBoundingBox = true;
-                (node as Mesh).showSubMeshesBoundingBox = true;
+                // (node as Mesh).showBoundingBox = true;
+                // (node as Mesh).showSubMeshesBoundingBox = true;
               }}
               isVisible={false}
               name={SHAPE_NAME}
