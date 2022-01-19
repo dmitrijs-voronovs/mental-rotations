@@ -23,6 +23,8 @@ import {
   generateFigures,
   launchTimer,
 } from "../../utils/GenerateScene";
+import { createEvent } from "../../utils/Events";
+import { EventDisplay } from "@components/EventDisplay";
 
 const onKeyDown = (
   eventInfo: KeyboardInfo,
@@ -33,16 +35,26 @@ const onKeyDown = (
   timer: ReturnType<typeof launchTimer>,
   prepareScene: () => void
 ) => {
+  const key = eventInfo.event.key;
   if (eventInfo.type === KeyboardEventTypes.KEYDOWN) {
-    const key = Number(eventInfo.event.key);
     switch (true) {
-      case key >= 1 && key <= 5:
-        const time = timer.stopTimer();
-        console.log({ key, time });
-        cleanUp(sceneEventArgs, meshes);
-        prepareScene();
+      case !Number.isNaN(Number(key)):
+        const numKey = Number(key);
+        if (numKey >= 1 && numKey <= 5) {
+          document.dispatchEvent(
+            createEvent("Data: actual shape number", { detail: numKey })
+          );
+          const time = timer.stopTimer();
+          console.log({ key: numKey, time });
+          cleanUp(sceneEventArgs, meshes);
+          prepareScene();
+        }
+        return;
+      case key === "h":
+        document.dispatchEvent(createEvent("Help"));
         return;
       default:
+        console.log(key);
         return;
     }
   }
@@ -99,7 +111,7 @@ const Game4 = () => {
           <div>5</div>
         </div>
       </div>
-      {/*<EventDisplay />*/}
+      <EventDisplay />
       <Engine
         antialias
         adaptToDeviceRatio

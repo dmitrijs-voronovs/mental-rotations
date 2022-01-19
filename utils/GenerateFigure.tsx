@@ -110,9 +110,6 @@ export const clearFigure = (
     });
   }
   square.rotation = Vector3.Zero();
-  // square.material?.dispose();
-  // square.parent?.dispose();
-  // square.dispose();
 };
 
 export const generateRotation = (
@@ -125,7 +122,6 @@ export const generateRotation = (
     Angle.FromDegrees(config.finalRotationX).radians(),
     Angle.FromDegrees(config.finalRotationY).radians(),
     Angle.FromDegrees(config.finalRotationZ).radians()
-    // ).scale(SHAPE_SIZE);
   );
 
 const generateCoordinates = (config: GenerationConfig): Vector3[] => {

@@ -27,6 +27,7 @@ import {
   POSITION_MULTIPLIER,
   PositionConfigEntity,
 } from "./positionConfig";
+import { createEvent } from "./Events";
 
 export function createCameras(
   sceneEventArgs: SceneEventArgs,
@@ -129,7 +130,7 @@ function generateRandomAngle(ignoreAngles?: Vector3[]) {
 const getBaseFigureConfig = (source: Mesh): GenerationConfig => ({
   ...defaultConfig,
   // maxDeltaForNextBlock: 3,
-  // totalBlocks: 22,
+  // totalBlocks: 15,
   originX: source.position.x,
   originY: source.position.y,
 });
@@ -156,6 +157,7 @@ export const launchTimer = () => {
     },
   };
 };
+
 const rotateReferenceShape = (
   source: Mesh,
   target: Mesh,
@@ -183,6 +185,7 @@ const rotateReferenceShape = (
 
   return rotation;
 };
+
 const rotateReferenceShapes = (
   source: Mesh,
   targets: Mesh[],
@@ -190,6 +193,9 @@ const rotateReferenceShapes = (
 ) => {
   const correctShapeIdx = Math.floor(Scalar.RandomRange(0, targets.length));
   console.log({ correctShapeIdx, correctAnswer: correctShapeIdx + 1 });
+  document.dispatchEvent(
+    createEvent("Data: correct shape number", { detail: correctShapeIdx + 1 })
+  );
 
   const existingAngles = [correctRotation, Vector3.Zero()];
   targets.forEach((target, idx) => {
@@ -203,6 +209,7 @@ const rotateReferenceShapes = (
       )
     );
   });
+  console.log(existingAngles.map((ang) => ang.asArray()));
 };
 export const generateFigures = (
   boxes: Mesh[],
