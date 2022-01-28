@@ -1,5 +1,5 @@
 // import "@babylonjs/inspector";
-import { Color3, Mesh, Vector3 } from "@babylonjs/core";
+import { Color3, Color4, Vector3 } from "@babylonjs/core";
 import React from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import { createAxis } from "@components/Axis/axisHelper";
@@ -39,7 +39,11 @@ const Game2 = () => {
             paddingBottom: "4rem",
           }}
         >
-          <Scene key="scene2" onSceneMount={onSceneMount}>
+          <Scene
+            key="scene2"
+            onSceneMount={onSceneMount}
+            clearColor={Color4.FromColor3(Color3.White())}
+          >
             <arcRotateCamera
               name="camera1"
               target={Vector3.Zero()}
@@ -49,28 +53,30 @@ const Game2 = () => {
             />
             <hemisphericLight
               name="light1"
-              intensity={0.7}
+              intensity={1}
               direction={Vector3.Up()}
+              groundColor={Color3.White()}
+              specular={Color3.Black()}
             />
             <box
-              onReady={(node) => {
-                // (node as Mesh).showBoundingBox = true;
-                // (node as Mesh).showSubMeshesBoundingBox = true;
-              }}
               isVisible={false}
               name={SHAPE_NAME}
               size={SHAPE_SIZE}
+              enableEdgesRendering
+              edgesWidth={6}
+              edgesColor={Color4.FromColor3(Color3.Black(), 1)}
               position={new Vector3(0, 3, 0)}
               scaling={new Vector3(1, 1, 1)}
             >
               <standardMaterial
                 name={`random-box-mat`}
-                diffuseColor={Color3.White()}
+                diffuseColor={new Color3(0.9, 0.9, 0.9)}
                 specularColor={Color3.White()}
               />
             </box>
             <ground
               name="ground"
+              visibility={0}
               height={10}
               width={10}
               position={new Vector3(0, -5, 0)}

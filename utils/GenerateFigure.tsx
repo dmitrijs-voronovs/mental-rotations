@@ -7,8 +7,6 @@ export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
 const SHAPE_INITIAL_COORD = new Vector3(0, 0, 0);
 
-const SHAPE_PARENT_NAME = "figure_parent";
-
 export type GenerationConfig = {
   spreadOnX: number;
   spreadOnY: number;
@@ -36,7 +34,7 @@ export const defaultConfig: GenerationConfig = {
   originX: 0,
   originY: 0,
   originZ: 0,
-  showAxis: true,
+  showAxis: false,
 };
 
 export function resetBoundingInfo(square: Mesh) {
@@ -163,9 +161,9 @@ const getRandomVector = (config: GenerationConfig): Vector3 => {
     vectorsForNextPosition.push(randomVector);
   }
   return vectorsForNextPosition
-    .reduce(
-      (resultingVector, vector) =>
-        (resultingVector = resultingVector.add(vector))
+    .reduce((resultingVector, vector) =>
+      // (resultingVector = resultingVector.add(vector))
+      resultingVector.add(vector)
     )
     .scale(SHAPE_SIZE);
 };

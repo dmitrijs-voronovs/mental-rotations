@@ -161,6 +161,7 @@ export const generateGUI = (
   gui.saveAs(INITIAL_SETTINGS_KEY);
 
   populateGui(gui, fieldConfig);
+  gui.save();
 
   return gui;
 };
