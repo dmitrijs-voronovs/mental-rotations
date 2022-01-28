@@ -1,4 +1,4 @@
-import "@babylonjs/inspector";
+// import "@babylonjs/inspector";
 import { Color3, Mesh, Vector3 } from "@babylonjs/core";
 import React from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
@@ -15,7 +15,7 @@ const Game2 = () => {
 
     const gui = generateGUI(sceneEventArgs);
     createAxis(sceneEventArgs, AXIS_SIZE);
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
     scene.onDisposeObservable.add(() => gui.destroy());
   };
 

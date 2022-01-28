@@ -20,4 +20,4 @@ export const positionConfig: PositionConfigEntity[] = [
   { x: 0.6, y: 0, height: 0.33, width: 0.2 },
   { x: 0.8, y: 0, height: 0.33, width: 0.2 },
 ];
-export const POSITION_MULTIPLIER = 350;
+export const POSITION_MULTIPLIER = 500;

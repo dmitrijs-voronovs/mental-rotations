@@ -25,6 +25,10 @@ import {
 } from "../../utils/GenerateScene";
 import { createEvent } from "../../utils/Events";
 import { EventDisplay } from "@components/EventDisplay";
+import { generateGUI } from "../../utils/GenerateGUI";
+import { GUI } from "dat.gui";
+import { GENERATION_SETTINGS_KEY } from "@components/Games/Game3";
+import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
 
 const onKeyDown = (
   eventInfo: KeyboardInfo,
@@ -60,15 +64,26 @@ const onKeyDown = (
   }
 };
 
-function createScene(sceneEventArgs: SceneEventArgs) {
+function getShapeConfig(gui?: GUI): GenerationConfig {
+  if (!gui) return defaultConfig;
+  const config = (gui.getSaveObject() as any).remembered[
+    GENERATION_SETTINGS_KEY
+  ][0];
+  console.log(config);
+  return config;
+}
+
+function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
   const { scene, canvas } = sceneEventArgs;
   createCameras(sceneEventArgs, positionConfig);
   let boxes: Mesh[];
+
   let timer: ReturnType<typeof launchTimer>;
 
   function prepareScene() {
     boxes = createBoxes(sceneEventArgs, positionConfig);
-    generateFigures(boxes, sceneEventArgs);
+    const shapeConfig = getShapeConfig(gui);
+    generateFigures(boxes, sceneEventArgs, shapeConfig);
     timer = launchTimer();
   }
 
@@ -90,10 +105,10 @@ function createScene(sceneEventArgs: SceneEventArgs) {
 const Game4 = () => {
   const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
     // const { scene } = sceneEventArgs;
-    // const gui = generateGUI(sceneEventArgs);
+    const gui = generateGUI(sceneEventArgs);
     // scene.onDisposeObservable.add(() => gui.destroy());
     // createAxis(sceneEventArgs, AXIS_SIZE);
-    createScene(sceneEventArgs);
+    createScene(sceneEventArgs, gui);
     // scene.debugLayer.show();
   };
 

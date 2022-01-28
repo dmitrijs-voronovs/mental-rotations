@@ -30,7 +30,7 @@ type GenerationConfig = {
 };
 
 const AXIS_SIZE = 5;
-const GENERATION_SETTINGS_KEY = "Default";
+export const GENERATION_SETTINGS_KEY = "Default";
 const INITIAL_SETTINGS_KEY = "initial";
 
 const generateGUI = (sceneEventArgs: SceneEventArgs): dat.GUI => {

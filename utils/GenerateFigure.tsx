@@ -98,6 +98,7 @@ export const generateFigure = (
 
   recenterMesh(parent, square, config);
 };
+
 export const clearFigure = (
   sceneEventArgs: SceneEventArgs,
   shapeName = SHAPE_NAME
@@ -139,6 +140,7 @@ const generateCoordinates = (config: GenerationConfig): Vector3[] => {
   }
   return allCoords;
 };
+
 const getRandomVector = (config: GenerationConfig): Vector3 => {
   const { maxDeltaForNextBlock, spreadOnX, spreadOnY, spreadOnZ } = config;
   const getValueOfRandomVector = (n: number): Vector3 => {
@@ -167,6 +169,7 @@ const getRandomVector = (config: GenerationConfig): Vector3 => {
     )
     .scale(SHAPE_SIZE);
 };
+
 const getNewCoord = (
   existingCoords: Vector3[],
   deltaVector: Vector3

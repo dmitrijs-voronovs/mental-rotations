@@ -1,10 +1,12 @@
 import {
   ArcRotateCamera,
+  Axis,
   Color3,
   Color4,
   Mesh,
   MeshBuilder,
   Scalar,
+  Space,
   StandardMaterial,
   TransformNode,
   Vector3,
@@ -104,7 +106,7 @@ export function createBoxes(
 }
 
 function getRandomAngle() {
-  const rotationTimes = Math.floor(Scalar.RandomRange(0, 2));
+  const rotationTimes = Math.floor(Scalar.RandomRange(-2, 2));
   return rotationTimes * 90;
 }
 
@@ -127,13 +129,17 @@ function generateRandomAngle(ignoreAngles?: Vector3[]) {
   return result;
 }
 
-const getBaseFigureConfig = (source: Mesh): GenerationConfig => ({
-  ...defaultConfig,
+const getBaseFigureConfig = (
+  source: Mesh,
+  config?: GenerationConfig
+): GenerationConfig => ({
+  ...(config ?? defaultConfig),
   // maxDeltaForNextBlock: 3,
   // totalBlocks: 15,
   originX: source.position.x,
   originY: source.position.y,
 });
+
 export const cleanUp = (sceneEventArgs: SceneEventArgs, meshes: Mesh[]) => {
   const { scene } = sceneEventArgs;
   meshes.forEach((shape) => {
@@ -172,10 +178,14 @@ const rotateReferenceShape = (
 
   const rotation =
     options?.toAngle || generateRandomAngle(options?.ignoreAngles);
-  target
-    .addRotation(0, 0, rotation.z)
-    .addRotation(rotation.x, 0, 0)
-    .addRotation(0, rotation.y, 0);
+  // target.rotation.x = rotation.x;
+  // target
+  //   .addRotation(0, 0, rotation.z)
+  //   .addRotation(rotation.x, 0, 0)
+  //   .addRotation(0, rotation.y, 0);
+  target.rotate(Axis.X, rotation.x, Space.LOCAL);
+  target.rotate(Axis.Y, rotation.y, Space.LOCAL);
+  target.rotate(Axis.Z, rotation.z, Space.LOCAL);
 
   const { x, y, z } = position;
   updateBoundingInfo(target);
@@ -209,19 +219,23 @@ const rotateReferenceShapes = (
       )
     );
   });
-  console.log(existingAngles.map((ang) => ang.asArray()));
+  // console.log(
+  //   targets.map((t) => [t.getWorldMatrix(), t._getWorldMatrixDeterminant()])
+  // );
+  // console.log(existingAngles.map((ang) => ang.asArray()));
 };
 export const generateFigures = (
   boxes: Mesh[],
-  sceneEventArgs: SceneEventArgs
+  sceneEventArgs: SceneEventArgs,
+  shapeConfig: GenerationConfig
 ) => {
-  const configReferenceShape = getBaseFigureConfig(boxes[0]);
+  const configReferenceShape = getBaseFigureConfig(boxes[0], shapeConfig);
   generateFigure(sceneEventArgs, configReferenceShape, boxes[0].name);
   const correctAngle = rotateReferenceShape(boxes[0], boxes[1], {
     ignoreAngles: [Vector3.Zero()],
   });
 
-  const configTestShape = getBaseFigureConfig(boxes[2]);
+  const configTestShape = getBaseFigureConfig(boxes[2], shapeConfig);
   generateFigure(sceneEventArgs, configTestShape, boxes[2].name);
   rotateReferenceShapes(
     boxes[2],

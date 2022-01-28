@@ -44,7 +44,7 @@ export const defaultGuiConfig: Omit<
   spreadMin: 0,
   spreadMax: 1,
   spreadStep: 0.01,
-  totalBlocksMax: 20,
+  totalBlocksMax: 50,
   totalBlocksMin: 2,
   totalBlocksStep: 1,
   maxDeltaForNextBlockMin: 1,
@@ -65,13 +65,22 @@ export const AXIS_SIZE = 5;
 const GENERATION_SETTINGS_KEY = "Default";
 
 const INITIAL_SETTINGS_KEY = "initial";
-function placeGui(gui: GUI, canvas: HTMLCanvasElement) {
+export type Position = { top: number; left: number };
+
+function placeGui(
+  gui: GUI,
+  canvas: HTMLCanvasElement,
+  position: Position = { top: 30, left: 30 }
+) {
   // GUI placement
   gui.domElement.id = "datGUI";
   gui.useLocalStorage = true;
   const canvasPlacement = canvas.getBoundingClientRect();
-  gui.domElement.style.marginTop = `${canvasPlacement.top + 30}px`;
-  gui.domElement.style.marginRight = `${canvasPlacement.left + 30}px`;
+  gui.domElement.style.position = "absolute";
+  gui.domElement.style.top = "0";
+  gui.domElement.style.left = "0";
+  gui.domElement.style.marginTop = `${canvasPlacement.top + position.top}px`;
+  gui.domElement.style.marginLeft = `${canvasPlacement.left + position.left}px`;
 }
 
 function populateGui(gui: GUI, fieldConfig: GuiConfigDefinition) {
@@ -113,12 +122,16 @@ function populateGui(gui: GUI, fieldConfig: GuiConfigDefinition) {
   });
 }
 
-export const generateGUI = (sceneEventArgs: SceneEventArgs): GUI => {
+const GUI_NAME = "My GUI";
+export const generateGUI = (
+  sceneEventArgs: SceneEventArgs,
+  position?: Position
+): GUI => {
   const { canvas } = sceneEventArgs;
 
-  const gui = new GUI({ name: "My GUI" });
+  const gui = new GUI({ name: GUI_NAME });
 
-  placeGui(gui, canvas);
+  placeGui(gui, canvas, position);
   // GUI values
   const fieldConfig = {
     ...defaultGuiConfig,
