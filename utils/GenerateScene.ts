@@ -1,12 +1,12 @@
 import {
+  Angle,
   ArcRotateCamera,
-  Axis,
   Color3,
   Color4,
   Mesh,
   MeshBuilder,
+  Quaternion,
   Scalar,
-  Space,
   StandardMaterial,
   TransformNode,
   Vector3,
@@ -107,6 +107,7 @@ export function createBoxes(
 
 function getRandomAngle() {
   const rotationTimes = Math.floor(Scalar.RandomRange(-2, 2));
+  // const rotationTimes = Math.floor(Scalar.RandomRange(0, 2));
   return rotationTimes * 90;
 }
 
@@ -119,13 +120,21 @@ function generateRandomAngle(ignoreAngles?: Vector3[]) {
 
   if (!ignoreAngles) return result;
 
-  while (ignoreAngles.find((toIgnore) => result.equals(toIgnore))) {
+  while (
+    ignoreAngles.find((toIgnore) =>
+      areQuaternionEqual(
+        Quaternion.FromEulerVector(result),
+        Quaternion.FromEulerVector(toIgnore)
+      )
+    )
+  ) {
     result = generateRotation({
       finalRotationX: getRandomAngle(),
       finalRotationY: getRandomAngle(),
       finalRotationZ: getRandomAngle(),
     });
   }
+
   return result;
 }
 
@@ -176,16 +185,10 @@ const rotateReferenceShape = (
   const parent = new TransformNode(getTransformNodeName(name));
   target = source.clone(target.name, parent);
 
+  console.log(target.name);
   const rotation =
     options?.toAngle || generateRandomAngle(options?.ignoreAngles);
-  // target.rotation.x = rotation.x;
-  // target
-  //   .addRotation(0, 0, rotation.z)
-  //   .addRotation(rotation.x, 0, 0)
-  //   .addRotation(0, rotation.y, 0);
-  target.rotate(Axis.X, rotation.x, Space.LOCAL);
-  target.rotate(Axis.Y, rotation.y, Space.LOCAL);
-  target.rotate(Axis.Z, rotation.z, Space.LOCAL);
+  target.rotationQuaternion = Quaternion.FromEulerVector(rotation);
 
   const { x, y, z } = position;
   updateBoundingInfo(target);
@@ -195,6 +198,12 @@ const rotateReferenceShape = (
 
   return rotation;
 };
+
+export function areQuaternionEqual(q1: Quaternion, q2: Quaternion) {
+  const dotProd = Math.abs(Quaternion.Dot(q1, q2));
+  const threshold = 1e-5;
+  return 1 - threshold < dotProd;
+}
 
 const rotateReferenceShapes = (
   source: Mesh,
@@ -209,21 +218,28 @@ const rotateReferenceShapes = (
 
   const existingAngles = [correctRotation, Vector3.Zero()];
   targets.forEach((target, idx) => {
-    existingAngles.push(
-      rotateReferenceShape(
-        source,
-        target,
-        idx === correctShapeIdx
-          ? { toAngle: correctRotation }
-          : { ignoreAngles: existingAngles }
-      )
+    target.computeWorldMatrix(true);
+    const angle = rotateReferenceShape(
+      source,
+      target,
+      idx === correctShapeIdx
+        ? { toAngle: correctRotation }
+        : { ignoreAngles: existingAngles }
     );
+    existingAngles.push(angle);
   });
-  // console.log(
-  //   targets.map((t) => [t.getWorldMatrix(), t._getWorldMatrixDeterminant()])
-  // );
-  // console.log(existingAngles.map((ang) => ang.asArray()));
+
+  console.log(
+    existingAngles
+      .slice(2)
+      .map((ang, i) => [
+        Angle.FromRadians(ang.x).degrees(),
+        Angle.FromRadians(ang.y).degrees(),
+        Angle.FromRadians(ang.z).degrees(),
+      ])
+  );
 };
+
 export const generateFigures = (
   boxes: Mesh[],
   sceneEventArgs: SceneEventArgs,

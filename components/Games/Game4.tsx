@@ -1,11 +1,14 @@
+// TODO: remove when not debugging
 import "@babylonjs/inspector";
 import {
+  Angle,
   Color3,
   Color4,
   EventState,
   KeyboardEventTypes,
   KeyboardInfo,
   Mesh,
+  Quaternion,
   Vector3,
 } from "@babylonjs/core";
 import React from "react";
@@ -17,6 +20,7 @@ import {
   PositionConfigEntity,
 } from "../../utils/positionConfig";
 import {
+  areQuaternionEqual,
   cleanUp,
   createBoxes,
   createCameras,
@@ -109,7 +113,7 @@ const Game4 = () => {
     // scene.onDisposeObservable.add(() => gui.destroy());
     // createAxis(sceneEventArgs, AXIS_SIZE);
     createScene(sceneEventArgs, gui);
-    // scene.debugLayer.show();
+    sceneEventArgs.scene.debugLayer.show();
   };
 
   return (

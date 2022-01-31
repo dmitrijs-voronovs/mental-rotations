@@ -130,9 +130,9 @@ const generateCoordinates = (config: GenerationConfig): Vector3[] => {
   let nBlocksToGenerate = totalBlocks - 1;
   while (nBlocksToGenerate > 0) {
     const randomDeltaVector = getRandomVector(config);
-    const newCoord = getNewCoord(allCoords, randomDeltaVector);
-    if (newCoord) {
-      allCoords.push(newCoord);
+    const newCoords = getNewCoords(allCoords, randomDeltaVector);
+    if (newCoords) {
+      allCoords.push(newCoords);
       nBlocksToGenerate--;
     }
   }
@@ -168,13 +168,13 @@ const getRandomVector = (config: GenerationConfig): Vector3 => {
     .scale(SHAPE_SIZE);
 };
 
-const getNewCoord = (
+const getNewCoords = (
   existingCoords: Vector3[],
   deltaVector: Vector3
 ): Vector3 | null => {
   const usedCoords: number[] = [];
   let isOverlapping = true;
-  let newCoord: Vector3 = Vector3.Zero();
+  let newCoords: Vector3 = Vector3.Zero();
   while (isOverlapping && usedCoords.length < existingCoords.length) {
     const randomExistingCordIdx = getRandomInt(existingCoords.length);
     // TODO: improve not to restart, but to find closest non-used value
@@ -183,10 +183,10 @@ const getNewCoord = (
     } else {
       usedCoords.push(randomExistingCordIdx);
     }
-    newCoord = existingCoords[randomExistingCordIdx].add(deltaVector);
+    newCoords = existingCoords[randomExistingCordIdx].add(deltaVector);
     isOverlapping = existingCoords.some(
-      (existingCoord) => existingCoord.toString() === newCoord.toString()
+      (existingCoord) => existingCoord.toString() === newCoords.toString()
     );
   }
-  return !isOverlapping ? newCoord : null;
+  return !isOverlapping ? newCoords : null;
 };
