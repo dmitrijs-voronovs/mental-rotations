@@ -29,7 +29,7 @@ import {
   POSITION_MULTIPLIER,
   PositionConfigEntity,
 } from "./positionConfig";
-import { createEvent } from "./Events";
+import { dispatchProjectEvent } from "./Events";
 
 export function createCameras(
   sceneEventArgs: SceneEventArgs,
@@ -161,15 +161,6 @@ export const cleanUp = (sceneEventArgs: SceneEventArgs, meshes: Mesh[]) => {
     }
   });
 };
-export const launchTimer = () => {
-  let startTime: number;
-  startTime = Date.now();
-  return {
-    stopTimer() {
-      return Date.now() - startTime;
-    },
-  };
-};
 
 const rotateReferenceShape = (
   source: Mesh,
@@ -183,7 +174,6 @@ const rotateReferenceShape = (
   const parent = new TransformNode(getTransformNodeName(name));
   target = source.clone(target.name, parent);
 
-  console.log(target.name);
   const rotation =
     options?.toAngle || generateRandomAngle(options?.ignoreAngles);
   target.rotationQuaternion = Quaternion.FromEulerVector(rotation);
@@ -225,7 +215,7 @@ const rotateReferenceShapes = (
   console.log(
     existingAngles
       .slice(2)
-      .map((ang, i) => [
+      .map((ang, _i) => [
         Angle.FromRadians(ang.x).degrees(),
         Angle.FromRadians(ang.y).degrees(),
         Angle.FromRadians(ang.z).degrees(),
@@ -247,10 +237,18 @@ export const generateFigures = (
   const configTestShape = getBaseFigureConfig(boxes[2], shapeConfig);
   generateFigure(sceneEventArgs, configTestShape, boxes[2].name);
 
-  const meshes = [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]];
-  const correctShapeIdx = Math.floor(Scalar.RandomRange(0, meshes.length));
+  const meshesToRotate = [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]];
+  const correctShapeIdx = Math.floor(
+    Scalar.RandomRange(0, meshesToRotate.length)
+  );
 
   console.log({ correctShapeIdx, correctAnswer: correctShapeIdx + 1 });
-  document.dispatchEvent(createEvent("correctAnswer", correctShapeIdx + 1));
-  rotateReferenceShapes(boxes[2], meshes, correctAngle, correctShapeIdx);
+
+  dispatchProjectEvent("correctAnswer", correctShapeIdx + 1);
+  rotateReferenceShapes(
+    boxes[2],
+    meshesToRotate,
+    correctAngle,
+    correctShapeIdx
+  );
 };

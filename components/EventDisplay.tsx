@@ -5,7 +5,6 @@ import { GenerationConfig } from "../utils/GenerateFigure";
 import {
   ActualAnswer,
   CorrectAnswer,
-  Help,
   listenToProjectEvents,
   Print,
   removeProjectEventListener,
@@ -88,7 +87,7 @@ export const EventDisplay: FC = (props) => {
       setShowHelp((help) => !help);
     };
 
-    function printHandler(e: Print) {
+    function printHandler(_e: Print) {
       exportTestResults(
         data.current || [
           {
@@ -110,7 +109,6 @@ export const EventDisplay: FC = (props) => {
 
   useEffect(() => {
     const actualAnswerHandler = (e: ActualAnswer) => {
-      console.log(correct, e);
       if (correct === e.detail) {
         toast({
           status: "success",

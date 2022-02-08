@@ -21,23 +21,22 @@ declare global {
   export interface DocumentEventMap extends ProjectEventMap {}
 }
 
-export function createEvent<T extends SimpleEventKeys>(
-  name: T
-): ProjectEventMap[T];
-export function createEvent<T extends CustomEventKeys>(
+export function dispatchProjectEvent<T extends SimpleEventKeys>(name: T): void;
+export function dispatchProjectEvent<T extends CustomEventKeys>(
   name: T,
   data: ProjectEventMap[T]["detail"]
-): ProjectEventMap[T];
-export function createEvent<T extends keyof ProjectEventMap>(
+): void;
+export function dispatchProjectEvent<T extends keyof ProjectEventMap>(
   name: T,
   data?: ProjectEventMap[T] extends CustomEvent
     ? ProjectEventMap[T]["detail"]
     : never
-): ProjectEventMap[T] {
+): void {
   if (data) {
-    return new CustomEvent(name, { detail: data });
+    document.dispatchEvent(new CustomEvent(name, { detail: data }));
+  } else {
+    document.dispatchEvent(new Event(name));
   }
-  return new Event(name) as any;
 }
 
 export function listenToProjectEvents<T extends keyof ProjectEventMap>(

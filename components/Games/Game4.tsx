@@ -1,156 +1,52 @@
 // TODO: remove when not debugging
 // import "@babylonjs/inspector";
-import {
-  Angle,
-  Color3,
-  Color4,
-  EventState,
-  KeyboardEventTypes,
-  KeyboardInfo,
-  Mesh,
-  Quaternion,
-  Tools,
-  Vector3,
-} from "@babylonjs/core";
+import { Color3, Color4, Mesh, Vector3 } from "@babylonjs/core";
 import React from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
+import { positionConfig } from "../../utils/positionConfig";
 import {
-  positionConfig,
-  PositionConfigEntity,
-} from "../../utils/positionConfig";
-import {
-  areQuaternionEqual,
-  cleanUp,
   createBoxes,
   createCameras,
   generateFigures,
-  launchTimer,
 } from "../../utils/GenerateScene";
-import { CorrectAnswer, createEvent } from "../../utils/Events";
 import { EventDisplay } from "@components/EventDisplay";
 import { generateGUI } from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
 import { GENERATION_SETTINGS_KEY } from "@components/Games/Game3";
 import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
-import { getCameraName } from "../../utils/names";
-import { data } from "browserslist";
-
-function createScreenshot(
-  canvas: HTMLCanvasElement,
-  segment: number[],
-  segmentWidth: number,
-  segmentHeight: number
-): string {
-  const hiddenCanvas = document.createElement("canvas");
-  hiddenCanvas.height = segmentHeight;
-  hiddenCanvas.width = segmentWidth;
-  hiddenCanvas
-    .getContext("2d")!
-    .drawImage(
-      canvas,
-      segmentWidth * segment[0],
-      segmentHeight * segment[1],
-      segmentWidth,
-      segmentHeight,
-      0,
-      0,
-      segmentWidth,
-      segmentHeight
-    );
-  return hiddenCanvas.toDataURL("image/png", 0.9);
-}
-
-function createScreenshots(canvas: HTMLCanvasElement): string[] {
-  const segmentWidth = canvas.width / 5;
-  const segmentHeight = canvas.height / 3;
-  const segments = [
-    [1, 0],
-    [3, 0],
-    [2, 1],
-    [0, 2],
-    [1, 2],
-    [2, 2],
-    [3, 2],
-    [4, 2],
-  ];
-  return segments.map((segment) =>
-    createScreenshot(canvas, segment, segmentWidth, segmentHeight)
-  );
-}
-
-const onKeyDown = (
-  eventInfo: KeyboardInfo,
-  eventState: EventState,
-  sceneEventArgs: SceneEventArgs,
-  meshes: Mesh[],
-  camerasConfig: PositionConfigEntity[],
-  timer: ReturnType<typeof launchTimer>,
-  prepareScene: () => void
-) => {
-  const key = eventInfo.event.key;
-  if (eventInfo.type === KeyboardEventTypes.KEYDOWN) {
-    switch (true) {
-      case !Number.isNaN(Number(key)):
-        const numKey = Number(key);
-        if (numKey >= 1 && numKey <= 5) {
-          document.dispatchEvent(createEvent("actualAnswer", numKey));
-          const time = timer.stopTimer();
-          console.log({ key: numKey, time });
-          cleanUp(sceneEventArgs, meshes);
-          prepareScene();
-        }
-        return;
-      case key === "h":
-        document.dispatchEvent(createEvent("help"));
-        return;
-      case key === "p":
-        const screenshots = createScreenshots(sceneEventArgs.canvas);
-        document.dispatchEvent(createEvent("print", screenshots));
-        return;
-      default:
-        console.log(key);
-        return;
-    }
-  }
-};
+import { launchTimer } from "../../utils/LaunchTimer";
+import { createKeyboardEventHandler } from "@components/Games/EventManager/CreateKeyboardEventHandler";
 
 function getShapeConfig(gui?: GUI): GenerationConfig {
   if (!gui) return defaultConfig;
-  const config = (gui.getSaveObject() as any).remembered[
-    GENERATION_SETTINGS_KEY
-  ][0];
-  console.log(config);
-  return config;
+  return (gui.getSaveObject() as any).remembered[GENERATION_SETTINGS_KEY][0];
 }
 
 function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
-  const { scene, canvas } = sceneEventArgs;
+  const { scene } = sceneEventArgs;
   createCameras(sceneEventArgs, positionConfig);
   let boxes: Mesh[];
-
-  let timer: ReturnType<typeof launchTimer>;
+  let stopTimer: ReturnType<typeof launchTimer>;
 
   function prepareScene() {
     boxes = createBoxes(sceneEventArgs, positionConfig);
     const shapeConfig = getShapeConfig(gui);
     generateFigures(boxes, sceneEventArgs, shapeConfig);
-    timer = launchTimer();
+    stopTimer = launchTimer();
   }
 
   prepareScene();
 
+  const KeyboardEventHandler = createKeyboardEventHandler(sceneEventArgs, {
+    stopTimer: stopTimer!,
+    prepareScene,
+    boxes: boxes!,
+  });
+
   scene.onKeyboardObservable.add((eventInfo, eventState) =>
-    onKeyDown(
-      eventInfo,
-      eventState,
-      sceneEventArgs,
-      boxes,
-      positionConfig,
-      timer,
-      prepareScene
-    )
+    KeyboardEventHandler.handleEvent(eventInfo, eventState)
   );
 }
 
