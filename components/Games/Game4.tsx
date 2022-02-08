@@ -1,5 +1,5 @@
 // TODO: remove when not debugging
-import "@babylonjs/inspector";
+// import "@babylonjs/inspector";
 import {
   Angle,
   Color3,
@@ -9,6 +9,7 @@ import {
   KeyboardInfo,
   Mesh,
   Quaternion,
+  Tools,
   Vector3,
 } from "@babylonjs/core";
 import React from "react";
@@ -27,12 +28,57 @@ import {
   generateFigures,
   launchTimer,
 } from "../../utils/GenerateScene";
-import { createEvent } from "../../utils/Events";
+import { CorrectAnswer, createEvent } from "../../utils/Events";
 import { EventDisplay } from "@components/EventDisplay";
 import { generateGUI } from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
 import { GENERATION_SETTINGS_KEY } from "@components/Games/Game3";
 import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
+import { getCameraName } from "../../utils/names";
+import { data } from "browserslist";
+
+function createScreenshot(
+  canvas: HTMLCanvasElement,
+  segment: number[],
+  segmentWidth: number,
+  segmentHeight: number
+): string {
+  const hiddenCanvas = document.createElement("canvas");
+  hiddenCanvas.height = segmentHeight;
+  hiddenCanvas.width = segmentWidth;
+  hiddenCanvas
+    .getContext("2d")!
+    .drawImage(
+      canvas,
+      segmentWidth * segment[0],
+      segmentHeight * segment[1],
+      segmentWidth,
+      segmentHeight,
+      0,
+      0,
+      segmentWidth,
+      segmentHeight
+    );
+  return hiddenCanvas.toDataURL("image/png", 0.9);
+}
+
+function createScreenshots(canvas: HTMLCanvasElement): string[] {
+  const segmentWidth = canvas.width / 5;
+  const segmentHeight = canvas.height / 3;
+  const segments = [
+    [1, 0],
+    [3, 0],
+    [2, 1],
+    [0, 2],
+    [1, 2],
+    [2, 2],
+    [3, 2],
+    [4, 2],
+  ];
+  return segments.map((segment) =>
+    createScreenshot(canvas, segment, segmentWidth, segmentHeight)
+  );
+}
 
 const onKeyDown = (
   eventInfo: KeyboardInfo,
@@ -49,9 +95,7 @@ const onKeyDown = (
       case !Number.isNaN(Number(key)):
         const numKey = Number(key);
         if (numKey >= 1 && numKey <= 5) {
-          document.dispatchEvent(
-            createEvent("Data: actual shape number", { detail: numKey })
-          );
+          document.dispatchEvent(createEvent("actualAnswer", numKey));
           const time = timer.stopTimer();
           console.log({ key: numKey, time });
           cleanUp(sceneEventArgs, meshes);
@@ -59,7 +103,11 @@ const onKeyDown = (
         }
         return;
       case key === "h":
-        document.dispatchEvent(createEvent("Help"));
+        document.dispatchEvent(createEvent("help"));
+        return;
+      case key === "p":
+        const screenshots = createScreenshots(sceneEventArgs.canvas);
+        document.dispatchEvent(createEvent("print", screenshots));
         return;
       default:
         console.log(key);
@@ -113,7 +161,7 @@ const Game4 = () => {
     // scene.onDisposeObservable.add(() => gui.destroy());
     // createAxis(sceneEventArgs, AXIS_SIZE);
     createScene(sceneEventArgs, gui);
-    sceneEventArgs.scene.debugLayer.show();
+    // sceneEventArgs.scene.debugLayer.show();
   };
 
   return (
@@ -132,6 +180,7 @@ const Game4 = () => {
       </div>
       <EventDisplay />
       <Engine
+        engineOptions={{ preserveDrawingBuffer: true, stencil: true }}
         antialias
         adaptToDeviceRatio
         canvasId="babylonJS"

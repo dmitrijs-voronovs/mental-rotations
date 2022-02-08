@@ -143,8 +143,6 @@ const getBaseFigureConfig = (
   config?: GenerationConfig
 ): GenerationConfig => ({
   ...(config ?? defaultConfig),
-  // maxDeltaForNextBlock: 3,
-  // totalBlocks: 15,
   originX: source.position.x,
   originY: source.position.y,
 });
@@ -208,14 +206,9 @@ export function areQuaternionEqual(q1: Quaternion, q2: Quaternion) {
 const rotateReferenceShapes = (
   source: Mesh,
   targets: Mesh[],
-  correctRotation: Vector3
+  correctRotation: Vector3,
+  correctShapeIdx: number
 ) => {
-  const correctShapeIdx = Math.floor(Scalar.RandomRange(0, targets.length));
-  console.log({ correctShapeIdx, correctAnswer: correctShapeIdx + 1 });
-  document.dispatchEvent(
-    createEvent("Data: correct shape number", { detail: correctShapeIdx + 1 })
-  );
-
   const existingAngles = [correctRotation, Vector3.Zero()];
   targets.forEach((target, idx) => {
     target.computeWorldMatrix(true);
@@ -253,9 +246,11 @@ export const generateFigures = (
 
   const configTestShape = getBaseFigureConfig(boxes[2], shapeConfig);
   generateFigure(sceneEventArgs, configTestShape, boxes[2].name);
-  rotateReferenceShapes(
-    boxes[2],
-    [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]],
-    correctAngle
-  );
+
+  const meshes = [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]];
+  const correctShapeIdx = Math.floor(Scalar.RandomRange(0, meshes.length));
+
+  console.log({ correctShapeIdx, correctAnswer: correctShapeIdx + 1 });
+  document.dispatchEvent(createEvent("correctAnswer", correctShapeIdx + 1));
+  rotateReferenceShapes(boxes[2], meshes, correctAngle, correctShapeIdx);
 };
