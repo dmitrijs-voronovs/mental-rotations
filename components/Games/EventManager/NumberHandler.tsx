@@ -1,12 +1,12 @@
 import { KeyDownEventHandler } from "@components/Games/EventManager/KeyDownEventHandler";
-import { launchTimer } from "../../../utils/LaunchTimer";
+import { launchTimer, Timer } from "../../../utils/LaunchTimer";
 import { Mesh } from "@babylonjs/core";
 import { dispatchProjectEvent } from "../../../utils/Events";
 import { cleanUp } from "../../../utils/GenerateScene";
 
 export class NumberHandler extends KeyDownEventHandler {
   constructor(
-    protected stopTimer: ReturnType<typeof launchTimer>,
+    protected timer: Timer,
     protected prepareScene: () => void,
     protected meshes: Mesh[]
   ) {
@@ -21,7 +21,7 @@ export class NumberHandler extends KeyDownEventHandler {
   handle(key: string): void {
     const numKey = Number(key);
     if (numKey >= 1 && numKey <= 5) {
-      const time = this.stopTimer();
+      const time = this.timer.stopTimer();
       dispatchProjectEvent("actualAnswer", { answer: numKey, time });
 
       cleanUp(this.sceneEventArgs, this.meshes);

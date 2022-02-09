@@ -16,7 +16,7 @@ import { generateGUI } from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
 import { GENERATION_SETTINGS_KEY } from "@components/Games/Game3";
 import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
-import { launchTimer } from "../../utils/LaunchTimer";
+import { launchTimer, Timer } from "../../utils/LaunchTimer";
 import { createKeyboardEventHandler } from "@components/Games/EventManager/CreateKeyboardEventHandler";
 
 function getShapeConfig(gui?: GUI): GenerationConfig {
@@ -28,19 +28,19 @@ function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
   const { scene } = sceneEventArgs;
   createCameras(sceneEventArgs, positionConfig);
   let boxes: Mesh[];
-  let stopTimer: ReturnType<typeof launchTimer>;
+  let timer = launchTimer();
 
   function prepareScene() {
     boxes = createBoxes(sceneEventArgs, positionConfig);
     const shapeConfig = getShapeConfig(gui);
     generateFigures(boxes, sceneEventArgs, shapeConfig);
-    stopTimer = launchTimer();
+    timer.restartTimer();
   }
 
   prepareScene();
 
   const KeyboardEventHandler = createKeyboardEventHandler(sceneEventArgs, {
-    stopTimer: stopTimer!,
+    timer: timer,
     prepareScene,
     boxes: boxes!,
   });
