@@ -1,13 +1,25 @@
+import { GenerationConfig } from "./GenerateFigure";
+
 export interface Print extends CustomEvent<string[]> {}
 export interface CorrectAnswer extends CustomEvent<number> {}
-export interface ActualAnswer extends CustomEvent<number> {}
+export interface ActualAnswer
+  extends CustomEvent<{ answer: number; time: number }> {}
 export interface Help extends Event {}
+export interface ConfigurationSet
+  extends CustomEvent<{
+    isForReferenceShape: boolean;
+    config: GenerationConfig;
+  }> {}
+export interface RotationAnglesSet
+  extends CustomEvent<{ x: number; y: number; z: number }> {}
 
 type ProjectEventMap = {
   print: Print;
   help: Help;
   actualAnswer: ActualAnswer;
   correctAnswer: CorrectAnswer;
+  configurationSet: ConfigurationSet;
+  rotationAnglesSet: RotationAnglesSet;
 };
 
 type SimpleEventKeys = {

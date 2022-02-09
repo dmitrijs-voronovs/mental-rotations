@@ -21,9 +21,8 @@ export class NumberHandler extends KeyDownEventHandler {
   handle(key: string): void {
     const numKey = Number(key);
     if (numKey >= 1 && numKey <= 5) {
-      dispatchProjectEvent("actualAnswer", numKey);
-
       const time = this.stopTimer();
+      dispatchProjectEvent("actualAnswer", { answer: numKey, time });
 
       cleanUp(this.sceneEventArgs, this.meshes);
       this.prepareScene();

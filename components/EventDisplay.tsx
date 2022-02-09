@@ -1,13 +1,15 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Box, Kbd, useToast } from "@chakra-ui/react";
 import { ExportToCsv } from "export-to-csv";
 import { GenerationConfig } from "../utils/GenerateFigure";
 import {
   ActualAnswer,
+  ConfigurationSet,
   CorrectAnswer,
   listenToProjectEvents,
   Print,
   removeProjectEventListener,
+  RotationAnglesSet,
 } from "../utils/Events";
 
 type PersistentGenerationConfig = Omit<
@@ -22,12 +24,16 @@ type PersistentTargetGenerationConfig = {
   [Key in keyof PersistentGenerationConfig as `target-${Key}`]: PersistentGenerationConfig[Key];
 };
 
+// TODO: think about IDs?
 export type TestResult = {
   time: number;
   correct: boolean;
-};
-// & PersistentReferenceGenerationConfig &
-//   PersistentTargetGenerationConfig;
+  rotationX: number;
+  rotationY: number;
+  rotationZ: number;
+  taskNumber: number;
+} & PersistentReferenceGenerationConfig &
+  PersistentTargetGenerationConfig;
 
 const formatConfig = <T extends "reference" | "target">(
   config: GenerationConfig,
@@ -76,7 +82,14 @@ export const EventDisplay: FC = (props) => {
   const toast = useToast();
   const [correct, setCorrect] = useState(-1);
   const [showHelp, setShowHelp] = useState(false);
-  const data = useRef<TestResults>(null);
+  const data = useRef<TestResults>([]);
+  const lastTestData = useRef<Partial<TestResult>>({});
+
+  const updateTestResults = useCallback(() => {
+    lastTestData.current.taskNumber = data.current.length + 1;
+    data.current.push(lastTestData.current as TestResult);
+    lastTestData.current = {};
+  }, []);
 
   useEffect(() => {
     const correctAnswerHandler = (e: CorrectAnswer) => {
@@ -88,28 +101,48 @@ export const EventDisplay: FC = (props) => {
     };
 
     function printHandler(_e: Print) {
-      exportTestResults(
-        data.current || [
-          {
-            time: Date.now(),
-            correct: true,
-          },
-        ]
+      // exportTestResults(data.current);
+      console.log(data.current);
+    }
+
+    function configurationSetHandler(e: ConfigurationSet) {
+      const { config, isForReferenceShape } = e.detail;
+      const formattedConfig = formatConfig(
+        config,
+        isForReferenceShape ? "reference" : "target"
       );
+      lastTestData.current = { ...lastTestData.current, ...formattedConfig };
+    }
+
+    function rotationAnglesSetHandler(e: RotationAnglesSet) {
+      const { x: rotationX, y: rotationY, z: rotationZ } = e.detail;
+      lastTestData.current = {
+        ...lastTestData.current,
+        rotationX,
+        rotationY,
+        rotationZ,
+      };
     }
 
     listenToProjectEvents("correctAnswer", correctAnswerHandler);
-    listenToProjectEvents("help", helpHandler);
     listenToProjectEvents("print", printHandler);
+    listenToProjectEvents("help", helpHandler);
+    listenToProjectEvents("rotationAnglesSet", rotationAnglesSetHandler);
+    listenToProjectEvents("configurationSet", configurationSetHandler);
     return () => {
       removeProjectEventListener("correctAnswer", correctAnswerHandler);
       removeProjectEventListener("print", printHandler);
+      removeProjectEventListener("help", helpHandler);
+      removeProjectEventListener("rotationAnglesSet", rotationAnglesSetHandler);
+      removeProjectEventListener("configurationSet", configurationSetHandler);
     };
   }, []);
 
   useEffect(() => {
     const actualAnswerHandler = (e: ActualAnswer) => {
-      if (correct === e.detail) {
+      const { answer, time } = e.detail;
+      const isCorrect = correct === answer;
+      if (isCorrect) {
         toast({
           status: "success",
           position: "top-right",
@@ -119,9 +152,12 @@ export const EventDisplay: FC = (props) => {
         toast({
           status: "error",
           position: "top-right",
-          title: "Wrong answer :(",
+          title: "Wrong answer",
         });
       }
+      lastTestData.current.time = time;
+      lastTestData.current.correct = isCorrect;
+      updateTestResults();
     };
 
     listenToProjectEvents("actualAnswer", actualAnswerHandler);

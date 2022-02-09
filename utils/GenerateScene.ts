@@ -107,7 +107,6 @@ export function createBoxes(
 
 function getRandomAngle() {
   const rotationTimes = Math.floor(Scalar.RandomRange(-2, 2));
-  // const rotationTimes = Math.floor(Scalar.RandomRange(0, 2));
   return rotationTimes * 90;
 }
 
@@ -181,7 +180,6 @@ const rotateReferenceShape = (
   const { x, y, z } = position;
   updateBoundingInfo(target);
 
-  target.showSubMeshesBoundingBox = true;
   recenterMesh(parent, target, { originX: x, originY: y, originZ: z });
 
   return rotation;
@@ -211,16 +209,6 @@ const rotateReferenceShapes = (
     );
     existingAngles.push(angle);
   });
-
-  console.log(
-    existingAngles
-      .slice(2)
-      .map((ang, _i) => [
-        Angle.FromRadians(ang.x).degrees(),
-        Angle.FromRadians(ang.y).degrees(),
-        Angle.FromRadians(ang.z).degrees(),
-      ])
-  );
 };
 
 export const generateFigures = (
@@ -229,12 +217,37 @@ export const generateFigures = (
   shapeConfig: GenerationConfig
 ) => {
   const configReferenceShape = getBaseFigureConfig(boxes[0], shapeConfig);
+  dispatchProjectEvent("configurationSet", {
+    isForReferenceShape: true,
+    config: configReferenceShape,
+  });
+
   generateFigure(sceneEventArgs, configReferenceShape, boxes[0].name);
   const correctAngle = rotateReferenceShape(boxes[0], boxes[1], {
     ignoreAngles: [Vector3.Zero()],
   });
 
+  function getAngle(dimension: "x" | "y" | "z") {
+    const ang = Angle.FromRadians(correctAngle[dimension]).degrees();
+    return ang > 180 ? 180 - ang : ang;
+  }
+
+  console.log("correctAngle", {
+    x: getAngle("x"),
+    y: getAngle("y"),
+    z: getAngle("z"),
+  });
+  dispatchProjectEvent("rotationAnglesSet", {
+    x: getAngle("x"),
+    y: getAngle("y"),
+    z: getAngle("z"),
+  });
+
   const configTestShape = getBaseFigureConfig(boxes[2], shapeConfig);
+  dispatchProjectEvent("configurationSet", {
+    isForReferenceShape: false,
+    config: configTestShape,
+  });
   generateFigure(sceneEventArgs, configTestShape, boxes[2].name);
 
   const meshesToRotate = [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]];
