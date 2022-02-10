@@ -1,38 +1,70 @@
-const e = new Event("Task completed");
-document.dispatchEvent(e);
+import { GenerationConfig } from "./GenerateFigure";
+import { TestScreenshots } from "@components/EventDisplay";
 
-export type CorrectAnswer = "Correct answer";
-export type WrongAnswer = "Wrong answer";
-export type Help = "Help";
-export const HelpE: Help = "Help";
+export interface Print extends Event {}
+export interface CorrectAnswer extends CustomEvent<number> {}
+export interface ActualAnswer
+  extends CustomEvent<{ answer: number; time: number }> {}
+export interface Help extends Event {}
+export interface ConfigurationSet
+  extends CustomEvent<{
+    isForReferenceShape: boolean;
+    config: GenerationConfig;
+  }> {}
+export interface RotationAnglesSet
+  extends CustomEvent<{ x: number; y: number; z: number }> {}
+export interface SceneCreated extends CustomEvent<TestScreenshots> {}
 
-export type DataCorrectShapeNumber = "Data: correct shape number";
-export const DataCorrectShapeNumberE: DataCorrectShapeNumber =
-  "Data: correct shape number";
+type ProjectEventMap = {
+  print: Print;
+  help: Help;
+  actualAnswer: ActualAnswer;
+  correctAnswer: CorrectAnswer;
+  configurationSet: ConfigurationSet;
+  rotationAnglesSet: RotationAnglesSet;
+  sceneCreated: SceneCreated;
+};
 
-export type DataActualShapeNumber = "Data: actual shape number";
-export const DataActualShapeNumberE: DataActualShapeNumber =
-  "Data: actual shape number";
+type SimpleEventKeys = {
+  [Key in keyof ProjectEventMap]: ProjectEventMap[Key] extends CustomEvent
+    ? never
+    : Key;
+}[keyof ProjectEventMap];
+type CustomEventKeys = Exclude<keyof ProjectEventMap, SimpleEventKeys>;
 
-export type DataCorrectShapeNumber_Data = number;
-export type DataActualShapeNumber_Data = number;
+declare global {
+  export interface DocumentEventMap extends ProjectEventMap {}
+}
 
-export type AppSimpleEvent = CorrectAnswer | WrongAnswer | Help;
+export function dispatchProjectEvent<T extends SimpleEventKeys>(name: T): void;
+export function dispatchProjectEvent<T extends CustomEventKeys>(
+  name: T,
+  data: ProjectEventMap[T]["detail"]
+): void;
+export function dispatchProjectEvent<T extends keyof ProjectEventMap>(
+  name: T,
+  data?: ProjectEventMap[T] extends CustomEvent
+    ? ProjectEventMap[T]["detail"]
+    : never
+): void {
+  if (data) {
+    document.dispatchEvent(new CustomEvent(name, { detail: data }));
+  } else {
+    document.dispatchEvent(new Event(name));
+  }
+}
 
-export type AppCustomEvent = DataCorrectShapeNumber | DataActualShapeNumber;
+export function listenToProjectEvents<T extends keyof ProjectEventMap>(
+  name: T,
+  callback: (event: ProjectEventMap[T]) => void,
+  options?: Parameters<typeof document.addEventListener>[2]
+): void {
+  document.addEventListener(name, callback, options);
+}
 
-export type AppEvent = AppSimpleEvent | AppCustomEvent;
-
-type EventData<T extends AppCustomEvent> =
-  AppCustomEvent extends DataCorrectShapeNumber
-    ? DataCorrectShapeNumber_Data
-    : AppCustomEvent extends DataActualShapeNumber
-    ? DataActualShapeNumber_Data
-    : unknown;
-
-export function createEvent<T extends AppEvent>(
-  type: T,
-  data?: T extends AppCustomEvent ? CustomEventInit<EventData<T>> : undefined
-) {
-  return new CustomEvent(type, data);
+export function removeProjectEventListener<T extends keyof ProjectEventMap>(
+  name: T,
+  callback: (event: ProjectEventMap[T]) => void
+): void {
+  document.removeEventListener(name, callback);
 }

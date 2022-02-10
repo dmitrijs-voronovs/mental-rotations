@@ -8,7 +8,7 @@ import {
 } from "./GenerateFigure";
 import { GUI } from "dat.gui";
 
-export type GuiConfigDefinition = GenerationConfig & {
+type GuiSpecificConfig = {
   clearAndGenerate(): void;
   save: () => void;
   generateFigure(): void;
@@ -32,11 +32,23 @@ export type GuiConfigDefinition = GenerationConfig & {
   finalRotationZMax: number;
   finalRotationZStep: number;
 };
+export type GuiConfig = GenerationConfig & GuiSpecificConfig;
 
-export const defaultGuiConfig: Omit<
-  GuiConfigDefinition,
-  keyof GenerationConfig
-> = {
+type KeysOfType<O, T> = {
+  [Key in keyof O]: O[Key] extends T ? Key : never;
+}[keyof O];
+const a: KeysOfType<GuiConfig, boolean> = "showAxis";
+
+// TODO: use that for the configs
+type GuiGenericConfig<T extends Record<string, string | number | boolean>> = {
+  [Key in KeysOfType<T, number> as `${Key & string}Min`]: number;
+} & {
+  [Key in KeysOfType<T, number> as `${Key & string}Max`]: number;
+} & {
+  [Key in KeysOfType<T, string> as `${Key & string}Enum`]: string[];
+};
+
+export const defaultGuiConfig: GuiSpecificConfig = {
   clearAndGenerate: () => {},
   save: () => {},
   generateFigure: () => {},
@@ -83,7 +95,7 @@ function placeGui(
   gui.domElement.style.marginLeft = `${canvasPlacement.left + position.left}px`;
 }
 
-function populateGui(gui: GUI, fieldConfig: GuiConfigDefinition) {
+function populateGui(gui: GUI, fieldConfig: GuiConfig) {
   ["spreadOnX", "spreadOnY", "spreadOnZ"].forEach((fieldName) => {
     gui.add(
       fieldConfig,
