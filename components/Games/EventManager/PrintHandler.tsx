@@ -8,8 +8,7 @@ export class PrintHandler
   implements KeyDownEventHandlerI
 {
   handle(key: string): void {
-    const screenshots = createScreenshots(this.sceneEventArgs.canvas);
-    dispatchProjectEvent("print", screenshots);
+    dispatchProjectEvent("print");
   }
 
   test(key: string): boolean {

@@ -10,6 +10,7 @@ import {
   Print,
   removeProjectEventListener,
   RotationAnglesSet,
+  SceneCreated,
 } from "../utils/Events";
 
 type PersistentGenerationConfig = Omit<
@@ -24,16 +25,31 @@ type PersistentTargetGenerationConfig = {
   [Key in keyof PersistentGenerationConfig as `target-${Key}`]: PersistentGenerationConfig[Key];
 };
 
+export type TestScreenshots = Record<
+  | "referenceShape"
+  | "referenceShapeRotated"
+  | "testShape"
+  | "testShape1"
+  | "testShape2"
+  | "testShape3"
+  | "testShape4"
+  | "testShape5",
+  string
+>;
+
 // TODO: think about IDs?
 export type TestResult = {
   time: number;
   correct: boolean;
+  correctAnswer: number;
+  actualAnswer: number;
   rotationX: number;
   rotationY: number;
   rotationZ: number;
   taskNumber: number;
 } & PersistentReferenceGenerationConfig &
-  PersistentTargetGenerationConfig;
+  PersistentTargetGenerationConfig &
+  TestScreenshots;
 
 const formatConfig = <T extends "reference" | "target">(
   config: GenerationConfig,
@@ -93,16 +109,22 @@ export const EventDisplay: FC = (props) => {
 
   useEffect(() => {
     const correctAnswerHandler = (e: CorrectAnswer) => {
-      setCorrect(e.detail);
+      const correctAnswer = e.detail;
+      lastTestData.current.correctAnswer = correctAnswer;
+      setCorrect(correctAnswer);
     };
 
     const helpHandler = () => {
       setShowHelp((help) => !help);
     };
 
-    function printHandler(_e: Print) {
-      // exportTestResults(data.current);
+    function printHandler() {
+      exportTestResults(data.current);
       console.log(data.current);
+    }
+
+    function sceneCreatedHandler(e: SceneCreated) {
+      lastTestData.current = { ...lastTestData.current, ...e.detail };
     }
 
     function configurationSetHandler(e: ConfigurationSet) {
@@ -126,12 +148,14 @@ export const EventDisplay: FC = (props) => {
 
     listenToProjectEvents("correctAnswer", correctAnswerHandler);
     listenToProjectEvents("print", printHandler);
+    listenToProjectEvents("sceneCreated", sceneCreatedHandler);
     listenToProjectEvents("help", helpHandler);
     listenToProjectEvents("rotationAnglesSet", rotationAnglesSetHandler);
     listenToProjectEvents("configurationSet", configurationSetHandler);
     return () => {
       removeProjectEventListener("correctAnswer", correctAnswerHandler);
       removeProjectEventListener("print", printHandler);
+      removeProjectEventListener("sceneCreated", sceneCreatedHandler);
       removeProjectEventListener("help", helpHandler);
       removeProjectEventListener("rotationAnglesSet", rotationAnglesSetHandler);
       removeProjectEventListener("configurationSet", configurationSetHandler);
@@ -155,6 +179,7 @@ export const EventDisplay: FC = (props) => {
           title: "Wrong answer",
         });
       }
+      lastTestData.current.actualAnswer = answer;
       lastTestData.current.time = time;
       lastTestData.current.correct = isCorrect;
       updateTestResults();

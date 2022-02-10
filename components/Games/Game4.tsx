@@ -12,23 +12,35 @@ import {
   generateFigures,
 } from "../../utils/GenerateScene";
 import { EventDisplay } from "@components/EventDisplay";
-import { generateGUI } from "../../utils/GenerateGUI";
+import { generateGUI, GuiConfig } from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
 import { GENERATION_SETTINGS_KEY } from "@components/Games/Game3";
 import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
-import { launchTimer, Timer } from "../../utils/LaunchTimer";
+import { launchTimer } from "../../utils/LaunchTimer";
 import { createKeyboardEventHandler } from "@components/Games/EventManager/CreateKeyboardEventHandler";
+
+function getConfigFromGui(gui: GUI) {
+  const rawConfig = (gui.getSaveObject() as any).remembered[
+    GENERATION_SETTINGS_KEY
+  ][0] as GuiConfig;
+  return Object.entries(rawConfig).reduce<any>((result, [k, v]) => {
+    if (typeof v !== "function") {
+      result[k] = v;
+    }
+    return result;
+  }, {} as GenerationConfig);
+}
 
 function getShapeConfig(gui?: GUI): GenerationConfig {
   if (!gui) return defaultConfig;
-  return (gui.getSaveObject() as any).remembered[GENERATION_SETTINGS_KEY][0];
+  return getConfigFromGui(gui);
 }
 
 function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
   const { scene } = sceneEventArgs;
   createCameras(sceneEventArgs, positionConfig);
   let boxes: Mesh[];
-  let timer = launchTimer();
+  const timer = launchTimer();
 
   function prepareScene() {
     boxes = createBoxes(sceneEventArgs, positionConfig);

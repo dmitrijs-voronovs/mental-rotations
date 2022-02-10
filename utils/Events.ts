@@ -1,6 +1,7 @@
 import { GenerationConfig } from "./GenerateFigure";
+import { TestScreenshots } from "@components/EventDisplay";
 
-export interface Print extends CustomEvent<string[]> {}
+export interface Print extends Event {}
 export interface CorrectAnswer extends CustomEvent<number> {}
 export interface ActualAnswer
   extends CustomEvent<{ answer: number; time: number }> {}
@@ -12,6 +13,7 @@ export interface ConfigurationSet
   }> {}
 export interface RotationAnglesSet
   extends CustomEvent<{ x: number; y: number; z: number }> {}
+export interface SceneCreated extends CustomEvent<TestScreenshots> {}
 
 type ProjectEventMap = {
   print: Print;
@@ -20,6 +22,7 @@ type ProjectEventMap = {
   correctAnswer: CorrectAnswer;
   configurationSet: ConfigurationSet;
   rotationAnglesSet: RotationAnglesSet;
+  sceneCreated: SceneCreated;
 };
 
 type SimpleEventKeys = {

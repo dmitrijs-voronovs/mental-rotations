@@ -30,6 +30,7 @@ import {
   PositionConfigEntity,
 } from "./positionConfig";
 import { dispatchProjectEvent } from "./Events";
+import { createScreenshots } from "./CreateScreenshots";
 
 export function createCameras(
   sceneEventArgs: SceneEventArgs,
@@ -232,11 +233,6 @@ export const generateFigures = (
     return ang > 180 ? 180 - ang : ang;
   }
 
-  console.log("correctAngle", {
-    x: getAngle("x"),
-    y: getAngle("y"),
-    z: getAngle("z"),
-  });
   dispatchProjectEvent("rotationAnglesSet", {
     x: getAngle("x"),
     y: getAngle("y"),
@@ -249,6 +245,17 @@ export const generateFigures = (
     config: configTestShape,
   });
   generateFigure(sceneEventArgs, configTestShape, boxes[2].name);
+  const screenshots = createScreenshots(sceneEventArgs.canvas);
+  dispatchProjectEvent("sceneCreated", {
+    referenceShape: screenshots[0],
+    referenceShapeRotated: screenshots[1],
+    testShape: screenshots[2],
+    testShape1: screenshots[3],
+    testShape2: screenshots[4],
+    testShape3: screenshots[5],
+    testShape4: screenshots[6],
+    testShape5: screenshots[7],
+  });
 
   const meshesToRotate = [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]];
   const correctShapeIdx = Math.floor(
