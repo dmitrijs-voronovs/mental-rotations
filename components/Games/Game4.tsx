@@ -1,7 +1,7 @@
 // TODO: remove when not debugging
 // import "@babylonjs/inspector";
 import { Color3, Color4, Mesh, Vector3 } from "@babylonjs/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
@@ -62,15 +62,23 @@ function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
   );
 }
 
+const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
+  // const { canvas } = sceneEventArgs;
+  const gui = generateGUI(sceneEventArgs);
+  // scene.onDisposeObservable.add(() => gui.destroy());
+  // createAxis(sceneEventArgs, AXIS_SIZE);
+  createScene(sceneEventArgs, gui);
+  // sceneEventArgs.scene.debugLayer.show();
+};
+
+const CANVAS_ID = "babylonJS";
+
 const Game4 = () => {
-  const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
-    // const { scene } = sceneEventArgs;
-    const gui = generateGUI(sceneEventArgs);
-    // scene.onDisposeObservable.add(() => gui.destroy());
-    // createAxis(sceneEventArgs, AXIS_SIZE);
-    createScene(sceneEventArgs, gui);
-    // sceneEventArgs.scene.debugLayer.show();
-  };
+  useEffect(() => {
+    const canvas = document.getElementById(CANVAS_ID)!;
+    canvas.tabIndex = 0;
+    canvas.focus();
+  }, []);
 
   return (
     <>
@@ -91,7 +99,7 @@ const Game4 = () => {
         engineOptions={{ preserveDrawingBuffer: true, stencil: true }}
         antialias
         adaptToDeviceRatio
-        canvasId="babylonJS"
+        canvasId={CANVAS_ID}
         canvasStyle={{
           flex: "1",
           display: "flex",
