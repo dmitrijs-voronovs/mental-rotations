@@ -1,27 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 
+import dynamic from "next/dynamic";
+
+const Game4 = dynamic(() => import("@components/Games/Game4"), { ssr: false });
 function App() {
-  const [GameComponent, setGameComponent] = useState<JSX.Element>();
-
-  useEffect(() => {
-    const importGameComponent = async () => {
-      try {
-        const Component = (await import(`@components/Games/Game4`)).default;
-        setGameComponent(Component);
-        console.log("component is loaded", Component, typeof Component);
-      } catch (e) {
-        console.log("unable to load the component");
-      }
-    };
-
-    importGameComponent();
-  }, []);
-
   return (
     <ChakraProvider>
       <div style={{ flex: 1, display: "flex", position: "relative" }}>
-        {GameComponent && React.cloneElement(GameComponent)}
+        <Game4 />
       </div>
     </ChakraProvider>
   );
