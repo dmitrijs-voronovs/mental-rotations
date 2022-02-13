@@ -31,7 +31,7 @@ function perapeScene(scene: SceneEventArgs["scene"]) {
   }
 }
 
-const Game2 = () => {
+const ConfigurationEditor = () => {
   const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
     const { scene } = sceneEventArgs;
 
@@ -126,4 +126,4 @@ const Game2 = () => {
   );
 };
 
-export default Game2;
+export default ConfigurationEditor;
