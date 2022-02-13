@@ -137,13 +137,17 @@ function populateGui(gui: GUI, fieldConfig: GuiConfig) {
 const GUI_NAME = "My GUI";
 export const generateGUI = (
   sceneEventArgs: SceneEventArgs,
-  position?: Position
+  options?: {
+    position?: Position;
+    generateFigureCallback?: () => void;
+    clearFigureCallback?: () => void;
+  }
 ): GUI => {
   const { canvas } = sceneEventArgs;
 
   const gui = new GUI({ name: GUI_NAME });
 
-  placeGui(gui, canvas, position);
+  placeGui(gui, canvas, options?.position);
   // GUI values
   const fieldConfig = {
     ...defaultGuiConfig,
@@ -161,8 +165,12 @@ export const generateGUI = (
       } else {
         deleteAxis(sceneEventArgs);
       }
+      if (options?.generateFigureCallback) options.generateFigureCallback();
     },
-    clearFigure: () => clearFigure(sceneEventArgs),
+    clearFigure: () => {
+      clearFigure(sceneEventArgs);
+      if (options?.clearFigureCallback) options.clearFigureCallback();
+    },
     clearAndGenerate() {
       this.clearFigure();
       this.generateFigure();

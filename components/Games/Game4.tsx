@@ -1,6 +1,6 @@
 // TODO: remove when not debugging
 // import "@babylonjs/inspector";
-import { Color3, Color4, Mesh, Vector3 } from "@babylonjs/core";
+import { AbstractMesh, Color3, Color4, Mesh, Vector3 } from "@babylonjs/core";
 import React, { useEffect } from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
@@ -15,9 +15,14 @@ import { EventDisplay } from "@components/EventDisplay";
 import { generateGUI, GuiConfig } from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
 import { GENERATION_SETTINGS_KEY } from "@components/Games/Game3";
-import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
+import {
+  defaultConfig,
+  GenerationConfig,
+  scaleMeshToFitScreen,
+} from "../../utils/GenerateFigure";
 import { launchTimer } from "../../utils/LaunchTimer";
 import { createKeyboardEventHandler } from "@components/Games/EventManager/CreateKeyboardEventHandler";
+import { getBoxName } from "../../utils/names";
 
 function getConfigFromGui(gui: GUI) {
   const rawConfig = (gui.getSaveObject() as any).remembered[
@@ -38,7 +43,7 @@ function getShapeConfig(gui?: GUI): GenerationConfig {
 
 function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
   const { scene } = sceneEventArgs;
-  createCameras(sceneEventArgs, positionConfig);
+  const cameras = createCameras(sceneEventArgs, positionConfig);
   let boxes: Mesh[];
   const timer = launchTimer();
 
@@ -46,6 +51,11 @@ function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
     boxes = createBoxes(sceneEventArgs, positionConfig);
     const shapeConfig = getShapeConfig(gui);
     generateFigures(boxes, sceneEventArgs, shapeConfig);
+    cameras.forEach((camera, i) => {
+      // get meshes from world / insted of directly to make sure new props are included
+      const relatedMesh = scene.getMeshByName(getBoxName(i))! as Mesh;
+      scaleMeshToFitScreen(relatedMesh, camera);
+    });
     timer.restartTimer();
   }
 

@@ -1,4 +1,11 @@
-import { Angle, Mesh, Scalar, TransformNode, Vector3 } from "@babylonjs/core";
+import {
+  Angle,
+  ArcRotateCamera,
+  Mesh,
+  Scalar,
+  TransformNode,
+  Vector3,
+} from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
 import { getRandomInt } from "./common";
 import { getInstanceName, getTransformNodeName } from "./names";
@@ -38,31 +45,39 @@ export const defaultConfig: GenerationConfig = {
 };
 
 export function resetBoundingInfo(square: Mesh) {
+  square.refreshBoundingInfo();
+  square.computeWorldMatrix(true);
   square
     .getBoundingInfo()
     .boundingBox.reConstruct(Vector3.Zero(), Vector3.Zero());
+  square
+    .getBoundingInfo()
+    .boundingSphere.reConstruct(Vector3.Zero(), Vector3.Zero());
 }
 
 export function updateBoundingInfo(square: Mesh) {
-  const { min, max } = square.getHierarchyBoundingVectors();
+  const { min, max } = square.getHierarchyBoundingVectors(true);
 
   square.getBoundingInfo().boundingBox.reConstruct(min, max);
-  // square.showBoundingBox = true;
-  // square.showSubMeshesBoundingBox = true;
+  square.getBoundingInfo().boundingSphere.reConstruct(min, max);
 }
 
-export function recenterMesh(
-  parent: TransformNode,
-  square: Mesh,
-  config: Pick<GenerationConfig, "originX" | "originY" | "originZ">
-) {
-  const center = square.getBoundingInfo().boundingBox.center;
-  const positionDiff = new Vector3(
-    config.originX,
-    config.originY,
-    config.originZ
-  ).subtract(center);
-  parent.position = parent.position.add(positionDiff);
+export function recenterMesh(mesh: Mesh) {
+  const center = mesh.getBoundingInfo().boundingBox.center;
+  const parent = mesh.parent! as TransformNode;
+  parent.position = parent.position.add(parent.position.subtract(center));
+}
+
+export function scaleMeshToFitScreen(mesh: Mesh, camera: ArcRotateCamera) {
+  resetBoundingInfo(mesh);
+  updateBoundingInfo(mesh);
+
+  const maxVector = mesh.getBoundingInfo().boundingBox.maximum;
+  const maxWorldVector = mesh.getBoundingInfo().boundingBox.maximumWorld;
+  const meshRadius = mesh.getBoundingInfo().boundingSphere.radius;
+  const margin = 4;
+  const fovMultiplier = 2 - camera.fov;
+  camera.radius = meshRadius * 2 * fovMultiplier + margin;
 }
 
 export const generateFigure = (
@@ -74,10 +89,10 @@ export const generateFigure = (
   const square = scene.getMeshByName(shapeName) as Mesh;
   resetBoundingInfo(square);
 
-  const newCoords = generateCoordinates(config);
+  const submeshCoordinates = generateCoordinatesOfSubmeshes(config);
 
   const rotation = generateRotation(config);
-  newCoords.forEach((coord, i) => {
+  submeshCoordinates.forEach((coord, i) => {
     const inst = square.createInstance(getInstanceName(shapeName, i));
     inst.setParent(square);
     inst.scalingDeterminant = 0.99;
@@ -86,15 +101,17 @@ export const generateFigure = (
   square.edgesShareWithInstances = true;
   square.rotation = rotation;
 
-  square.position = new Vector3(config.originX, config.originY, config.originZ);
-  const parent =
-    scene.getTransformNodeByName(getTransformNodeName(shapeName)) ||
-    new TransformNode(getTransformNodeName(shapeName));
-  square.setParent(parent);
+  let parent = square.parent as TransformNode;
+  // TODO: move that to make specific to game2?
+  if (!parent) {
+    const parentName = getTransformNodeName(square.name);
+    parent =
+      scene.getTransformNodeByName(parentName) ?? new TransformNode(parentName);
+    square.parent = parent;
+  }
 
   updateBoundingInfo(square);
-
-  recenterMesh(parent, square, config);
+  recenterMesh(square);
 };
 
 export const clearFigure = (
@@ -123,7 +140,9 @@ export const generateRotation = (
     Angle.FromDegrees(config.finalRotationZ).radians()
   );
 
-const generateCoordinates = (config: GenerationConfig): Vector3[] => {
+const generateCoordinatesOfSubmeshes = (
+  config: GenerationConfig
+): Vector3[] => {
   const { totalBlocks } = config;
 
   const allCoords: Vector3[] = [SHAPE_INITIAL_COORD];
