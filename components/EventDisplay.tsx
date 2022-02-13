@@ -7,7 +7,6 @@ import {
   ConfigurationSet,
   CorrectAnswer,
   listenToProjectEvents,
-  Print,
   removeProjectEventListener,
   RotationAnglesSet,
   SceneCreated,
@@ -189,7 +188,8 @@ export const EventDisplay: FC = (props) => {
     return () => {
       removeProjectEventListener("actualAnswer", actualAnswerHandler);
     };
-  }, [correct]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [correct, updateTestResults]);
 
   if (showHelp)
     return (

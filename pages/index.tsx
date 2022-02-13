@@ -37,6 +37,7 @@ const Home: NextPage = () => {
         <Grid mt={"2rem"} templateColumns={"1fr 1fr"} gap={"2rem"}>
           {links.map(({ link, heading, text }) => (
             <GridItem
+              key={link}
               p={"2rem"}
               border={"1px solid transparent"}
               borderRadius={"2rem"}
