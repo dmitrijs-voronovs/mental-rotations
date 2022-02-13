@@ -1,19 +1,51 @@
 // import "@babylonjs/inspector";
-import { Color3, Color4, Vector3 } from "@babylonjs/core";
+import {
+  ArcRotateCamera,
+  Color3,
+  Color4,
+  Mesh,
+  TransformNode,
+  Vector3,
+} from "@babylonjs/core";
 import React from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import { createAxis } from "@components/Axis/axisHelper";
 import { Container } from "@components/common/Container";
-import { SHAPE_NAME, SHAPE_SIZE } from "../../utils/GenerateFigure";
+import {
+  scaleMeshToFitScreen,
+  SHAPE_NAME,
+  SHAPE_SIZE,
+} from "../../utils/GenerateFigure";
 import { generateGUI } from "../../utils/GenerateGUI";
 
 const AXIS_SIZE = 5;
+
+const CAMERA_NAME = "camera1";
+
+function perapeScene(scene: SceneEventArgs["scene"]) {
+  const camera = scene.getCameraByName(CAMERA_NAME) as ArcRotateCamera;
+  const mesh = scene.getMeshByName(SHAPE_NAME) as Mesh;
+  if (camera && mesh) {
+    camera.inertia = 0.5;
+    scaleMeshToFitScreen(mesh, camera);
+  }
+}
 
 const Game2 = () => {
   const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
     const { scene } = sceneEventArgs;
 
-    const gui = generateGUI(sceneEventArgs);
+    const gui = generateGUI(sceneEventArgs, {
+      generateFigureCallback: () => {
+        perapeScene(scene);
+      },
+      clearFigureCallback: () => {
+        const shape = scene.getMeshByName(SHAPE_NAME);
+        if (shape && shape.parent) {
+          (shape.parent as TransformNode).position = Vector3.Zero();
+        }
+      },
+    });
     createAxis(sceneEventArgs, AXIS_SIZE);
     // scene.debugLayer.show();
     scene.onDisposeObservable.add(() => gui.destroy());
@@ -45,7 +77,7 @@ const Game2 = () => {
             clearColor={Color4.FromColor3(Color3.White())}
           >
             <arcRotateCamera
-              name="camera1"
+              name={CAMERA_NAME}
               target={Vector3.Zero()}
               alpha={Math.PI / 3}
               beta={Math.PI / 3}

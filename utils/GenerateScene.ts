@@ -35,7 +35,7 @@ import { createScreenshots } from "./CreateScreenshots";
 export function createCameras(
   sceneEventArgs: SceneEventArgs,
   config: PositionConfigEntity[]
-) {
+): ArcRotateCamera[] {
   const { scene, canvas } = sceneEventArgs;
   return config.map((configRaw, i) => {
     const config = { ...configRaw, ...defaultPositionConfig };
@@ -61,6 +61,7 @@ export function createCameras(
     // TODO: remove later
     camera.attachControl(canvas, true);
     scene.activeCameras = (scene.activeCameras || []).concat(camera);
+    camera.inertia = 0.5;
 
     return camera;
   });
@@ -82,7 +83,9 @@ export function createBoxes(
     );
 
     box.scaling = new Vector3(1, 1, 1);
-    box.position = new Vector3(
+    const parent = new TransformNode(getTransformNodeName(box.name), scene);
+    box.parent = parent;
+    parent.position = new Vector3(
       config.x! * POSITION_MULTIPLIER,
       config.y! * POSITION_MULTIPLIER,
       0
@@ -97,7 +100,6 @@ export function createBoxes(
       (scene.getMaterialByName(`box-material`) as StandardMaterial) ||
       new StandardMaterial(`box-material`, scene);
     material.diffuseColor = new Color3(0.9, 0.9, 0.9);
-    // material.diffuseColor = Color3.White();
     material.specularColor = Color3.White();
     box.material = material;
 
@@ -170,18 +172,16 @@ const rotateReferenceShape = (
   resetBoundingInfo(target);
 
   const { position, name } = target;
+  const parent = target.parent as TransformNode;
   target.dispose();
-  const parent = new TransformNode(getTransformNodeName(name));
-  target = source.clone(target.name, parent);
+  target = source.clone(name, parent);
 
   const rotation =
     options?.toAngle || generateRandomAngle(options?.ignoreAngles);
   target.rotationQuaternion = Quaternion.FromEulerVector(rotation);
 
-  const { x, y, z } = position;
   updateBoundingInfo(target);
-
-  recenterMesh(parent, target, { originX: x, originY: y, originZ: z });
+  recenterMesh(target);
 
   return rotation;
 };
@@ -212,6 +212,11 @@ const rotateReferenceShapes = (
   });
 };
 
+function getAngleOfVector(dimension: "x" | "y" | "z", vector: Vector3) {
+  const ang = Angle.FromRadians(vector[dimension]).degrees();
+  return ang > 180 ? 180 - ang : ang;
+}
+
 export const generateFigures = (
   boxes: Mesh[],
   sceneEventArgs: SceneEventArgs,
@@ -228,15 +233,10 @@ export const generateFigures = (
     ignoreAngles: [Vector3.Zero()],
   });
 
-  function getAngle(dimension: "x" | "y" | "z") {
-    const ang = Angle.FromRadians(correctAngle[dimension]).degrees();
-    return ang > 180 ? 180 - ang : ang;
-  }
-
   dispatchProjectEvent("rotationAnglesSet", {
-    x: getAngle("x"),
-    y: getAngle("y"),
-    z: getAngle("z"),
+    x: getAngleOfVector("x", correctAngle),
+    y: getAngleOfVector("y", correctAngle),
+    z: getAngleOfVector("z", correctAngle),
   });
 
   const configTestShape = getBaseFigureConfig(boxes[2], shapeConfig);
@@ -261,8 +261,6 @@ export const generateFigures = (
   const correctShapeIdx = Math.floor(
     Scalar.RandomRange(0, meshesToRotate.length)
   );
-
-  console.log({ correctShapeIdx, correctAnswer: correctShapeIdx + 1 });
 
   dispatchProjectEvent("correctAnswer", correctShapeIdx + 1);
   rotateReferenceShapes(

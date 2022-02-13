@@ -24,6 +24,7 @@ function createScreenshot(
 }
 
 export function createScreenshots(canvas: HTMLCanvasElement): string[] {
+  // TODO: revisit, as width can contain padding;
   const segmentWidth = canvas.width / 5;
   const segmentHeight = canvas.height / 3;
   const segments = [
@@ -36,6 +37,7 @@ export function createScreenshots(canvas: HTMLCanvasElement): string[] {
     [3, 2],
     [4, 2],
   ];
+
   return segments.map((segment) =>
     createScreenshot(canvas, segment, segmentWidth, segmentHeight)
   );
