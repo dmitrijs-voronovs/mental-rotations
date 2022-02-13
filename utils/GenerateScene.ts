@@ -262,8 +262,6 @@ export const generateFigures = (
     Scalar.RandomRange(0, meshesToRotate.length)
   );
 
-  console.log({ correctShapeIdx, correctAnswer: correctShapeIdx + 1 });
-
   dispatchProjectEvent("correctAnswer", correctShapeIdx + 1);
   rotateReferenceShapes(
     boxes[2],
