@@ -3,7 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import dynamic from "next/dynamic";
 
-const Game4 = dynamic(() => import("@components/Games/Game4"), { ssr: false });
+const Game4 = dynamic(() => import("@components/Games/Test"), { ssr: false });
 function App() {
   return (
     <ChakraProvider>

@@ -1,6 +1,6 @@
 // TODO: remove when not debugging
 // import "@babylonjs/inspector";
-import { AbstractMesh, Color3, Color4, Mesh, Vector3 } from "@babylonjs/core";
+import { Color3, Color4, Mesh, Vector3 } from "@babylonjs/core";
 import React, { useEffect } from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
@@ -12,9 +12,12 @@ import {
   generateFigures,
 } from "../../utils/GenerateScene";
 import { EventDisplay } from "@components/EventDisplay";
-import { generateGUI, GuiConfig } from "../../utils/GenerateGUI";
+import {
+  generateGUI,
+  GENERATION_SETTINGS_KEY,
+  GuiConfig,
+} from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
-import { GENERATION_SETTINGS_KEY } from "@components/Games/Game3";
 import {
   defaultConfig,
   GenerationConfig,
@@ -52,7 +55,7 @@ function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
     const shapeConfig = getShapeConfig(gui);
     generateFigures(boxes, sceneEventArgs, shapeConfig);
     cameras.forEach((camera, i) => {
-      // get meshes from world / insted of directly to make sure new props are included
+      // get meshes from world / instead of directly to make sure new props are included
       const relatedMesh = scene.getMeshByName(getBoxName(i))! as Mesh;
       scaleMeshToFitScreen(relatedMesh, camera);
     });
@@ -83,7 +86,7 @@ const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
 
 const CANVAS_ID = "babylonJS";
 
-const Game4 = () => {
+const Test = () => {
   useEffect(() => {
     const canvas = document.getElementById(CANVAS_ID)!;
     canvas.tabIndex = 0;
@@ -137,4 +140,4 @@ const Game4 = () => {
   );
 };
 
-export default Game4;
+export default Test;

@@ -74,7 +74,7 @@ export const defaultGuiConfig: GuiSpecificConfig = {
 };
 
 export const AXIS_SIZE = 5;
-const GENERATION_SETTINGS_KEY = "Default";
+export const GENERATION_SETTINGS_KEY = "Default";
 
 const INITIAL_SETTINGS_KEY = "initial";
 export type Position = { top: number; left: number };
