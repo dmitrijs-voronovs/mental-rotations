@@ -97,6 +97,7 @@ export const generateFigure = (
     inst.setParent(square);
     inst.scalingDeterminant = 0.99;
     inst.position = coord;
+    inst.isPickable = true;
   });
   square.edgesShareWithInstances = true;
   square.rotation = rotation;

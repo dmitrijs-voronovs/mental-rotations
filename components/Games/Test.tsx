@@ -1,12 +1,19 @@
 // TODO: remove when not debugging
 // import "@babylonjs/inspector";
-import { Color3, Color4, Mesh, Vector3 } from "@babylonjs/core";
+import {
+  Color3,
+  Color4,
+  Mesh,
+  PointerEventTypes,
+  Vector3,
+} from "@babylonjs/core";
 import React, { useEffect } from "react";
 import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
 import { positionConfig } from "../../utils/positionConfig";
 import {
+  cleanUp,
   createBoxes,
   createCameras,
   generateFigures,
@@ -26,6 +33,7 @@ import {
 import { launchTimer } from "../../utils/LaunchTimer";
 import { createKeyboardEventHandler } from "@components/Games/EventManager/CreateKeyboardEventHandler";
 import { getBoxName } from "../../utils/names";
+import { dispatchProjectEvent } from "../../utils/Events";
 
 function getConfigFromGui(gui: GUI) {
   const rawConfig = (gui.getSaveObject() as any).remembered[
@@ -45,7 +53,7 @@ function getShapeConfig(gui?: GUI): GenerationConfig {
 }
 
 function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
-  const { scene } = sceneEventArgs;
+  const { scene, canvas } = sceneEventArgs;
   const cameras = createCameras(sceneEventArgs, positionConfig);
   let boxes: Mesh[];
   const timer = launchTimer();
@@ -65,7 +73,7 @@ function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
   prepareScene();
 
   const KeyboardEventHandler = createKeyboardEventHandler(sceneEventArgs, {
-    timer: timer,
+    timer,
     prepareScene,
     boxes: boxes!,
   });
@@ -73,6 +81,41 @@ function createScene(sceneEventArgs: SceneEventArgs, gui?: GUI) {
   scene.onKeyboardObservable.add((eventInfo, eventState) =>
     KeyboardEventHandler.handleEvent(eventInfo, eventState)
   );
+
+  scene.onPointerObservable.add((pointerInfo) => {
+    switch (pointerInfo.type) {
+      case PointerEventTypes.POINTERDOWN:
+        console.log(pointerInfo);
+        const targetMeshMinY = (canvas.clientHeight / 9) * 5;
+        if (pointerInfo.event.clientY < targetMeshMinY) return;
+        const segmentWidth = canvas.clientWidth / 5;
+        const pickedMesh = Math.ceil(pointerInfo.event.clientX / segmentWidth);
+
+        // const marker = document.createElement("div");
+        // marker.style.position = "absolute";
+        // marker.style.width = "10px";
+        // marker.style.height = "10px";
+        // marker.style.left = pointerInfo.event.clientX + "px";
+        // marker.style.top = pointerInfo.event.clientY + "px";
+        // marker.style.background = "red";
+        // marker.style.borderRadius = "50%";
+        // document.body.appendChild(marker);
+        console.log(pickedMesh);
+        const time = timer.stopTimer();
+        dispatchProjectEvent("actualAnswer", { answer: pickedMesh, time });
+
+        cleanUp(sceneEventArgs, boxes);
+        prepareScene();
+        // console.log(scene.pick());
+        break;
+      // case PointerEventTypes.POINTERUP:
+      //   pointerUp();
+      //   break;
+      // case PointerEventTypes.POINTERMOVE:
+      //   pointerMove();
+      //   break;
+    }
+  });
 }
 
 const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
