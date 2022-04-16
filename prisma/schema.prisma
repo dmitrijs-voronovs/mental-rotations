@@ -67,14 +67,14 @@ model Test {
   name           String          @unique
   description    String
   tasks          Task[]
-  CompletedTests CompletedTest[]
+  completedTests CompletedTest[]
 }
 
 model Task {
   id             String @id @default(cuid())
   taskNumber     Int
   referenceShape Json
-  tagetShape     Json
+  targetShape    Json
   angles         Json?
   imageUrl       String
   correctAnswer  Int
