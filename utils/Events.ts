@@ -2,6 +2,9 @@ import { GenerationConfig } from "./GenerateFigure";
 import { TestScreenshots } from "@components/EventDisplay";
 
 export interface Print extends Event {}
+
+export interface Skip extends Event {}
+
 export interface CorrectAnswer extends CustomEvent<number> {}
 export interface ActualAnswer
   extends CustomEvent<{ answer: number; time: number }> {}
@@ -16,6 +19,7 @@ export interface RotationAnglesSet
 export interface SceneCreated extends CustomEvent<TestScreenshots> {}
 
 type ProjectEventMap = {
+  skip: Skip;
   print: Print;
   help: Help;
   actualAnswer: ActualAnswer;
