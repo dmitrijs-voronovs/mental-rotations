@@ -101,7 +101,7 @@ model CompletedTask {
   answer  Int
   correct Boolean
   testId  String
-  test    CompletedTest @relation(fields: [id], references: [id])
+  test    CompletedTest @relation(fields: [testId], references: [id])
 
   @@unique([id, testId])
 }
