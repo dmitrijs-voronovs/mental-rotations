@@ -12,7 +12,7 @@ import { getInstanceName, getTransformNodeName } from "./names";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
-const SHAPE_INITIAL_COORD = new Vector3(0, 0, 0);
+const SHAPE_INITIAL_COORDS = new Vector3(0, 0, 0);
 
 export type GenerationConfig = {
   spreadOnX: number;
@@ -146,7 +146,7 @@ const generateCoordinatesOfSubmeshes = (
 ): Vector3[] => {
   const { totalBlocks } = config;
 
-  const allCoords: Vector3[] = [SHAPE_INITIAL_COORD];
+  const allCoords: Vector3[] = [SHAPE_INITIAL_COORDS];
   let nBlocksToGenerate = totalBlocks - 1;
   while (nBlocksToGenerate > 0) {
     const randomDeltaVector = getRandomVector(config);
