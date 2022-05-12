@@ -163,6 +163,7 @@ export const EventDisplay: FC = (props) => {
 
   useEffect(() => {
     const actualAnswerHandler = (e: ActualAnswer) => {
+      if (lastTestData.current.correctAnswer === undefined) return;
       const { answer, time } = e.detail;
       const isCorrect = correct === answer;
       if (isCorrect) {
