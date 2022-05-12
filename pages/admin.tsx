@@ -15,7 +15,7 @@ const Admin: FC = ({ children }) => {
   const isAdmin = data?.user.role === "ADMIN";
   console.log();
 
-  return !isAdmin ? <Text>"Only admin can enter"</Text> : <Box>{children}</Box>;
+  return !isAdmin ? <Text>Only admin can enter</Text> : <Box>{children}</Box>;
 };
 
 export default AdminPage;
