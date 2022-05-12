@@ -3,13 +3,13 @@ import { Task } from "@prisma/client";
 import { Box } from "@chakra-ui/react";
 import s from "../styles/Proto.App.module.scss";
 import classNames from "classnames";
-import { getScreenName } from "../utils/GenerateScene";
+import { getScreenName } from "../utils/SaveScreenshots";
 
 export const TestTask: FC<{
   task: Task;
   taskIdx: number;
   onClick: (n: number) => void;
-}> = ({ task, taskIdx, onClick }) => (
+}> = ({ task, onClick }) => (
   <>
     <Box>You are currently on the task {task.taskNumber}</Box>
     <div className={s.blockGrid2}>
