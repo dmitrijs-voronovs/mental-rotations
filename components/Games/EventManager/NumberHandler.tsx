@@ -1,13 +1,14 @@
 import { KeyDownEventHandler } from "@components/Games/EventManager/KeyDownEventHandler";
-import { launchTimer, Timer } from "../../../utils/LaunchTimer";
+import { Timer } from "../../../utils/LaunchTimer";
 import { Mesh } from "@babylonjs/core";
 import { dispatchProjectEvent } from "../../../utils/Events";
 import { cleanUp } from "../../../utils/GenerateScene";
+import { PrepareScene } from "@components/Games/ISceneFactory";
 
 export class NumberHandler extends KeyDownEventHandler {
   constructor(
     protected timer: Timer,
-    protected prepareScene: () => void,
+    protected prepareScene: PrepareScene,
     protected meshes: Mesh[]
   ) {
     super();

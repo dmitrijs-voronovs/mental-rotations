@@ -2,7 +2,7 @@ import { KeyDownEventHandler } from "@components/Games/EventManager/KeyDownEvent
 import { Timer } from "../../../utils/LaunchTimer";
 import { Mesh } from "@babylonjs/core";
 import { cleanUp } from "../../../utils/GenerateScene";
-import { PrepareScene } from "@components/Games/Test";
+import { PrepareScene } from "@components/Games/ISceneFactory";
 
 export class SkipHandler extends KeyDownEventHandler {
   constructor(

@@ -1,7 +1,7 @@
 import { KeyDownEventHandlerI } from "@components/Games/EventManager/KeyDownEventHandlerI";
 import { EventState, KeyboardInfo } from "@babylonjs/core";
 
-export interface KeyDownEventManagerI {
+export interface IKeyDownEventManager {
   registerHandler(handler: KeyDownEventHandlerI): void;
 
   // deleteHandler(handlerId: number): void;
