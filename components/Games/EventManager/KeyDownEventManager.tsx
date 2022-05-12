@@ -20,8 +20,9 @@ export class KeyDownEventManager implements KeyDownEventManagerI {
     }
   }
 
-  registerHandler(handler: KeyDownEventHandlerI): void {
+  registerHandler(handler: KeyDownEventHandlerI): this {
     handler.setContext(this.sceneEventArgs);
     this.handlers.push(handler);
+    return this;
   }
 }
