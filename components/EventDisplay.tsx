@@ -32,7 +32,8 @@ export type TestScreenshots = Record<
   | "testShape2"
   | "testShape3"
   | "testShape4"
-  | "testShape5",
+  | "testShape5"
+  | "scene",
   string
 >;
 
@@ -88,12 +89,22 @@ const exportOptions = {
   useKeysAsHeaders: true,
 };
 
-function exportTestResults(results: TestResults) {
+function exportTestResultsCSV(results: TestResults) {
   const csvExporter = new ExportToCsv(exportOptions);
   csvExporter.generateCsv(results);
 }
 
-export const EventDisplay: FC = (props) => {
+function exportTestResultsJSON(results: TestResults) {
+  const dataStr =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(results));
+  const a = document.createElement("a");
+  a.href = dataStr;
+  a.download = "data.json";
+  a.click();
+}
+
+export const EventDisplay: FC = () => {
   const toast = useToast();
   const [correct, setCorrect] = useState(-1);
   const [showHelp, setShowHelp] = useState(false);
@@ -118,8 +129,11 @@ export const EventDisplay: FC = (props) => {
     };
 
     function printHandler() {
-      exportTestResults(data.current);
       console.log(data.current);
+      if (data.current.length) {
+        exportTestResultsCSV(data.current);
+        exportTestResultsJSON(data.current);
+      }
     }
 
     function sceneCreatedHandler(e: SceneCreated) {
