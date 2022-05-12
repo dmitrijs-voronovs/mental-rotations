@@ -11,7 +11,7 @@ import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import { createAxis } from "@components/Axis/axisHelper";
 import { Container } from "@components/common/Container";
 import {
-  scaleMeshToFitScreen,
+  adjustCameraRadiusToFitMesh,
   SHAPE_NAME,
   SHAPE_SIZE,
 } from "../../utils/GenerateFigure";
@@ -26,7 +26,7 @@ function prepareScene(scene: SceneEventArgs["scene"]) {
   const mesh = scene.getMeshByName(SHAPE_NAME) as Mesh;
   if (camera && mesh) {
     camera.inertia = 0.5;
-    scaleMeshToFitScreen(mesh, camera);
+    adjustCameraRadiusToFitMesh(mesh, camera);
   }
 }
 
@@ -48,6 +48,7 @@ const ConfigurationEditor = () => {
     createAxis(sceneEventArgs, AXIS_SIZE);
     import("@babylonjs/inspector").then(() => scene.debugLayer.show());
 
+    // TODO: add to other editors
     scene.onDisposeObservable.add(() => gui.destroy());
   };
 
