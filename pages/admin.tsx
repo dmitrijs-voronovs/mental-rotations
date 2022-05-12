@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
+import { Box, Text } from "@chakra-ui/react";
 
 const AdminPage = () => {
   return (
@@ -9,12 +10,12 @@ const AdminPage = () => {
   );
 };
 
-const Admin: FC<{ children: ReactNode }> = ({ children }) => {
+const Admin: FC = ({ children }) => {
   const { data } = useSession();
   const isAdmin = data?.user.role === "ADMIN";
   console.log();
 
-  return isAdmin ? children : "Only admin can enter";
+  return !isAdmin ? <Text>"Only admin can enter"</Text> : <Box>{children}</Box>;
 };
 
 export default AdminPage;

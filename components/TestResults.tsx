@@ -72,7 +72,7 @@ export const TestResults: FC<{
             </Thead>
             <Tbody>
               {data.map(({ time, correct }, i) => (
-                <Tr>
+                <Tr key={i}>
                   <Td>{i + 1}</Td>
                   <Td>{time}</Td>
                   <Td>{correct ? "YES" : "NO"}</Td>

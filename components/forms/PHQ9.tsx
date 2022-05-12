@@ -109,7 +109,7 @@ export function PHQ9() {
             <form onSubmit={handleSubmit}>
               <VStack spacing={4} align="flex-start">
                 {questions.map((q, i) => (
-                  <QuestionField question={q} id={i} />
+                  <QuestionField key={i} question={q} id={i} />
                 ))}
                 <Button type="submit" isFullWidth>
                   Submit
