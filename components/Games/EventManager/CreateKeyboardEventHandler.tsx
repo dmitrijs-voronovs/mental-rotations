@@ -22,9 +22,9 @@ export function createKeyboardEventHandler(
       sceneHelpers.prepareScene,
       sceneHelpers.boxes
     )
-  );
-  KeyboardEventHandler.registerHandler(new HelpHandler());
-  KeyboardEventHandler.registerHandler(new PrintHandler());
-  KeyboardEventHandler.registerHandler(new DefaultHandler());
+  )
+    .registerHandler(new HelpHandler())
+    .registerHandler(new PrintHandler())
+    .registerHandler(new DefaultHandler());
   return KeyboardEventHandler;
 }
