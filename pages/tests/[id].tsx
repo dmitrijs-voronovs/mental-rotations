@@ -97,11 +97,7 @@ const TestDetails: FC<{
             </UnorderedList>
           </>
         )}
-        <Button
-          colorScheme="blue"
-          variant="solid"
-          onClick={() => setTaskIdx(0)}
-        >
+        <Button variant="solid" onClick={() => setTaskIdx(0)}>
           Start
         </Button>
       </VStack>

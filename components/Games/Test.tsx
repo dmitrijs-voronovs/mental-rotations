@@ -31,11 +31,11 @@ export function getShapeConfig(gui?: GUI): GenerationConfig {
 }
 
 const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
-  // const { canvas } = sceneEventArgs;
   const gui = generateGUI(sceneEventArgs);
-  // scene.onDisposeObservable.add(() => gui.destroy());
   new DynamicSceneFactory(sceneEventArgs, gui).create();
   // new TestGenerationSceneFactory(sceneEventArgs, gui).create();
+  sceneEventArgs.scene.onDisposeObservable.add(() => gui.destroy());
+
   // import("@babylonjs/inspector").then(() => sceneEventArgs.scene.debugLayer.show());
 };
 
