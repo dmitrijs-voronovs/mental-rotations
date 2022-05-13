@@ -15,7 +15,6 @@ import {
 import { SceneEventArgs } from "react-babylonjs";
 import {
   defaultConfig,
-  generateFigure,
   generateRotation,
   GenerationConfig,
   recenterMesh,
@@ -29,12 +28,11 @@ import {
   POSITION_MULTIPLIER,
   PositionConfigEntity,
 } from "./positionConfig";
-import { dispatchProjectEvent } from "./Events";
-import { createScreenshots } from "./CreateScreenshots";
 
 export function createCameras(
   sceneEventArgs: SceneEventArgs,
-  config: PositionConfigEntity[]
+  config: PositionConfigEntity[],
+  withCamera?: (camera: ArcRotateCamera) => void
 ): ArcRotateCamera[] {
   const { scene, canvas } = sceneEventArgs;
   return config.map((configRaw, i) => {
@@ -62,6 +60,7 @@ export function createCameras(
     camera.attachControl(canvas, true);
     scene.activeCameras = (scene.activeCameras || []).concat(camera);
     camera.inertia = 0.5;
+    if (withCamera) withCamera(camera);
 
     return camera;
   });
@@ -69,7 +68,8 @@ export function createCameras(
 
 export function createBoxes(
   sceneEventArgs: SceneEventArgs,
-  camerasConfig: PositionConfigEntity[]
+  camerasConfig: PositionConfigEntity[],
+  withBox?: (box: Mesh) => void
 ) {
   const { scene } = sceneEventArgs;
   const shapes = camerasConfig.map((configRaw, i) => {
@@ -93,7 +93,7 @@ export function createBoxes(
 
     box.isVisible = false;
     box.enableEdgesRendering();
-    box.edgesWidth = 6;
+    box.edgesWidth = 10;
     box.edgesColor = Color4.FromColor3(Color3.Black(), 1);
 
     const material =
@@ -102,6 +102,8 @@ export function createBoxes(
     material.diffuseColor = new Color3(0.9, 0.9, 0.9);
     material.specularColor = Color3.White();
     box.material = material;
+
+    if (withBox) withBox(box);
 
     return box;
   });
@@ -140,7 +142,7 @@ function generateRandomAngle(ignoreAngles?: Vector3[]) {
   return result;
 }
 
-const getBaseFigureConfig = (
+export const getBaseFigureConfig = (
   source: Mesh,
   config?: GenerationConfig
 ): GenerationConfig => ({
@@ -164,14 +166,14 @@ export const cleanUp = (sceneEventArgs: SceneEventArgs, meshes: Mesh[]) => {
   });
 };
 
-const rotateReferenceShape = (
+export const rotateReferenceShape = (
   source: Mesh,
   target: Mesh,
   options?: { toAngle?: Vector3; ignoreAngles?: Vector3[] }
 ): Vector3 => {
   resetBoundingInfo(target);
 
-  const { position, name } = target;
+  const { name } = target;
   const parent = target.parent as TransformNode;
   target.dispose();
   target = source.clone(name, parent);
@@ -192,7 +194,7 @@ export function areQuaternionEqual(q1: Quaternion, q2: Quaternion) {
   return 1 - threshold < dotProd;
 }
 
-const rotateReferenceShapes = (
+export const rotateReferenceShapes = (
   source: Mesh,
   targets: Mesh[],
   correctRotation: Vector3,
@@ -212,61 +214,7 @@ const rotateReferenceShapes = (
   });
 };
 
-function getAngleOfVector(dimension: "x" | "y" | "z", vector: Vector3) {
+export function getAngleOfVector(dimension: "x" | "y" | "z", vector: Vector3) {
   const ang = Angle.FromRadians(vector[dimension]).degrees();
   return ang > 180 ? 180 - ang : ang;
 }
-
-export const generateFigures = (
-  boxes: Mesh[],
-  sceneEventArgs: SceneEventArgs,
-  shapeConfig: GenerationConfig
-) => {
-  const configReferenceShape = getBaseFigureConfig(boxes[0], shapeConfig);
-  dispatchProjectEvent("configurationSet", {
-    isForReferenceShape: true,
-    config: configReferenceShape,
-  });
-
-  generateFigure(sceneEventArgs, configReferenceShape, boxes[0].name);
-  const correctAngle = rotateReferenceShape(boxes[0], boxes[1], {
-    ignoreAngles: [Vector3.Zero()],
-  });
-
-  dispatchProjectEvent("rotationAnglesSet", {
-    x: getAngleOfVector("x", correctAngle),
-    y: getAngleOfVector("y", correctAngle),
-    z: getAngleOfVector("z", correctAngle),
-  });
-
-  const configTestShape = getBaseFigureConfig(boxes[2], shapeConfig);
-  dispatchProjectEvent("configurationSet", {
-    isForReferenceShape: false,
-    config: configTestShape,
-  });
-  generateFigure(sceneEventArgs, configTestShape, boxes[2].name);
-  const screenshots = createScreenshots(sceneEventArgs.canvas);
-  dispatchProjectEvent("sceneCreated", {
-    referenceShape: screenshots[0],
-    referenceShapeRotated: screenshots[1],
-    testShape: screenshots[2],
-    testShape1: screenshots[3],
-    testShape2: screenshots[4],
-    testShape3: screenshots[5],
-    testShape4: screenshots[6],
-    testShape5: screenshots[7],
-  });
-
-  const meshesToRotate = [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]];
-  const correctShapeIdx = Math.floor(
-    Scalar.RandomRange(0, meshesToRotate.length)
-  );
-
-  dispatchProjectEvent("correctAnswer", correctShapeIdx + 1);
-  rotateReferenceShapes(
-    boxes[2],
-    meshesToRotate,
-    correctAngle,
-    correctShapeIdx
-  );
-};

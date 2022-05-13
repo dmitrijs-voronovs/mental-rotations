@@ -1,9 +1,9 @@
-import { KeyDownEventManagerI } from "@components/Games/EventManager/KeyDownEventManagerI";
+import { IKeyDownEventManager } from "@components/Games/EventManager/IKeyDownEventManager";
 import { KeyDownEventHandlerI } from "@components/Games/EventManager/KeyDownEventHandlerI";
 import { SceneEventArgs } from "react-babylonjs";
 import { EventState, KeyboardEventTypes, KeyboardInfo } from "@babylonjs/core";
 
-export class KeyDownEventManager implements KeyDownEventManagerI {
+export class KeyDownEventManager implements IKeyDownEventManager {
   protected handlers: KeyDownEventHandlerI[] = [];
 
   constructor(protected sceneEventArgs: SceneEventArgs) {}
@@ -20,8 +20,9 @@ export class KeyDownEventManager implements KeyDownEventManagerI {
     }
   }
 
-  registerHandler(handler: KeyDownEventHandlerI): void {
+  registerHandler(handler: KeyDownEventHandlerI): this {
     handler.setContext(this.sceneEventArgs);
     this.handlers.push(handler);
+    return this;
   }
 }

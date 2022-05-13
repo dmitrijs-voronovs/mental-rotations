@@ -1,4 +1,3 @@
-// import "@babylonjs/inspector";
 import {
   ArcRotateCamera,
   Color3,
@@ -12,7 +11,7 @@ import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import { createAxis } from "@components/Axis/axisHelper";
 import { Container } from "@components/common/Container";
 import {
-  scaleMeshToFitScreen,
+  adjustCameraRadiusToFitMesh,
   SHAPE_NAME,
   SHAPE_SIZE,
 } from "../../utils/GenerateFigure";
@@ -22,12 +21,12 @@ const AXIS_SIZE = 5;
 
 const CAMERA_NAME = "camera1";
 
-function perapeScene(scene: SceneEventArgs["scene"]) {
+function prepareScene(scene: SceneEventArgs["scene"]) {
   const camera = scene.getCameraByName(CAMERA_NAME) as ArcRotateCamera;
   const mesh = scene.getMeshByName(SHAPE_NAME) as Mesh;
   if (camera && mesh) {
     camera.inertia = 0.5;
-    scaleMeshToFitScreen(mesh, camera);
+    adjustCameraRadiusToFitMesh(mesh, camera);
   }
 }
 
@@ -37,7 +36,7 @@ const ConfigurationEditor = () => {
 
     const gui = generateGUI(sceneEventArgs, {
       generateFigureCallback: () => {
-        perapeScene(scene);
+        prepareScene(scene);
       },
       clearFigureCallback: () => {
         const shape = scene.getMeshByName(SHAPE_NAME);
@@ -47,7 +46,9 @@ const ConfigurationEditor = () => {
       },
     });
     createAxis(sceneEventArgs, AXIS_SIZE);
-    // scene.debugLayer.show();
+    import("@babylonjs/inspector").then(() => scene.debugLayer.show());
+
+    // TODO: add to other editors
     scene.onDisposeObservable.add(() => gui.destroy());
   };
 
@@ -95,7 +96,7 @@ const ConfigurationEditor = () => {
               name={SHAPE_NAME}
               size={SHAPE_SIZE}
               enableEdgesRendering
-              edgesWidth={6}
+              edgesWidth={10}
               edgesColor={Color4.FromColor3(Color3.Black(), 1)}
               position={new Vector3(0, 3, 0)}
               scaling={new Vector3(1, 1, 1)}

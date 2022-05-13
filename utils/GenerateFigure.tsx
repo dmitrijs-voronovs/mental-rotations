@@ -1,6 +1,7 @@
 import {
   Angle,
   ArcRotateCamera,
+  InstancedMesh,
   Mesh,
   Scalar,
   TransformNode,
@@ -12,7 +13,7 @@ import { getInstanceName, getTransformNodeName } from "./names";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
-const SHAPE_INITIAL_COORD = new Vector3(0, 0, 0);
+const SHAPE_INITIAL_COORDS = new Vector3(0, 0, 0);
 
 export type GenerationConfig = {
   spreadOnX: number;
@@ -68,14 +69,20 @@ export function recenterMesh(mesh: Mesh) {
   parent.position = parent.position.add(parent.position.subtract(center));
 }
 
-export function scaleMeshToFitScreen(mesh: Mesh, camera: ArcRotateCamera) {
+export function adjustCameraRadiusToFitMesh(
+  mesh: Mesh,
+  camera: ArcRotateCamera
+) {
   resetBoundingInfo(mesh);
   updateBoundingInfo(mesh);
 
-  const maxVector = mesh.getBoundingInfo().boundingBox.maximum;
-  const maxWorldVector = mesh.getBoundingInfo().boundingBox.maximumWorld;
   const meshRadius = mesh.getBoundingInfo().boundingSphere.radius;
   const margin = 4;
+  // TODO: replace with something more reliable. Change formula to suit any camera fov
+  // // camera.fov = 0.1;
+  // const fovMultiplier = 8 - camera.fov;
+  // // const fovMultiplier = 1;
+  // camera.radius = meshRadius * 2 * fovMultiplier + margin * 8;
   const fovMultiplier = 2 - camera.fov;
   camera.radius = meshRadius * 2 * fovMultiplier + margin;
 }
@@ -83,7 +90,8 @@ export function scaleMeshToFitScreen(mesh: Mesh, camera: ArcRotateCamera) {
 export const generateFigure = (
   sceneEventArgs: SceneEventArgs,
   config: GenerationConfig,
-  shapeName = SHAPE_NAME
+  shapeName = SHAPE_NAME,
+  withInstance?: (inst: InstancedMesh) => void
 ) => {
   const { scene } = sceneEventArgs;
   const square = scene.getMeshByName(shapeName) as Mesh;
@@ -95,9 +103,11 @@ export const generateFigure = (
   submeshCoordinates.forEach((coord, i) => {
     const inst = square.createInstance(getInstanceName(shapeName, i));
     inst.setParent(square);
-    inst.scalingDeterminant = 0.99;
+    inst.scalingDeterminant = 0.97;
     inst.position = coord;
     inst.isPickable = true;
+
+    if (withInstance) withInstance(inst);
   });
   square.edgesShareWithInstances = true;
   square.rotation = rotation;
@@ -146,7 +156,7 @@ const generateCoordinatesOfSubmeshes = (
 ): Vector3[] => {
   const { totalBlocks } = config;
 
-  const allCoords: Vector3[] = [SHAPE_INITIAL_COORD];
+  const allCoords: Vector3[] = [SHAPE_INITIAL_COORDS];
   let nBlocksToGenerate = totalBlocks - 1;
   while (nBlocksToGenerate > 0) {
     const randomDeltaVector = getRandomVector(config);
@@ -181,10 +191,7 @@ const getRandomVector = (config: GenerationConfig): Vector3 => {
     vectorsForNextPosition.push(randomVector);
   }
   return vectorsForNextPosition
-    .reduce((resultingVector, vector) =>
-      // (resultingVector = resultingVector.add(vector))
-      resultingVector.add(vector)
-    )
+    .reduce((resultingVector, vector) => resultingVector.add(vector))
     .scale(SHAPE_SIZE);
 };
 
