@@ -44,15 +44,23 @@ enum Role {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role            @default(USER)
-  accounts      Account[]
-  sessions      Session[]
-  CompletedTest CompletedTest[]
+  id             String           @id @default(cuid())
+  name           String?
+  email          String?          @unique
+  emailVerified  DateTime?
+  image          String?
+  role           Role             @default(USER)
+  accounts       Account[]
+  sessions       Session[]
+  completedTest  CompletedTest[]
+  UserInfo       UserInfo[]
+  AdditionalTest AdditionalTest[]
+}
+
+model UserInfo {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -77,10 +85,10 @@ model Task {
   referenceShape Json
   targetShape    Json
   angles         Json?
-  imageUrl       String
+  images         Json
   correctAnswer  Int
   testId         String
-  test           Test   @relation(fields: [testId], references: [id])
+  test           Test   @relation(fields: [testId], references: [id], onDelete: Cascade)
 
   @@unique([id, testId])
 }
@@ -90,9 +98,9 @@ model CompletedTest {
   createdAt DateTime        @default(now())
   tasks     CompletedTask[]
   userId    String
-  user      User            @relation(fields: [userId], references: [id])
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   testId    String
-  test      Test            @relation(fields: [testId], references: [id])
+  test      Test            @relation(fields: [testId], references: [id], onDelete: Cascade)
 }
 
 model CompletedTask {
@@ -101,7 +109,20 @@ model CompletedTask {
   answer  Int
   correct Boolean
   testId  String
-  test    CompletedTest @relation(fields: [testId], references: [id])
+  test    CompletedTest @relation(fields: [testId], references: [id], onDelete: Cascade)
 
   @@unique([id, testId])
+}
+
+enum AdditionalTestType {
+  PHQ9
+  EMOTION_WHEEL
+}
+
+model AdditionalTest {
+  id     String             @id @default(cuid())
+  type   AdditionalTestType
+  data   Json
+  userId String
+  user   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

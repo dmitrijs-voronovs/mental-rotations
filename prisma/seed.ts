@@ -1,14 +1,21 @@
-import { PrismaClient } from "@prisma/client";
-import test1 from "../public/tests/1-easy/data.json";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { TestResults } from "@components/EventDisplay";
+
+const TEST_NAMES = ["1-easy", "2-easy-2d", "3-easy-isometric", "tutorial"];
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const tasks = test1 as TestResults;
-  const formattedTasks = formatTasks(tasks);
+  const res = await Promise.all(TEST_NAMES.map(addTest));
+  console.log(res);
+}
+
+async function addTest(testName: string) {
+  const tasks = (await import(`../public/tests/${testName}/data.json`))
+    .default as TestResults;
+  const formattedTasks = formatTasks(tasks, testName);
   const testData = await prisma.test.upsert({
-    where: { name: "complex" },
+    where: { name: testName },
     update: {
       tasks: {
         deleteMany: {},
@@ -18,7 +25,7 @@ async function main() {
       },
     },
     create: {
-      name: "complex",
+      name: testName,
       description: "The first test to conduct with 10 tasks of 7 blocks each",
       tasks: {
         createMany: {
@@ -30,10 +37,12 @@ async function main() {
       tasks: true,
     },
   });
-  console.log(testData);
 }
 
-function formatTasks(tasks: TestResults) {
+function formatTasks(
+  tasks: TestResults,
+  testName: string
+): Prisma.TaskUncheckedCreateWithoutTestInput[] {
   return tasks.map((t) => ({
     taskNumber: t.taskNumber,
     referenceShape: {
@@ -62,8 +71,17 @@ function formatTasks(tasks: TestResults) {
       rotationZ: t.rotationZ,
     },
     correctAnswer: t.correctAnswer,
-    // imageUrl: t.scene.split("/").slice(0, -1).join("/") + "/",
-    imageUrl: "tests/complex/",
+    images: {
+      referenceShape: `/tests/${testName}/${t["referenceShape"]}`,
+      referenceShapeRotated: `/tests/${testName}/${t["referenceShapeRotated"]}`,
+      testShape: `/tests/${testName}/${t["testShape"]}`,
+      testShape1: `/tests/${testName}/${t["testShape1"]}`,
+      testShape2: `/tests/${testName}/${t["testShape2"]}`,
+      testShape3: `/tests/${testName}/${t["testShape3"]}`,
+      testShape4: `/tests/${testName}/${t["testShape4"]}`,
+      testShape5: `/tests/${testName}/${t["testShape5"]}`,
+      scene: t["scene"],
+    },
   }));
 }
 
