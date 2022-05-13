@@ -39,6 +39,10 @@ async function addTest(testName: string) {
   });
 }
 
+function getImgSrc(testName: string, src: string) {
+  return `/tests/${testName}/${src}`;
+}
+
 function formatTasks(
   tasks: TestResults,
   testName: string
@@ -72,15 +76,15 @@ function formatTasks(
     },
     correctAnswer: t.correctAnswer,
     images: {
-      referenceShape: `/tests/${testName}/${t["referenceShape"]}`,
-      referenceShapeRotated: `/tests/${testName}/${t["referenceShapeRotated"]}`,
-      testShape: `/tests/${testName}/${t["testShape"]}`,
-      testShape1: `/tests/${testName}/${t["testShape1"]}`,
-      testShape2: `/tests/${testName}/${t["testShape2"]}`,
-      testShape3: `/tests/${testName}/${t["testShape3"]}`,
-      testShape4: `/tests/${testName}/${t["testShape4"]}`,
-      testShape5: `/tests/${testName}/${t["testShape5"]}`,
-      scene: t["scene"],
+      referenceShape: getImgSrc(testName, t["referenceShape"]),
+      referenceShapeRotated: getImgSrc(testName, t["referenceShapeRotated"]),
+      testShape: getImgSrc(testName, t["testShape"]),
+      testShape1: getImgSrc(testName, t["testShape1"]),
+      testShape2: getImgSrc(testName, t["testShape2"]),
+      testShape3: getImgSrc(testName, t["testShape3"]),
+      testShape4: getImgSrc(testName, t["testShape4"]),
+      testShape5: getImgSrc(testName, t["testShape5"]),
+      scene: getImgSrc(testName, t["scene"]),
     },
   }));
 }
