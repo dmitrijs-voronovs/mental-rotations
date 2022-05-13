@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
+-- CreateEnum
+CREATE TYPE "AdditionalTestType" AS ENUM ('PHQ9', 'EMOTION_WHEEL');
+
 -- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL,
@@ -42,6 +45,14 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "UserInfo" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "UserInfo_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "VerificationToken" (
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
@@ -64,7 +75,7 @@ CREATE TABLE "Task" (
     "referenceShape" JSONB NOT NULL,
     "targetShape" JSONB NOT NULL,
     "angles" JSONB,
-    "imageUrl" TEXT NOT NULL,
+    "images" JSONB NOT NULL,
     "correctAnswer" INTEGER NOT NULL,
     "testId" TEXT NOT NULL,
 
@@ -75,6 +86,7 @@ CREATE TABLE "Task" (
 CREATE TABLE "CompletedTest" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT NOT NULL,
     "testId" TEXT NOT NULL,
 
     CONSTRAINT "CompletedTest_pkey" PRIMARY KEY ("id")
@@ -89,6 +101,16 @@ CREATE TABLE "CompletedTask" (
     "testId" TEXT NOT NULL,
 
     CONSTRAINT "CompletedTask_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AdditionalTest" (
+    "id" TEXT NOT NULL,
+    "type" "AdditionalTestType" NOT NULL,
+    "data" JSONB NOT NULL,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "AdditionalTest_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -122,10 +144,19 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Task" ADD CONSTRAINT "Task_testId_fkey" FOREIGN KEY ("testId") REFERENCES "Test"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserInfo" ADD CONSTRAINT "UserInfo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CompletedTest" ADD CONSTRAINT "CompletedTest_testId_fkey" FOREIGN KEY ("testId") REFERENCES "Test"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Task" ADD CONSTRAINT "Task_testId_fkey" FOREIGN KEY ("testId") REFERENCES "Test"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CompletedTask" ADD CONSTRAINT "CompletedTask_id_fkey" FOREIGN KEY ("id") REFERENCES "CompletedTest"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CompletedTest" ADD CONSTRAINT "CompletedTest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CompletedTest" ADD CONSTRAINT "CompletedTest_testId_fkey" FOREIGN KEY ("testId") REFERENCES "Test"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CompletedTask" ADD CONSTRAINT "CompletedTask_testId_fkey" FOREIGN KEY ("testId") REFERENCES "CompletedTest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AdditionalTest" ADD CONSTRAINT "AdditionalTest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

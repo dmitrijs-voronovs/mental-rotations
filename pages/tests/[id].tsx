@@ -8,6 +8,7 @@ import {
   Heading,
   Link,
   ListItem,
+  Progress,
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
@@ -15,9 +16,12 @@ import { useRouter } from "next/dist/client/router";
 import { TestTask } from "@components/TestTask";
 import { launchTimer, Timer } from "../../utils/LaunchTimer";
 import { TestResults } from "@components/TestResults";
+import { getSession } from "next-auth/react";
+import { TestScreenshots } from "@components/EventDisplay";
 
-export const getServerSideProps: GetServerSideProps = async (req) => {
-  const id = req.params!.id as string;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession({ ctx });
+  const id = ctx.params!.id as string;
   const test = await prisma.test.findUnique({
     where: { id },
     include: {
@@ -27,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (req) => {
   });
 
   return {
-    props: { test: JSON.parse(JSON.stringify(test)) },
+    props: { test: JSON.parse(JSON.stringify(test)), session },
   };
 };
 
@@ -38,6 +42,7 @@ const TestDetails: FC<{
   const [results, setResults] = useState<
     Prisma.CompletedTaskCreateWithoutTestInput[]
   >([]);
+  const [loading, setLoading] = useState(0);
   const timer = useRef<Timer>();
   const router = useRouter();
   console.log(test);
@@ -47,6 +52,7 @@ const TestDetails: FC<{
     timer.current = launchTimer();
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onItemClick = (n: number) => {
     console.log(test, taskIdx, test!.tasks[taskIdx]);
     setResults((res) => [
@@ -74,16 +80,45 @@ const TestDetails: FC<{
     };
   }, [onItemClick]);
 
+  useEffect(() => {
+    function loadTaskImages(imgNames: TestScreenshots) {
+      Object.entries(imgNames).forEach(([name, src]) => {
+        if (name === "scene") return;
+        const img = new Image();
+        img.src = src;
+        img.onload = (e) => {
+          setLoading((old) => old + 1);
+        };
+      });
+    }
+
+    if (test) {
+      test.tasks.forEach((task) =>
+        loadTaskImages(task.images as TestScreenshots)
+      );
+    }
+  }, [test]);
+
   if (!test) {
     router.push("/tests");
     return null;
   }
+
+  const testImageCount =
+    test.tasks.length *
+    (Object.values(test.tasks[0].images as TestScreenshots).length - 1);
 
   if (taskIdx < 0)
     return (
       <VStack>
         <Heading>{test.name}</Heading>
         <p>Test consists of {test.tasks.length} tasks</p>
+        <Box>
+          <Heading fontSize={"md"}>
+            Loading test data {loading}/{testImageCount}
+          </Heading>
+          <Progress size={"md"} value={loading} min={0} max={testImageCount} />
+        </Box>
         {test.completedTests.length && (
           <>
             <Heading fontSize={"md"}>Was already completed:</Heading>
@@ -97,11 +132,7 @@ const TestDetails: FC<{
             </UnorderedList>
           </>
         )}
-        <Button
-          colorScheme="blue"
-          variant="solid"
-          onClick={() => setTaskIdx(0)}
-        >
+        <Button variant="solid" onClick={() => setTaskIdx(0)}>
           Start
         </Button>
       </VStack>

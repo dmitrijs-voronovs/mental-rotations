@@ -1,14 +1,21 @@
-import { PrismaClient } from "@prisma/client";
-import test1 from "../public/tests/1-easy/data.json";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { TestResults } from "@components/EventDisplay";
+
+const TEST_NAMES = ["1-easy", "2-easy-2d", "3-easy-isometric", "tutorial"];
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const tasks = test1 as TestResults;
-  const formattedTasks = formatTasks(tasks);
+  const res = await Promise.all(TEST_NAMES.map(addTest));
+  console.log(res);
+}
+
+async function addTest(testName: string) {
+  const tasks = (await import(`../public/tests/${testName}/data.json`))
+    .default as TestResults;
+  const formattedTasks = formatTasks(tasks, testName);
   const testData = await prisma.test.upsert({
-    where: { name: "complex" },
+    where: { name: testName },
     update: {
       tasks: {
         deleteMany: {},
@@ -18,7 +25,7 @@ async function main() {
       },
     },
     create: {
-      name: "complex",
+      name: testName,
       description: "The first test to conduct with 10 tasks of 7 blocks each",
       tasks: {
         createMany: {
@@ -30,10 +37,16 @@ async function main() {
       tasks: true,
     },
   });
-  console.log(testData);
 }
 
-function formatTasks(tasks: TestResults) {
+function getImgSrc(testName: string, src: string) {
+  return `/tests/${testName}/${src}`;
+}
+
+function formatTasks(
+  tasks: TestResults,
+  testName: string
+): Prisma.TaskUncheckedCreateWithoutTestInput[] {
   return tasks.map((t) => ({
     taskNumber: t.taskNumber,
     referenceShape: {
@@ -62,8 +75,17 @@ function formatTasks(tasks: TestResults) {
       rotationZ: t.rotationZ,
     },
     correctAnswer: t.correctAnswer,
-    // imageUrl: t.scene.split("/").slice(0, -1).join("/") + "/",
-    imageUrl: "tests/complex/",
+    images: {
+      referenceShape: getImgSrc(testName, t["referenceShape"]),
+      referenceShapeRotated: getImgSrc(testName, t["referenceShapeRotated"]),
+      testShape: getImgSrc(testName, t["testShape"]),
+      testShape1: getImgSrc(testName, t["testShape1"]),
+      testShape2: getImgSrc(testName, t["testShape2"]),
+      testShape3: getImgSrc(testName, t["testShape3"]),
+      testShape4: getImgSrc(testName, t["testShape4"]),
+      testShape5: getImgSrc(testName, t["testShape5"]),
+      scene: getImgSrc(testName, t["scene"]),
+    },
   }));
 }
 
