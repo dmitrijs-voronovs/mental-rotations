@@ -1,9 +1,9 @@
 import {
-  BaseSceneFactory,
-  ISceneFactory,
+  BaseSceneInitializer,
+  ISceneInitializer,
   PrepareScene,
   PrepareSceneOptions,
-} from "@components/Games/ISceneFactory";
+} from "@components/Games/ISceneInitializer";
 import {
   cleanUp,
   createBoxes,
@@ -35,11 +35,11 @@ import { dispatchProjectEvent } from "../../utils/Events";
 import { getShapeConfig } from "@components/Games/Test";
 import { SceneEventArgs } from "react-babylonjs";
 
-export class TestGenerationSceneFactory
-  extends BaseSceneFactory
-  implements ISceneFactory
+export class TestGenerationSceneInitializer
+  extends BaseSceneInitializer
+  implements ISceneInitializer
 {
-  create(): void {
+  init(): void {
     {
       const { scene, canvas } = this.sceneEventArgs;
       const cameras = createCameras(

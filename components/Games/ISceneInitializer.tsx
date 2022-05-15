@@ -1,23 +1,24 @@
 import { SceneEventArgs } from "react-babylonjs";
 import { GUI } from "dat.gui";
 
-export interface ISceneFactory {
+export interface ISceneInitializer {
   sceneEventArgs: SceneEventArgs;
   gui?: GUI;
 
-  create(): void;
+  init(): void;
 }
 
-export interface SceneFactoryCreator {
-  new (sceneEventArgs: SceneEventArgs, gui?: GUI): ISceneFactory;
+export interface SceneInitializerCreator {
+  new (sceneEventArgs: SceneEventArgs, gui?: GUI): ISceneInitializer;
 }
 
-export abstract class BaseSceneFactory implements ISceneFactory {
+export abstract class BaseSceneInitializer implements ISceneInitializer {
   constructor(public sceneEventArgs: SceneEventArgs, public gui?: GUI) {}
 
-  abstract create(): void;
+  abstract init(): void;
 }
 
+// TODO: move out
 export type PrepareSceneOptions = {
   skipMetadataIncrement: boolean;
 };

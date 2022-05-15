@@ -11,7 +11,7 @@ import {
 } from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
 import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
-import { SceneFactoryCreator } from "@components/Games/ISceneFactory";
+import { SceneInitializerCreator } from "@components/Games/ISceneInitializer";
 
 function getConfigFromGui(gui: GUI) {
   const rawConfig = (gui.getSaveObject() as any).remembered[
@@ -32,10 +32,10 @@ export function getShapeConfig(gui?: GUI): GenerationConfig {
 
 const onSceneMount = (
   sceneEventArgs: SceneEventArgs,
-  SceneFactory: SceneFactoryCreator
+  SceneFactory: SceneInitializerCreator
 ) => {
   const gui = generateGUI(sceneEventArgs);
-  new SceneFactory(sceneEventArgs, gui).create();
+  new SceneFactory(sceneEventArgs, gui).init();
   sceneEventArgs.scene.onDisposeObservable.add(() => gui.destroy());
 
   // import("@babylonjs/inspector").then(() => sceneEventArgs.scene.debugLayer.show());
@@ -45,7 +45,7 @@ const CANVAS_ID = "babylonJS";
 
 // const Test: FC<{ onSceneMount: (sceneEventArgs: SceneEventArgs) => void }> = ({ onSceneMount }) => {
 const Test: FC<{
-  SceneFactory: SceneFactoryCreator;
+  SceneFactory: SceneInitializerCreator;
 }> = ({ SceneFactory }) => {
   useEffect(() => {
     const canvas = document.getElementById(CANVAS_ID)!;
