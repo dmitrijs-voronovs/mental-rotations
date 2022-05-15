@@ -4,35 +4,16 @@ import {
   PrepareScene,
   PrepareSceneOptions,
 } from "@components/Games/ISceneInitializer";
-import {
-  cleanUp,
-  createBoxes,
-  createCameras,
-  getAngleOfVector,
-  getBaseFigureConfig,
-  rotateReferenceShape,
-  rotateReferenceShapes,
-} from "../../utils/GenerateScene";
+import { cleanUp, createBoxes, createCameras } from "../../utils/GenerateScene";
 import { positionConfig } from "../../utils/positionConfig";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
-import {
-  InstancedMesh,
-  Mesh,
-  PointerEventTypes,
-  Scalar,
-  Vector3,
-} from "@babylonjs/core";
+import { Mesh, PointerEventTypes } from "@babylonjs/core";
 import { launchTimer } from "../../utils/LaunchTimer";
 import { getBoxName } from "../../utils/names";
-import {
-  adjustCameraRadiusToFitMesh,
-  generateFigure,
-  GenerationConfig,
-} from "../../utils/GenerateFigure";
+import { adjustCameraRadiusToFitMesh } from "../../utils/GenerateFigure";
 import { DynamicTestKeyboardEventHandlerFactory } from "@components/Games/EventManager/DynamicTestKeyboardEventHandlerFactory";
 import { dispatchProjectEvent } from "../../utils/Events";
 import { getShapeConfig } from "@components/Games/Test";
-import { SceneEventArgs } from "react-babylonjs";
 
 export class DynamicSceneInitializer
   extends BaseSceneInitializer
@@ -76,6 +57,8 @@ export class DynamicSceneInitializer
 
     prepareScene();
 
+    // this.sceneEventArgs.scene.getMeshesByID()
+
     const KeyboardEventHandler = new DynamicTestKeyboardEventHandlerFactory(
       this.sceneEventArgs,
       {
@@ -111,61 +94,5 @@ export class DynamicSceneInitializer
           break;
       }
     });
-  }
-
-  generateFigures(
-    boxes: Mesh[],
-    sceneEventArgs: SceneEventArgs,
-    shapeConfig: GenerationConfig,
-    withInstance?: (inst: InstancedMesh) => void
-  ) {
-    // TODO: is that necessary for generation?
-    // if (!sceneEventArgs.scene.metadata) return;
-
-    const configReferenceShape = getBaseFigureConfig(boxes[0], shapeConfig);
-    dispatchProjectEvent("configurationSet", {
-      isForReferenceShape: true,
-      config: configReferenceShape,
-    });
-
-    generateFigure(
-      sceneEventArgs,
-      configReferenceShape,
-      boxes[0].name,
-      withInstance
-    );
-    const correctAngle = rotateReferenceShape(boxes[0], boxes[1], {
-      ignoreAngles: [Vector3.Zero()],
-    });
-
-    dispatchProjectEvent("rotationAnglesSet", {
-      x: getAngleOfVector("x", correctAngle),
-      y: getAngleOfVector("y", correctAngle),
-      z: getAngleOfVector("z", correctAngle),
-    });
-
-    const configTestShape = getBaseFigureConfig(boxes[2], shapeConfig);
-    dispatchProjectEvent("configurationSet", {
-      isForReferenceShape: false,
-      config: configTestShape,
-    });
-    generateFigure(
-      sceneEventArgs,
-      configTestShape,
-      boxes[2].name,
-      withInstance
-    );
-    const meshesToRotate = [boxes[3], boxes[4], boxes[5], boxes[6], boxes[7]];
-    const correctShapeIdx = Math.floor(
-      Scalar.RandomRange(0, meshesToRotate.length)
-    );
-
-    dispatchProjectEvent("correctAnswer", correctShapeIdx + 1);
-    rotateReferenceShapes(
-      boxes[2],
-      meshesToRotate,
-      correctAngle,
-      correctShapeIdx
-    );
   }
 }
