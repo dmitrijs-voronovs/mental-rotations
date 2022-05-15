@@ -83,11 +83,11 @@ const QuestionField: FC<{ question: string; id: number }> = ({
   </FastField>
 );
 
-function sumAllValues(values: Record<string, string>) {
-  return Object.values(values).reduce((total, v) => total + Number(v), 0);
-}
+type PHQ9Props = {
+  onSubmit: (values: Record<string, string>) => void;
+};
 
-export function PHQ9() {
+export function PHQ9({ onSubmit }: PHQ9Props) {
   return (
     <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
       <VStack alignItems={"left"} mb={5}>
@@ -98,9 +98,9 @@ export function PHQ9() {
         initialValues={Object.fromEntries(questions.map((_q, i) => [i, ""]))}
         validateOnBlur
         onSubmit={(values) => {
-          alert(
-            JSON.stringify({ values, total: sumAllValues(values) }, null, 2)
-          );
+          const total = sumAllValues(values);
+          alert(JSON.stringify({ ...values, total }, null, 2));
+          onSubmit({ ...values, total: String(total) });
         }}
       >
         {({ handleSubmit, values }) => {
@@ -142,4 +142,8 @@ export function PHQ9() {
       </Formik>
     </Box>
   );
+}
+
+function sumAllValues(values: Record<string, string>) {
+  return Object.values(values).reduce((total, v) => total + Number(v), 0);
 }

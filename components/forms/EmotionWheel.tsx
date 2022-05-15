@@ -8,7 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FastField, FieldProps, Formik } from "formik";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 const otherOptions = ["Nav emociju", "Citas emocijas"];
 const emotions = [
@@ -81,7 +81,13 @@ const initialFormValues = emotions.reduce(
   {}
 );
 
-export function EmotionWheel() {
+type EmotionWheelProps = {
+  onSubmit: (values: Record<string, string | number>) => void;
+};
+
+export function EmotionWheel({ onSubmit }: EmotionWheelProps) {
+  const [other, setOther] = useState("");
+
   return (
     <Box
       p="5"
@@ -99,7 +105,8 @@ export function EmotionWheel() {
         initialValues={initialFormValues}
         validateOnBlur
         onSubmit={(values) => {
-          alert(JSON.stringify({ values }, null, 2));
+          alert(JSON.stringify({ ...values, other }, null, 2));
+          onSubmit({ ...values, other });
         }}
       >
         {({ handleSubmit, setValues }) => {
@@ -118,6 +125,7 @@ export function EmotionWheel() {
                     <Fragment key={emotion}>
                       <FastField name={emotion}>
                         {({ field, form }: FieldProps<string>) => {
+                          // TODO: make dynamic calculations according to formulas https://docs.google.com/spreadsheets/d/1xM3PbcXFuv7EVcMSmpiFVCuJ5xqCXDHr3jqt1V3ZOtg/edit#gid=0
                           const origSize = 16;
                           const offset = 90;
                           const scales = emotions.map((_e, i) => 1 + i * 0.5);
@@ -154,7 +162,7 @@ export function EmotionWheel() {
                                       position={"absolute"}
                                       left={left}
                                       top={top}
-                                      background={colors[emotionIdx]}
+                                      // background={colors[emotionIdx]}
                                       borderRadius={optionIdx === 0 ? 0 : "50%"}
                                       transform={`translate(-50%, -50%) scale(${
                                         1 + optionIdx * 0.5
@@ -210,8 +218,9 @@ export function EmotionWheel() {
                   transform={`translate(-50%, 0) scale(.94)`}
                   borderRadius={`0 0 ${innerRadius}px ${innerRadius}px`}
                   onClick={() => {
-                    const a = prompt("which one?");
+                    const a = prompt("which one?", other);
                     console.log(a);
+                    setOther(a || "");
                   }}
                 >
                   Other

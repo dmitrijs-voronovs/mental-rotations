@@ -22,7 +22,21 @@ import {
 } from "@chakra-ui/react";
 import { Field, FieldProps, Formik } from "formik";
 
-export function UserDetailsForm() {
+type UserDetailsFormValues = {
+  age: number;
+  gender: string;
+  occupation: string;
+  fieldOfActivity: string;
+  isRightHanded: boolean;
+  hasNeurodegenerativeIllnesses: boolean;
+  hasAgreedToPolicy: boolean;
+};
+
+type UserDetailsFormProps = {
+  onSubmit: (values: UserDetailsFormValues) => void;
+};
+
+export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
   return (
     <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
       <VStack alignItems={"left"} mb={5}>
@@ -34,12 +48,15 @@ export function UserDetailsForm() {
           age: 15,
           gender: "Male",
           occupation: "",
+          fieldOfActivity: "",
+          isRightHanded: true,
           hasNeurodegenerativeIllnesses: false,
           hasAgreedToPolicy: false,
         }}
         validateOnBlur
         onSubmit={(values) => {
           alert(JSON.stringify(values, null, 2));
+          onSubmit(values);
         }}
       >
         {({ handleSubmit }) => (
@@ -119,10 +136,71 @@ export function UserDetailsForm() {
                     <Input
                       {...field}
                       id="occupation"
-                      placeholder={"Mathematician"}
+                      placeholder={"Scientist"}
                     />
                     <FormErrorMessage>
                       {form.errors.occupation}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field
+                name={"fieldOfActivity"}
+                validate={(val?: string) =>
+                  !val
+                    ? "Value is required"
+                    : val.length < 4
+                    ? "Field of activity length should be > 3"
+                    : undefined
+                }
+              >
+                {({ field, form }: FieldProps<number>) => (
+                  <FormControl
+                    isRequired
+                    isInvalid={
+                      !!(
+                        form.touched.fieldOfActivity &&
+                        form.errors.fieldOfActivity
+                      )
+                    }
+                  >
+                    <FormLabel htmlFor="fieldOfActivity">
+                      Field of activity
+                    </FormLabel>
+                    <Input
+                      {...field}
+                      id="fieldOfActivity"
+                      placeholder={"Mathematician"}
+                    />
+                    <FormErrorMessage>
+                      {form.errors.fieldOfActivity}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name={"isRightHanded"}>
+                {({ field, form }: FieldProps<string>) => (
+                  <FormControl
+                    isRequired
+                    isInvalid={
+                      !!(
+                        form.touched.isRightHanded && form.errors.isRightHanded
+                      )
+                    }
+                    display={"flex"}
+                    alignItems={"baseline"}
+                  >
+                    <FormLabel htmlFor="isRightHanded">
+                      Are you right handed?
+                    </FormLabel>
+                    <Switch
+                      {...field}
+                      id="isRightHanded"
+                      size={"sm"}
+                      defaultChecked={true}
+                    />
+                    <FormErrorMessage>
+                      {form.errors.isRightHanded}
                     </FormErrorMessage>
                   </FormControl>
                 )}
