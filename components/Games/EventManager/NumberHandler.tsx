@@ -4,8 +4,12 @@ import { Mesh } from "@babylonjs/core";
 import { dispatchProjectEvent } from "../../../utils/Events";
 import { cleanUp } from "../../../utils/GenerateScene";
 import { PrepareScene } from "@components/Games/ISceneInitializer";
+import { KeyDownEventHandlerI } from "@components/Games/EventManager/KeyDownEventHandlerI";
 
-export class NumberHandler extends KeyDownEventHandler {
+export class NumberHandler
+  extends KeyDownEventHandler
+  implements KeyDownEventHandlerI
+{
   constructor(
     protected timer: Timer,
     protected prepareScene: PrepareScene,
