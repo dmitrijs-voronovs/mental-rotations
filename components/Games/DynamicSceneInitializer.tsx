@@ -1,5 +1,4 @@
 import {
-  BaseSceneInitializer,
   ISceneInitializer,
   PrepareScene,
   PrepareSceneOptions,
@@ -14,6 +13,7 @@ import { adjustCameraRadiusToFitMesh } from "../../utils/GenerateFigure";
 import { DynamicTestKeyboardEventHandlerFactory } from "@components/Games/EventManager/DynamicTestKeyboardEventHandlerFactory";
 import { dispatchProjectEvent } from "../../utils/Events";
 import { getShapeConfig } from "@components/Games/Test";
+import { BaseSceneInitializer } from "@components/Games/BaseSceneInitializer";
 
 export class DynamicSceneInitializer
   extends BaseSceneInitializer

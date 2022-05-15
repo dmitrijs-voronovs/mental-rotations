@@ -1,5 +1,4 @@
 import {
-  BaseSceneInitializer,
   ISceneInitializer,
   PrepareScene,
   PrepareSceneOptions,
@@ -15,6 +14,7 @@ import { TestTaskGenerationKeyboardEventHandlerFactory } from "@components/Games
 import { saveScreenshots } from "../../utils/SaveScreenshots";
 import { dispatchProjectEvent } from "../../utils/Events";
 import { getShapeConfig } from "@components/Games/Test";
+import { BaseSceneInitializer } from "@components/Games/BaseSceneInitializer";
 
 export class TestGenerationSceneInitializer
   extends BaseSceneInitializer
