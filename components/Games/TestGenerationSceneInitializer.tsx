@@ -50,10 +50,12 @@ export class TestGenerationSceneInitializer
           // camera.fov = 0.1;
         }
       );
-      let boxes: Mesh[];
+      let boxes: Mesh[] = [];
       const timer = launchTimer();
 
       const prepareScene: PrepareScene = (options?: PrepareSceneOptions) => {
+        cleanUp(this.sceneEventArgs, boxes);
+
         const { skipMetadataIncrement = false } = options || {};
         if (scene.metadata === null || !skipMetadataIncrement) {
           scene.metadata = scene.metadata === null ? 0 : scene.metadata + 1;
@@ -111,7 +113,6 @@ export class TestGenerationSceneInitializer
             }
             dispatchProjectEvent("actualAnswer", { answer: pickedMesh, time });
 
-            cleanUp(this.sceneEventArgs, boxes);
             prepareScene();
             break;
         }

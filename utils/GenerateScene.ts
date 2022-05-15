@@ -153,6 +153,7 @@ export const getBaseFigureConfig = (
 
 export const cleanUp = (sceneEventArgs: SceneEventArgs, meshes: Mesh[]) => {
   const { scene } = sceneEventArgs;
+  console.log({ meshes });
   meshes.forEach((shape) => {
     const shapeName = shape.name;
     const transformNode = scene.getTransformNodeByName(
