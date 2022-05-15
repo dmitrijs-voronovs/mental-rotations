@@ -11,7 +11,7 @@ import {
 } from "../../utils/GenerateGUI";
 import { GUI } from "dat.gui";
 import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
-import { DynamicSceneFactory } from "@components/Games/DynamicSceneFactory";
+import { SceneFactoryCreator } from "@components/Games/ISceneFactory";
 
 function getConfigFromGui(gui: GUI) {
   const rawConfig = (gui.getSaveObject() as any).remembered[
@@ -30,10 +30,12 @@ export function getShapeConfig(gui?: GUI): GenerationConfig {
   return getConfigFromGui(gui);
 }
 
-const onSceneMount = (sceneEventArgs: SceneEventArgs) => {
+const onSceneMount = (
+  sceneEventArgs: SceneEventArgs,
+  SceneFactory: SceneFactoryCreator
+) => {
   const gui = generateGUI(sceneEventArgs);
-  new DynamicSceneFactory(sceneEventArgs, gui).create();
-  // new TestGenerationSceneFactory(sceneEventArgs, gui).create();
+  new SceneFactory(sceneEventArgs, gui).create();
   sceneEventArgs.scene.onDisposeObservable.add(() => gui.destroy());
 
   // import("@babylonjs/inspector").then(() => sceneEventArgs.scene.debugLayer.show());
@@ -43,8 +45,8 @@ const CANVAS_ID = "babylonJS";
 
 // const Test: FC<{ onSceneMount: (sceneEventArgs: SceneEventArgs) => void }> = ({ onSceneMount }) => {
 const Test: FC<{
-  onSceneMount?: (sceneEventArgs: SceneEventArgs) => void;
-}> = () => {
+  SceneFactory: SceneFactoryCreator;
+}> = ({ SceneFactory }) => {
   useEffect(() => {
     const canvas = document.getElementById(CANVAS_ID)!;
     canvas.tabIndex = 0;
@@ -82,7 +84,7 @@ const Test: FC<{
       >
         <Scene
           key="scene3"
-          onSceneMount={onSceneMount}
+          onSceneMount={(scene) => onSceneMount(scene, SceneFactory)}
           clearColor={Color4.FromColor3(Color3.White())}
         >
           <hemisphericLight

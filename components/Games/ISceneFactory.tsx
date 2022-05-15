@@ -8,6 +8,10 @@ export interface ISceneFactory {
   create(): void;
 }
 
+export interface SceneFactoryCreator {
+  new (sceneEventArgs: SceneEventArgs, gui?: GUI): ISceneFactory;
+}
+
 export abstract class BaseSceneFactory implements ISceneFactory {
   constructor(public sceneEventArgs: SceneEventArgs, public gui?: GUI) {}
 
