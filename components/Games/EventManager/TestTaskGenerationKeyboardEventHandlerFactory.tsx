@@ -1,7 +1,6 @@
 import { IKeyboardEventHandlerFactory } from "@components/Games/EventManager/IKeyboardEventHandlerFactory";
 import { SceneEventArgs } from "react-babylonjs";
 import { Timer } from "../../../utils/LaunchTimer";
-import { Mesh } from "@babylonjs/core";
 import { IKeyDownEventManager } from "@components/Games/EventManager/IKeyDownEventManager";
 import { KeyDownEventManager } from "@components/Games/EventManager/KeyDownEventManager";
 import { HelpHandler } from "@components/Games/EventManager/HelpHandler";
@@ -14,11 +13,10 @@ export class TestTaskGenerationKeyboardEventHandlerFactory
   implements IKeyboardEventHandlerFactory
 {
   constructor(
-    public sceneEventArgs: SceneEventArgs,
-    public sceneHelpers: {
+    protected sceneEventArgs: SceneEventArgs,
+    protected sceneHelpers: {
       timer: Timer;
       prepareScene: () => void;
-      boxes: Mesh[];
     }
   ) {}
 
@@ -27,18 +25,13 @@ export class TestTaskGenerationKeyboardEventHandlerFactory
       .registerHandler(
         new NumberHandlerWithScreenshots(
           this.sceneHelpers.timer,
-          this.sceneHelpers.prepareScene,
-          this.sceneHelpers.boxes
+          this.sceneHelpers.prepareScene
         )
       )
       .registerHandler(new HelpHandler())
       .registerHandler(new PrintHandler())
       .registerHandler(
-        new SkipHandler(
-          this.sceneHelpers.timer,
-          this.sceneHelpers.prepareScene,
-          this.sceneHelpers.boxes
-        )
+        new SkipHandler(this.sceneHelpers.timer, this.sceneHelpers.prepareScene)
       )
       .registerHandler(new DefaultHandler());
   }

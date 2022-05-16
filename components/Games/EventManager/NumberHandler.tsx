@@ -1,6 +1,5 @@
 import { KeyDownEventHandler } from "@components/Games/EventManager/KeyDownEventHandler";
 import { Timer } from "../../../utils/LaunchTimer";
-import { Mesh } from "@babylonjs/core";
 import { dispatchProjectEvent } from "../../../utils/Events";
 import { PrepareScene } from "@components/Games/ISceneInitializer";
 import { KeyDownEventHandlerI } from "@components/Games/EventManager/KeyDownEventHandlerI";
@@ -9,11 +8,7 @@ export class NumberHandler
   extends KeyDownEventHandler
   implements KeyDownEventHandlerI
 {
-  constructor(
-    protected timer: Timer,
-    protected prepareScene: PrepareScene,
-    protected meshes: Mesh[]
-  ) {
+  constructor(protected timer: Timer, protected prepareScene: PrepareScene) {
     super();
   }
 
