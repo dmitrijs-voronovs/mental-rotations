@@ -1,4 +1,4 @@
-import { GenerationConfig } from "../utils/GenerateFigure";
+import { GenerationConfig } from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
 
 declare global {
   type TestDataEntity = {

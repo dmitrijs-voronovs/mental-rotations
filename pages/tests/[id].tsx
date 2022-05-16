@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import { TestTask } from "@components/TestTask";
-import { launchTimer, Timer } from "../../utils/LaunchTimer";
+import { launchTimer, Timer } from "@utils/LaunchTimer";
 import { TestResults } from "@components/TestResults";
 import { getSession } from "next-auth/react";
 import { TestScreenshots } from "@components/EventDisplay";

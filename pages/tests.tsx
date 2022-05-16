@@ -36,9 +36,7 @@ const Tests: FC<{ tests: (Test & { _count: { tasks: number } })[] }> = ({
               transition="transform ease-in-out .2s, box-shadow ease-in-out .2s, border-color ease-in-out .2s"
               sx={{
                 _hover: {
-                  transform: "scale(1.05)",
-                  border: "1px solid #63B3ED",
-                  boxShadow: "1rem 1rem 3rem #bee0ec",
+                  border: "1px solid",
                 },
               }}
             >

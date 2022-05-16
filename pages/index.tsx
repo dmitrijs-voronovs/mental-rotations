@@ -1,9 +1,34 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.scss";
-import { Box, Grid, GridItem, Link, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Link, Text } from "@chakra-ui/react";
 
 const links = [
+  {
+    link: "/tests",
+    heading: "Mental rotation test",
+    text: "Complete mental rotation test and get the score",
+  },
+  {
+    link: "/forms/emotionTest",
+    heading: "Emotion test",
+    text: "Complete emotion wheel test",
+  },
+  {
+    link: "/forms/newUser",
+    heading: "User details",
+    text: "Complete user details form and get the score",
+  },
+  {
+    link: "/forms/phq9",
+    heading: "Psychological test",
+    text: "Complete psychological test and get the score",
+  },
+  {
+    link: "/userInfo",
+    heading: "User info",
+    text: "Check your user info",
+  },
   {
     link: "/game",
     heading: "Configuration builder",
@@ -26,9 +51,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
+        <Heading>PSVT:R digital test</Heading>
+        <p className={styles.description}>
           Welcome to digitalized configurable PSVT:R
-        </h1>
+        </p>
 
         <p className={styles.description}>
           Get started by visiting the following links:
@@ -44,9 +70,7 @@ const Home: NextPage = () => {
               transition="transform ease-in-out .2s, box-shadow ease-in-out .2s, border-color ease-in-out .2s"
               sx={{
                 _hover: {
-                  transform: "scale(1.05)",
-                  border: "1px solid #63B3ED",
-                  boxShadow: "1rem 1rem 3rem #bee0ec",
+                  border: "1px solid",
                 },
               }}
             >

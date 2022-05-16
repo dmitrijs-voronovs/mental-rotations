@@ -1,13 +1,14 @@
 import React from "react";
 
 import dynamic from "next/dynamic";
-import { DynamicSceneInitializer } from "@utils/SceneHelpers/SceneInitializer/DynamicSceneInitializer";
+import { TestGenerationSceneInitializer } from "@utils/SceneHelpers/SceneInitializer/TestGenerationSceneInitializer";
 
 const Test = dynamic(() => import("@components/Games/Test"), { ssr: false });
+
 function App() {
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
-      <Test SceneFactory={DynamicSceneInitializer} />
+      <Test SceneFactory={TestGenerationSceneInitializer} />
     </div>
   );
 }

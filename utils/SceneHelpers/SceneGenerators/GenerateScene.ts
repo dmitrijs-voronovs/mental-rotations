@@ -22,12 +22,16 @@ import {
   SHAPE_SIZE,
   updateBoundingInfo,
 } from "./GenerateFigure";
-import { getBoxName, getCameraName, getTransformNodeName } from "./names";
+import {
+  getBoxName,
+  getCameraName,
+  getTransformNodeName,
+} from "@utils/GetNames";
 import {
   defaultPositionConfig,
   POSITION_MULTIPLIER,
   PositionConfigEntity,
-} from "./positionConfig";
+} from "../../../config/PositionConfig";
 
 export function createCameras(
   sceneEventArgs: SceneEventArgs,
@@ -150,21 +154,6 @@ export const getBaseFigureConfig = (
   originX: source.position.x,
   originY: source.position.y,
 });
-
-export const cleanUp = (sceneEventArgs: SceneEventArgs, meshes: Mesh[]) => {
-  const { scene } = sceneEventArgs;
-  meshes.forEach((shape) => {
-    const shapeName = shape.name;
-    const transformNode = scene.getTransformNodeByName(
-      getTransformNodeName(shapeName)
-    );
-    if (transformNode) {
-      const allMeshes = transformNode.getChildMeshes(false);
-      allMeshes.forEach((mesh) => scene.removeMesh(mesh));
-      scene.removeTransformNode(transformNode);
-    }
-  });
-};
 
 export const rotateReferenceShape = (
   source: Mesh,

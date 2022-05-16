@@ -1,7 +1,6 @@
-import { saveScreenshots } from "../../../utils/SaveScreenshots";
-import { dispatchProjectEvent } from "../../../utils/Events";
-import { cleanUp } from "../../../utils/GenerateScene";
-import { NumberHandler } from "@components/Games/EventManager/NumberHandler";
+import { saveScreenshots } from "@utils/Screenshots/SaveScreenshots";
+import { NumberHandler } from "./NumberHandler";
+import { dispatchProjectEvent } from "../../../events/Actions";
 
 export class NumberHandlerWithScreenshots extends NumberHandler {
   handle(key: string): void {
@@ -13,8 +12,6 @@ export class NumberHandlerWithScreenshots extends NumberHandler {
         saveScreenshots(this.sceneEventArgs);
       }
       dispatchProjectEvent("actualAnswer", { answer: numKey, time });
-
-      cleanUp(this.sceneEventArgs, this.meshes);
       this.prepareScene();
     }
   }

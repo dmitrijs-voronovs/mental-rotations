@@ -1,7 +1,7 @@
 import { SceneEventArgs } from "react-babylonjs";
 import { createScreenshots } from "./CreateScreenshots";
 import { Tools } from "@babylonjs/core";
-import { dispatchProjectEvent } from "./Events";
+import { dispatchProjectEvent } from "../../events/Actions";
 
 function downloadScreenshot(name: string, base64: string) {
   const a = document.createElement("a");

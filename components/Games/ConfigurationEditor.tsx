@@ -14,8 +14,8 @@ import {
   adjustCameraRadiusToFitMesh,
   SHAPE_NAME,
   SHAPE_SIZE,
-} from "../../utils/GenerateFigure";
-import { generateGUI } from "../../utils/GenerateGUI";
+} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
+import { generateGUI } from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
 
 const AXIS_SIZE = 5;
 

@@ -44,23 +44,24 @@ enum Role {
 }
 
 model User {
-  id             String           @id @default(cuid())
-  name           String?
-  email          String?          @unique
-  emailVerified  DateTime?
-  image          String?
-  role           Role             @default(USER)
-  accounts       Account[]
-  sessions       Session[]
-  completedTest  CompletedTest[]
-  UserInfo       UserInfo[]
-  AdditionalTest AdditionalTest[]
+  id              String           @id @default(cuid())
+  name            String?
+  email           String?          @unique
+  emailVerified   DateTime?
+  image           String?
+  role            Role             @default(USER)
+  accounts        Account[]
+  sessions        Session[]
+  completedTests  CompletedTest[]
+  info            UserInfo?
+  additionalTests AdditionalTest[]
 }
 
 model UserInfo {
   id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  info   Json
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model VerificationToken {

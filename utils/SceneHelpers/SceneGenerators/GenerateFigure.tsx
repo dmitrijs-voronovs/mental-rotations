@@ -8,8 +8,8 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import { SceneEventArgs } from "react-babylonjs";
-import { getRandomInt } from "./common";
-import { getInstanceName, getTransformNodeName } from "./names";
+import { getRandomInt } from "@utils/GetRandomInt";
+import { getInstanceName, getTransformNodeName } from "@utils/GetNames";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;
@@ -78,11 +78,6 @@ export function adjustCameraRadiusToFitMesh(
 
   const meshRadius = mesh.getBoundingInfo().boundingSphere.radius;
   const margin = 4;
-  // TODO: replace with something more reliable. Change formula to suit any camera fov
-  // // camera.fov = 0.1;
-  // const fovMultiplier = 8 - camera.fov;
-  // // const fovMultiplier = 1;
-  // camera.radius = meshRadius * 2 * fovMultiplier + margin * 8;
   const fovMultiplier = 2 - camera.fov;
   camera.radius = meshRadius * 2 * fovMultiplier + margin;
 }
