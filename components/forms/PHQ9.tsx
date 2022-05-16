@@ -85,9 +85,10 @@ const QuestionField: FC<{ question: string; id: number }> = ({
 
 type PHQ9Props = {
   onSubmit: (values: Record<string, string>) => void;
+  showDetails: boolean;
 };
 
-export function PHQ9({ onSubmit }: PHQ9Props) {
+export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
   return (
     <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
       <VStack alignItems={"left"} mb={5}>
@@ -114,27 +115,29 @@ export function PHQ9({ onSubmit }: PHQ9Props) {
                 <Button type="submit" isFullWidth>
                   Submit
                 </Button>
-                <Box
-                  position={"sticky"}
-                  bottom={2}
-                  background={"blueviolet"}
-                  color={"white"}
-                  p={5}
-                  borderRadius={5}
-                >
-                  <Heading
-                    display={"flex"}
-                    alignItems={"baseline"}
-                    mb={2}
-                    mt={-2}
+                {showDetails && (
+                  <Box
+                    position={"sticky"}
+                    bottom={2}
+                    background={"blueviolet"}
+                    color={"white"}
+                    p={5}
+                    borderRadius={5}
                   >
-                    <Text fontSize={"6xl"} mr={1}>
-                      {totalPoints}
-                    </Text>
-                    point{totalPoints !== 1 && "s"}
-                  </Heading>
-                  <Text>{getResults(totalPoints)}</Text>
-                </Box>
+                    <Heading
+                      display={"flex"}
+                      alignItems={"baseline"}
+                      mb={2}
+                      mt={-2}
+                    >
+                      <Text fontSize={"6xl"} mr={1}>
+                        {totalPoints}
+                      </Text>
+                      point{totalPoints !== 1 && "s"}
+                    </Heading>
+                    <Text>{getResults(totalPoints)}</Text>
+                  </Box>
+                )}
               </VStack>
             </form>
           );
