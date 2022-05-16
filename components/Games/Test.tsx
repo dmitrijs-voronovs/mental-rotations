@@ -1,17 +1,14 @@
-import { Color3, Color4, Vector3 } from "@babylonjs/core";
-import React, { FC, useEffect } from "react";
-import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
+import {Color3, Color4, Vector3} from "@babylonjs/core";
+import React, {FC, useEffect} from "react";
+import {Engine, Scene, SceneEventArgs} from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
-import { EventDisplay } from "@components/EventDisplay";
-import {
-  generateGUI,
-  GENERATION_SETTINGS_KEY,
-  GuiConfig,
-} from "../../utils/GenerateGUI";
-import { GUI } from "dat.gui";
-import { defaultConfig, GenerationConfig } from "../../utils/GenerateFigure";
-import { SceneInitializerCreator } from "@components/Games/ISceneInitializer";
+import {EventDisplay} from "@components/EventDisplay";
+import {generateGUI} from "../../utils/SceneHelpers/SceneGenerators/GenerateGUI";
+import {SceneInitializerCreator} from "../../utils/SceneHelpers/SceneInitializer/ISceneInitializer";
+import type {GUI} from "dat.gui";
+import {GENERATION_SETTINGS_KEY, GuiConfig,} from "@components/../../utils/SceneHelpers/SceneGenerators/GenerateGUI";
+import {defaultConfig, GenerationConfig,} from "@components/../../utils/SceneHelpers/SceneGenerators/GenerateFigure";
 
 function getConfigFromGui(gui: GUI) {
   const rawConfig = (gui.getSaveObject() as any).remembered[
@@ -30,7 +27,7 @@ export function getShapeConfig(gui?: GUI): GenerationConfig {
   return getConfigFromGui(gui);
 }
 
-const onSceneMount = (
+const onSceneMount = async (
   sceneEventArgs: SceneEventArgs,
   SceneFactory: SceneInitializerCreator
 ) => {
@@ -43,7 +40,6 @@ const onSceneMount = (
 
 const CANVAS_ID = "babylonJS";
 
-// const Test: FC<{ onSceneMount: (sceneEventArgs: SceneEventArgs) => void }> = ({ onSceneMount }) => {
 const Test: FC<{
   SceneFactory: SceneInitializerCreator;
 }> = ({ SceneFactory }) => {

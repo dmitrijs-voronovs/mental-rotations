@@ -1,11 +1,7 @@
-import { SceneEventArgs } from "react-babylonjs";
-import { GUI } from "dat.gui";
-import { InstancedMesh, Mesh, Scalar, Vector3 } from "@babylonjs/core";
-import {
-  adjustCameraRadiusToFitMesh,
-  generateFigure,
-  GenerationConfig,
-} from "../../utils/GenerateFigure";
+import {SceneEventArgs} from "react-babylonjs";
+import type {GUI} from "dat.gui";
+import {InstancedMesh, Mesh, Scalar, Vector3} from "@babylonjs/core";
+import {adjustCameraRadiusToFitMesh, generateFigure, GenerationConfig,} from "../SceneGenerators/GenerateFigure";
 import {
   createBoxes,
   createCameras,
@@ -13,18 +9,16 @@ import {
   getBaseFigureConfig,
   rotateReferenceShape,
   rotateReferenceShapes,
-} from "../../utils/GenerateScene";
-import { dispatchProjectEvent } from "../../utils/Events";
-import {
-  ISceneInitializer,
-  PrepareSceneOptions,
-} from "@components/Games/ISceneInitializer";
-import { getBoxName, getTransformNodeName } from "../../utils/names";
-import { launchTimer, Timer } from "../../utils/LaunchTimer";
-import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
-import { positionConfig } from "../../utils/positionConfig";
-import { getShapeConfig } from "@components/Games/Test";
-import { KeyboardEventHandlerFactoryCreator } from "@components/Games/EventManager/IKeyboardEventHandlerFactory";
+} from "../SceneGenerators/GenerateScene";
+import {ISceneInitializer, PrepareSceneOptions} from "./ISceneInitializer";
+import {getBoxName, getTransformNodeName} from "@utils/GetNames";
+import {launchTimer, Timer} from "@utils/LaunchTimer";
+import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
+import {positionConfig} from "../../../config/PositionConfig";
+import {KeyboardEventHandlerFactoryCreator} from "../EventHandlerFactories/IKeyboardEventHandlerFactory";
+// import { getShapeConfig } from "@utils/GetShapeConfig";
+import {dispatchProjectEvent} from "../../../events/Actions";
+import {getShapeConfig} from "@components/Games/Test";
 
 export abstract class BaseSceneInitializer implements ISceneInitializer {
   protected cameras: ArcRotateCamera[] = [];

@@ -1,7 +1,9 @@
 import React from "react";
 
 import dynamic from "next/dynamic";
-import { TestGenerationSceneInitializer } from "@components/Games/TestGenerationSceneInitializer";
+import {
+    TestGenerationSceneInitializer
+} from "@components/../../utils/SceneHelpers/SceneInitializer/TestGenerationSceneInitializer";
 
 const Test = dynamic(() => import("@components/Games/Test"), { ssr: false });
 

@@ -1,12 +1,12 @@
-import { KeyDownEventHandler } from "@components/Games/EventManager/KeyDownEventHandler";
-import { Timer } from "../../../utils/LaunchTimer";
-import { dispatchProjectEvent } from "../../../utils/Events";
-import { PrepareScene } from "@components/Games/ISceneInitializer";
-import { KeyDownEventHandlerI } from "@components/Games/EventManager/KeyDownEventHandlerI";
+import {KeyDownEventHandler} from "./KeyDownEventHandler";
+import {Timer} from "@utils/LaunchTimer";
+import {PrepareScene} from "../SceneInitializer/ISceneInitializer";
+import {IKeyDownEventHandler} from "./IKeyDownEventHandler";
+import {dispatchProjectEvent} from "../../../events/Actions";
 
 export class NumberHandler
   extends KeyDownEventHandler
-  implements KeyDownEventHandlerI
+  implements IKeyDownEventHandler
 {
   constructor(protected timer: Timer, protected prepareScene: PrepareScene) {
     super();

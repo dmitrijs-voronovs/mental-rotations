@@ -1,7 +1,7 @@
-import { KeyDownEventHandlerI } from "@components/Games/EventManager/KeyDownEventHandlerI";
-import { SceneEventArgs } from "react-babylonjs";
+import {IKeyDownEventHandler} from "./IKeyDownEventHandler";
+import {SceneEventArgs} from "react-babylonjs";
 
-export abstract class KeyDownEventHandler implements KeyDownEventHandlerI {
+export abstract class KeyDownEventHandler implements IKeyDownEventHandler {
   protected sceneEventArgs!: SceneEventArgs;
 
   abstract handle(key: string): void;

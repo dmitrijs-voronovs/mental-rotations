@@ -1,33 +1,29 @@
 import {
-  Angle,
-  ArcRotateCamera,
-  Color3,
-  Color4,
-  Mesh,
-  MeshBuilder,
-  Quaternion,
-  Scalar,
-  StandardMaterial,
-  TransformNode,
-  Vector3,
-  Viewport,
+	Angle,
+	ArcRotateCamera,
+	Color3,
+	Color4,
+	Mesh,
+	MeshBuilder,
+	Quaternion,
+	Scalar,
+	StandardMaterial,
+	TransformNode,
+	Vector3,
+	Viewport,
 } from "@babylonjs/core";
-import { SceneEventArgs } from "react-babylonjs";
+import {SceneEventArgs} from "react-babylonjs";
 import {
-  defaultConfig,
-  generateRotation,
-  GenerationConfig,
-  recenterMesh,
-  resetBoundingInfo,
-  SHAPE_SIZE,
-  updateBoundingInfo,
+	defaultConfig,
+	generateRotation,
+	GenerationConfig,
+	recenterMesh,
+	resetBoundingInfo,
+	SHAPE_SIZE,
+	updateBoundingInfo,
 } from "./GenerateFigure";
-import { getBoxName, getCameraName, getTransformNodeName } from "./names";
-import {
-  defaultPositionConfig,
-  POSITION_MULTIPLIER,
-  PositionConfigEntity,
-} from "./positionConfig";
+import {getBoxName, getCameraName, getTransformNodeName,} from "@utils/GetNames";
+import {defaultPositionConfig, POSITION_MULTIPLIER, PositionConfigEntity,} from "../../../config/PositionConfig";
 
 export function createCameras(
   sceneEventArgs: SceneEventArgs,

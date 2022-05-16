@@ -1,33 +1,4 @@
-import { GenerationConfig } from "./GenerateFigure";
-import { TestScreenshots } from "@components/EventDisplay";
-
-export interface Print extends Event {}
-
-export interface Skip extends Event {}
-
-export interface CorrectAnswer extends CustomEvent<number> {}
-export interface ActualAnswer
-  extends CustomEvent<{ answer: number; time: number }> {}
-export interface Help extends Event {}
-export interface ConfigurationSet
-  extends CustomEvent<{
-    isForReferenceShape: boolean;
-    config: GenerationConfig;
-  }> {}
-export interface RotationAnglesSet
-  extends CustomEvent<{ x: number; y: number; z: number }> {}
-export interface SceneCreated extends CustomEvent<TestScreenshots> {}
-
-type ProjectEventMap = {
-  skip: Skip;
-  print: Print;
-  help: Help;
-  actualAnswer: ActualAnswer;
-  correctAnswer: CorrectAnswer;
-  configurationSet: ConfigurationSet;
-  rotationAnglesSet: RotationAnglesSet;
-  sceneCreated: SceneCreated;
-};
+import {ProjectEventMap} from "./Events";
 
 type SimpleEventKeys = {
   [Key in keyof ProjectEventMap]: ProjectEventMap[Key] extends CustomEvent
@@ -35,10 +6,6 @@ type SimpleEventKeys = {
     : Key;
 }[keyof ProjectEventMap];
 type CustomEventKeys = Exclude<keyof ProjectEventMap, SimpleEventKeys>;
-
-declare global {
-  export interface DocumentEventMap extends ProjectEventMap {}
-}
 
 export function dispatchProjectEvent<T extends SimpleEventKeys>(name: T): void;
 export function dispatchProjectEvent<T extends CustomEventKeys>(

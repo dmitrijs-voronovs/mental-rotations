@@ -1,5 +1,5 @@
-import { SceneEventArgs } from "react-babylonjs";
-import { GUI } from "dat.gui";
+import {SceneEventArgs} from "react-babylonjs";
+import type {GUI} from "dat.gui";
 
 export interface ISceneInitializer {
   sceneEventArgs: SceneEventArgs;

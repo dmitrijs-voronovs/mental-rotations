@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Vector3, Viewport } from "@babylonjs/core";
+import {ArcRotateCamera, Vector3, Viewport} from "@babylonjs/core";
 
 export type PositionConfigEntity = Partial<ArcRotateCamera> & Partial<Viewport>;
 export const defaultPositionConfig: PositionConfigEntity = {

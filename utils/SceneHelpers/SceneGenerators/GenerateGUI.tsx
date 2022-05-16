@@ -1,12 +1,7 @@
-import { SceneEventArgs } from "react-babylonjs";
-import { createAxis, deleteAxis } from "@components/Axis/axisHelper";
-import {
-  clearFigure,
-  defaultConfig,
-  generateFigure,
-  GenerationConfig,
-} from "./GenerateFigure";
-import { GUI } from "dat.gui";
+import {SceneEventArgs} from "react-babylonjs";
+import {createAxis, deleteAxis} from "@components/Axis/axisHelper";
+import {clearFigure, defaultConfig, generateFigure, GenerationConfig,} from "./GenerateFigure";
+import {GUI} from "dat.gui";
 
 type GuiSpecificConfig = {
   clearAndGenerate(): void;

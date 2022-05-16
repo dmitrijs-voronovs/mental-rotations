@@ -10,8 +10,8 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { FastField, FieldProps, Formik } from "formik";
-import { FC } from "react";
+import {FastField, FieldProps, Formik} from "formik";
+import {FC} from "react";
 
 const questions = [
   "Little interest or pleasure in doing things?",
@@ -85,7 +85,7 @@ const QuestionField: FC<{ question: string; id: number }> = ({
 
 type PHQ9Props = {
   onSubmit: (values: Record<string, string>) => void;
-  showDetails: boolean;
+  showDetails?: boolean;
 };
 
 export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
