@@ -1,9 +1,9 @@
 import styles from "@pagestyles/Home.module.scss";
-import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 import React from "react";
 
 import dynamic from "next/dynamic";
+import classNames from "classnames";
 
 const GameComponent = dynamic(
   () => import("@components/Games/ConfigurationEditor"),
@@ -13,7 +13,6 @@ const GameComponent = dynamic(
 );
 
 const Game = () => {
-  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
@@ -22,7 +21,7 @@ const Game = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main className={classNames(styles.main, styles.noOverflow)}>
         <h1 className={styles.title}>Welcome to Configuration Editor</h1>
 
         <p className={styles.description}>

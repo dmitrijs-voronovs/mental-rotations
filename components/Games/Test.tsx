@@ -28,6 +28,8 @@ function getConfigFromGui(gui: GUI) {
   }, {} as GenerationConfig);
 }
 
+// Should be left in this file, otherwise Test component fails due to the GUI
+// being rendered on server, caused by incorrect import order by webpack
 export function getShapeConfig(gui?: GUI): GenerationConfig {
   if (!gui) return defaultConfig;
   return getConfigFromGui(gui);
