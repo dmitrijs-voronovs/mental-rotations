@@ -1,13 +1,13 @@
-import {IKeyboardEventHandlerFactory} from "./IKeyboardEventHandlerFactory";
-import {SceneEventArgs} from "react-babylonjs";
-import {Timer} from "@utils/LaunchTimer";
-import {IKeyDownEventManager} from "../EventManager/IKeyDownEventManager";
-import {KeyDownEventManager} from "../EventManager/KeyDownEventManager";
-import {HelpHandler} from "../EventHandlers/HelpHandler";
-import {PrintHandler} from "../EventHandlers/PrintHandler";
-import {SkipHandler} from "../EventHandlers/SkipHandler";
-import {DefaultHandler} from "../EventHandlers/DefaultHandler";
-import {NumberHandlerWithScreenshots} from "../EventHandlers/NumberHandlerWithScreenshots";
+import { IKeyboardEventHandlerFactory } from "./IKeyboardEventHandlerFactory";
+import { SceneEventArgs } from "react-babylonjs";
+import { Timer } from "@utils/LaunchTimer";
+import { IKeyDownEventManager } from "../EventManager/IKeyDownEventManager";
+import { KeyDownEventManager } from "../EventManager/KeyDownEventManager";
+import { HelpHandler } from "../EventHandlers/HelpHandler";
+import { PrintHandler } from "../EventHandlers/PrintHandler";
+import { SkipHandler } from "../EventHandlers/SkipHandler";
+import { DefaultHandler } from "../EventHandlers/DefaultHandler";
+import { NumberHandlerWithScreenshots } from "../EventHandlers/NumberHandlerWithScreenshots";
 
 export class TestTaskGenerationKeyboardEventHandlerFactory
   implements IKeyboardEventHandlerFactory

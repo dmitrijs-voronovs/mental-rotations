@@ -1,7 +1,15 @@
-import {Angle, ArcRotateCamera, InstancedMesh, Mesh, Scalar, TransformNode, Vector3,} from "@babylonjs/core";
-import {SceneEventArgs} from "react-babylonjs";
-import {getRandomInt} from "@utils/GetRandomInt";
-import {getInstanceName, getTransformNodeName} from "@utils/GetNames";
+import {
+  Angle,
+  ArcRotateCamera,
+  InstancedMesh,
+  Mesh,
+  Scalar,
+  TransformNode,
+  Vector3,
+} from "@babylonjs/core";
+import { SceneEventArgs } from "react-babylonjs";
+import { getRandomInt } from "@utils/GetRandomInt";
+import { getInstanceName, getTransformNodeName } from "@utils/GetNames";
 
 export const SHAPE_NAME = "box-figure";
 export const SHAPE_SIZE = 2;

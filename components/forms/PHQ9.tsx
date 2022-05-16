@@ -10,8 +10,8 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import {FastField, FieldProps, Formik} from "formik";
-import {FC} from "react";
+import { FastField, FieldProps, Formik } from "formik";
+import { FC } from "react";
 
 const questions = [
   "Little interest or pleasure in doing things?",

@@ -12,7 +12,7 @@ import {
   Vector3,
   Viewport,
 } from "@babylonjs/core";
-import {SceneEventArgs} from "react-babylonjs";
+import { SceneEventArgs } from "react-babylonjs";
 import {
   defaultConfig,
   generateRotation,
@@ -22,8 +22,16 @@ import {
   SHAPE_SIZE,
   updateBoundingInfo,
 } from "./GenerateFigure";
-import {getBoxName, getCameraName, getTransformNodeName,} from "@utils/GetNames";
-import {defaultPositionConfig, POSITION_MULTIPLIER, PositionConfigEntity,} from "../../../config/PositionConfig";
+import {
+  getBoxName,
+  getCameraName,
+  getTransformNodeName,
+} from "@utils/GetNames";
+import {
+  defaultPositionConfig,
+  POSITION_MULTIPLIER,
+  PositionConfigEntity,
+} from "../../../config/PositionConfig";
 
 export function createCameras(
   sceneEventArgs: SceneEventArgs,

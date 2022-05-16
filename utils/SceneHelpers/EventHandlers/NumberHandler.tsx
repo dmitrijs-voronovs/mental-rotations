@@ -1,8 +1,8 @@
-import {KeyDownEventHandler} from "./KeyDownEventHandler";
-import {Timer} from "@utils/LaunchTimer";
-import {PrepareScene} from "../SceneInitializer/ISceneInitializer";
-import {IKeyDownEventHandler} from "./IKeyDownEventHandler";
-import {dispatchProjectEvent} from "../../../events/Actions";
+import { KeyDownEventHandler } from "./KeyDownEventHandler";
+import { Timer } from "@utils/LaunchTimer";
+import { PrepareScene } from "../SceneInitializer/ISceneInitializer";
+import { IKeyDownEventHandler } from "./IKeyDownEventHandler";
+import { dispatchProjectEvent } from "../../../events/Actions";
 
 export class NumberHandler
   extends KeyDownEventHandler

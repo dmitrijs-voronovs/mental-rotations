@@ -1,7 +1,11 @@
-import {SceneEventArgs} from "react-babylonjs";
-import type {GUI} from "dat.gui";
-import {InstancedMesh, Mesh, Scalar, Vector3} from "@babylonjs/core";
-import {adjustCameraRadiusToFitMesh, generateFigure, GenerationConfig,} from "../SceneGenerators/GenerateFigure";
+import { SceneEventArgs } from "react-babylonjs";
+import type { GUI } from "dat.gui";
+import { InstancedMesh, Mesh, Scalar, Vector3 } from "@babylonjs/core";
+import {
+  adjustCameraRadiusToFitMesh,
+  generateFigure,
+  GenerationConfig,
+} from "../SceneGenerators/GenerateFigure";
 import {
   createBoxes,
   createCameras,
@@ -10,14 +14,14 @@ import {
   rotateReferenceShape,
   rotateReferenceShapes,
 } from "../SceneGenerators/GenerateScene";
-import {ISceneInitializer, PrepareSceneOptions} from "./ISceneInitializer";
-import {getBoxName, getTransformNodeName} from "@utils/GetNames";
-import {launchTimer, Timer} from "@utils/LaunchTimer";
-import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
-import {positionConfig} from "../../../config/PositionConfig";
-import {KeyboardEventHandlerFactoryCreator} from "../EventHandlerFactories/IKeyboardEventHandlerFactory";
-import {dispatchProjectEvent} from "../../../events/Actions";
-import {getShapeConfig} from "@components/Games/Test";
+import { ISceneInitializer, PrepareSceneOptions } from "./ISceneInitializer";
+import { getBoxName, getTransformNodeName } from "@utils/GetNames";
+import { launchTimer, Timer } from "@utils/LaunchTimer";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { positionConfig } from "../../../config/PositionConfig";
+import { KeyboardEventHandlerFactoryCreator } from "../EventHandlerFactories/IKeyboardEventHandlerFactory";
+import { dispatchProjectEvent } from "../../../events/Actions";
+import { getShapeConfig } from "@components/Games/Test";
 
 export abstract class BaseSceneInitializer implements ISceneInitializer {
   protected cameras: ArcRotateCamera[] = [];

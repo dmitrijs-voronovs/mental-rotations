@@ -1,4 +1,4 @@
-import {ProjectEventMap} from "./Events";
+import { ProjectEventMap } from "./Events";
 
 type SimpleEventKeys = {
   [Key in keyof ProjectEventMap]: ProjectEventMap[Key] extends CustomEvent

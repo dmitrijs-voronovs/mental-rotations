@@ -1,5 +1,5 @@
-import {KeyDownEventHandler} from "./KeyDownEventHandler";
-import {IKeyDownEventHandler} from "./IKeyDownEventHandler";
+import { KeyDownEventHandler } from "./KeyDownEventHandler";
+import { IKeyDownEventHandler } from "./IKeyDownEventHandler";
 
 export class DefaultHandler
   extends KeyDownEventHandler

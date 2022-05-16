@@ -1,9 +1,18 @@
-import {FC, useCallback, useEffect, useRef, useState} from "react";
-import {Box, Kbd, useToast} from "@chakra-ui/react";
-import {ExportToCsv} from "export-to-csv";
-import {GenerationConfig} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
-import {ActualAnswer, ConfigurationSet, CorrectAnswer, RotationAnglesSet, SceneCreated,} from "../events/Events";
-import {listenToProjectEvents, removeProjectEventListener,} from "../events/Actions";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { Box, Kbd, useToast } from "@chakra-ui/react";
+import { ExportToCsv } from "export-to-csv";
+import { GenerationConfig } from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
+import {
+  ActualAnswer,
+  ConfigurationSet,
+  CorrectAnswer,
+  RotationAnglesSet,
+  SceneCreated,
+} from "../events/Events";
+import {
+  listenToProjectEvents,
+  removeProjectEventListener,
+} from "../events/Actions";
 
 type PersistentGenerationConfig = Omit<
   GenerationConfig,

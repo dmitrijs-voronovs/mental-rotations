@@ -1,14 +1,23 @@
-import {GetServerSideProps} from "next";
-import {prisma} from "../../lib/prisma";
-import {FC, useEffect, useRef, useState} from "react";
-import {CompletedTest, Prisma, Task, Test} from "@prisma/client";
-import {Box, Button, Heading, Link, ListItem, Progress, UnorderedList, VStack,} from "@chakra-ui/react";
-import {useRouter} from "next/dist/client/router";
-import {TestTask} from "@components/TestTask";
-import {launchTimer, Timer} from "@utils/LaunchTimer";
-import {TestResults} from "@components/TestResults";
-import {getSession} from "next-auth/react";
-import {TestScreenshots} from "@components/EventDisplay";
+import { GetServerSideProps } from "next";
+import { prisma } from "../../lib/prisma";
+import { FC, useEffect, useRef, useState } from "react";
+import { CompletedTest, Prisma, Task, Test } from "@prisma/client";
+import {
+  Box,
+  Button,
+  Heading,
+  Link,
+  ListItem,
+  Progress,
+  UnorderedList,
+  VStack,
+} from "@chakra-ui/react";
+import { useRouter } from "next/dist/client/router";
+import { TestTask } from "@components/TestTask";
+import { launchTimer, Timer } from "@utils/LaunchTimer";
+import { TestResults } from "@components/TestResults";
+import { getSession } from "next-auth/react";
+import { TestScreenshots } from "@components/EventDisplay";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession({ ctx });

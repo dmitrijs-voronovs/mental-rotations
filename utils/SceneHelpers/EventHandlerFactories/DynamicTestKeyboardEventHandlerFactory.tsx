@@ -1,12 +1,12 @@
-import {IKeyboardEventHandlerFactory} from "./IKeyboardEventHandlerFactory";
-import {SceneEventArgs} from "react-babylonjs";
-import {Timer} from "@utils/LaunchTimer";
-import {IKeyDownEventManager} from "../EventManager/IKeyDownEventManager";
-import {KeyDownEventManager} from "../EventManager/KeyDownEventManager";
-import {NumberHandler} from "../EventHandlers/NumberHandler";
-import {HelpHandler} from "../EventHandlers/HelpHandler";
-import {PrintHandler} from "../EventHandlers/PrintHandler";
-import {DefaultHandler} from "../EventHandlers/DefaultHandler";
+import { IKeyboardEventHandlerFactory } from "./IKeyboardEventHandlerFactory";
+import { SceneEventArgs } from "react-babylonjs";
+import { Timer } from "@utils/LaunchTimer";
+import { IKeyDownEventManager } from "../EventManager/IKeyDownEventManager";
+import { KeyDownEventManager } from "../EventManager/KeyDownEventManager";
+import { NumberHandler } from "../EventHandlers/NumberHandler";
+import { HelpHandler } from "../EventHandlers/HelpHandler";
+import { PrintHandler } from "../EventHandlers/PrintHandler";
+import { DefaultHandler } from "../EventHandlers/DefaultHandler";
 
 export class DynamicTestKeyboardEventHandlerFactory
   implements IKeyboardEventHandlerFactory

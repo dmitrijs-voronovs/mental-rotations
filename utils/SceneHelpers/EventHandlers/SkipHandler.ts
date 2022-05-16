@@ -1,6 +1,6 @@
-import {KeyDownEventHandler} from "./KeyDownEventHandler";
-import {Timer} from "@utils/LaunchTimer";
-import {PrepareScene} from "../SceneInitializer/ISceneInitializer";
+import { KeyDownEventHandler } from "./KeyDownEventHandler";
+import { Timer } from "@utils/LaunchTimer";
+import { PrepareScene } from "../SceneInitializer/ISceneInitializer";
 
 export class SkipHandler extends KeyDownEventHandler {
   constructor(protected timer: Timer, protected prepareScene: PrepareScene) {

@@ -1,6 +1,6 @@
-import {saveScreenshots} from "@utils/Screenshots/SaveScreenshots";
-import {NumberHandler} from "./NumberHandler";
-import {dispatchProjectEvent} from "../../../events/Actions";
+import { saveScreenshots } from "@utils/Screenshots/SaveScreenshots";
+import { NumberHandler } from "./NumberHandler";
+import { dispatchProjectEvent } from "../../../events/Actions";
 
 export class NumberHandlerWithScreenshots extends NumberHandler {
   handle(key: string): void {

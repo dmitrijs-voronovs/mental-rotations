@@ -1,10 +1,21 @@
-import {ArcRotateCamera, Color3, Color4, Mesh, TransformNode, Vector3,} from "@babylonjs/core";
+import {
+  ArcRotateCamera,
+  Color3,
+  Color4,
+  Mesh,
+  TransformNode,
+  Vector3,
+} from "@babylonjs/core";
 import React from "react";
-import {Engine, Scene, SceneEventArgs} from "react-babylonjs";
-import {createAxis} from "@components/Axis/axisHelper";
-import {Container} from "@components/common/Container";
-import {adjustCameraRadiusToFitMesh, SHAPE_NAME, SHAPE_SIZE,} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
-import {generateGUI} from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
+import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
+import { createAxis } from "@components/Axis/axisHelper";
+import { Container } from "@components/common/Container";
+import {
+  adjustCameraRadiusToFitMesh,
+  SHAPE_NAME,
+  SHAPE_SIZE,
+} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
+import { generateGUI } from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
 
 const AXIS_SIZE = 5;
 

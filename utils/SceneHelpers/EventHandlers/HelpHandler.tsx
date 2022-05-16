@@ -1,6 +1,6 @@
-import {KeyDownEventHandler} from "./KeyDownEventHandler";
-import {IKeyDownEventHandler} from "./IKeyDownEventHandler";
-import {dispatchProjectEvent} from "../../../events/Actions";
+import { KeyDownEventHandler } from "./KeyDownEventHandler";
+import { IKeyDownEventHandler } from "./IKeyDownEventHandler";
+import { dispatchProjectEvent } from "../../../events/Actions";
 
 export class HelpHandler
   extends KeyDownEventHandler

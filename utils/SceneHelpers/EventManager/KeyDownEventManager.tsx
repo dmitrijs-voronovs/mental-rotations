@@ -1,7 +1,7 @@
-import {IKeyDownEventManager} from "./IKeyDownEventManager";
-import {IKeyDownEventHandler} from "../EventHandlers/IKeyDownEventHandler";
-import {SceneEventArgs} from "react-babylonjs";
-import {EventState, KeyboardEventTypes, KeyboardInfo} from "@babylonjs/core";
+import { IKeyDownEventManager } from "./IKeyDownEventManager";
+import { IKeyDownEventHandler } from "../EventHandlers/IKeyDownEventHandler";
+import { SceneEventArgs } from "react-babylonjs";
+import { EventState, KeyboardEventTypes, KeyboardInfo } from "@babylonjs/core";
 
 export class KeyDownEventManager implements IKeyDownEventManager {
   protected handlers: IKeyDownEventHandler[] = [];

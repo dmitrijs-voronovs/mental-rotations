@@ -1,5 +1,5 @@
-import {IKeyDownEventHandler} from "./IKeyDownEventHandler";
-import {SceneEventArgs} from "react-babylonjs";
+import { IKeyDownEventHandler } from "./IKeyDownEventHandler";
+import { SceneEventArgs } from "react-babylonjs";
 
 export abstract class KeyDownEventHandler implements IKeyDownEventHandler {
   protected sceneEventArgs!: SceneEventArgs;

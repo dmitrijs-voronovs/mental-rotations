@@ -1,4 +1,4 @@
-import {SceneEventArgs} from "react-babylonjs";
+import { SceneEventArgs } from "react-babylonjs";
 
 export interface IKeyDownEventHandler {
   test(key: string): boolean;

@@ -1,8 +1,8 @@
-import {ISceneInitializer} from "./ISceneInitializer";
-import {PointerEventTypes} from "@babylonjs/core";
-import {DynamicTestKeyboardEventHandlerFactory} from "../EventHandlerFactories/DynamicTestKeyboardEventHandlerFactory";
-import {BaseSceneInitializer} from "./BaseSceneInitializer";
-import {dispatchProjectEvent} from "../../../events/Actions";
+import { ISceneInitializer } from "./ISceneInitializer";
+import { PointerEventTypes } from "@babylonjs/core";
+import { DynamicTestKeyboardEventHandlerFactory } from "../EventHandlerFactories/DynamicTestKeyboardEventHandlerFactory";
+import { BaseSceneInitializer } from "./BaseSceneInitializer";
+import { dispatchProjectEvent } from "../../../events/Actions";
 
 export class DynamicSceneInitializer
   extends BaseSceneInitializer

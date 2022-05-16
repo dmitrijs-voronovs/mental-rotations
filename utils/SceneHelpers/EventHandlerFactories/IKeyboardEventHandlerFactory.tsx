@@ -1,6 +1,6 @@
-import {SceneEventArgs} from "react-babylonjs";
-import {Timer} from "@utils/LaunchTimer";
-import {IKeyDownEventManager} from "../EventManager/IKeyDownEventManager";
+import { SceneEventArgs } from "react-babylonjs";
+import { Timer } from "@utils/LaunchTimer";
+import { IKeyDownEventManager } from "../EventManager/IKeyDownEventManager";
 
 export interface IKeyboardEventHandlerFactory {
   create(): IKeyDownEventManager;

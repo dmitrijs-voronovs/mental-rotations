@@ -1,5 +1,5 @@
-import {GenerationConfig} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
-import {TestScreenshots} from "@components/EventDisplay";
+import { GenerationConfig } from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
+import { TestScreenshots } from "@components/EventDisplay";
 
 export interface Print extends Event {}
 
