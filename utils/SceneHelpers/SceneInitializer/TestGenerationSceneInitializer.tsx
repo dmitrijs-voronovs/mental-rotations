@@ -1,6 +1,6 @@
 import { ISceneInitializer, PrepareSceneOptions } from "./ISceneInitializer";
 import { InstancedMesh, PointerEventTypes } from "@babylonjs/core";
-import { GenerationConfig } from "@utils/../SceneGenerators/GenerateFigure";
+import { GenerationConfig } from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
 import { TestTaskGenerationKeyboardEventHandlerFactory } from "@utils/SceneHelpers/EventHandlerFactories/TestTaskGenerationKeyboardEventHandlerFactory";
 import { saveScreenshots } from "@utils/Screenshots/SaveScreenshots";
 import { BaseSceneInitializer } from "./BaseSceneInitializer";
