@@ -36,6 +36,20 @@ export abstract class BaseSceneInitializer implements ISceneInitializer {
 
   constructor(public sceneEventArgs: SceneEventArgs, public gui?: GUI) {}
 
+  init(): void {
+    this.cameras = createCameras(
+      this.sceneEventArgs,
+      positionConfig,
+      (camera: ArcRotateCamera) => {
+        // only for isometric view of cameras
+        // camera.fov = 0.1;
+      }
+    );
+    this.timer = launchTimer();
+    this.prepareScene();
+    this.initHandlers();
+  }
+
   protected initHandlers() {
     this.initKeyboardHandler();
     this.initMouseHandler();
@@ -54,20 +68,6 @@ export abstract class BaseSceneInitializer implements ISceneInitializer {
       (eventInfo, eventState) =>
         KeyboardEventHandler.handleEvent(eventInfo, eventState)
     );
-  }
-
-  init(): void {
-    this.cameras = createCameras(
-      this.sceneEventArgs,
-      positionConfig,
-      (camera: ArcRotateCamera) => {
-        // only for isometric view of cameras
-        // camera.fov = 0.1;
-      }
-    );
-    this.timer = launchTimer();
-    this.prepareScene();
-    this.initHandlers();
   }
 
   protected generateFigures(
