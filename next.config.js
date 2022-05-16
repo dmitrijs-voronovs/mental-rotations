@@ -4,6 +4,8 @@ const withTM = require("next-transpile-modules")([
   "dat.gui",
 ]);
 
+const ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
+
 module.exports = withTM({
   reactStrictMode: true,
   async headers() {
@@ -13,7 +15,7 @@ module.exports = withTM({
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=3600, s-maxage=3600",
+            value: `public, max-age=${ONE_YEAR_IN_SECONDS}, s-maxage=${ONE_YEAR_IN_SECONDS}`,
           },
         ],
       },
