@@ -6,9 +6,12 @@ export interface Print extends Event {}
 export interface Skip extends Event {}
 
 export interface CorrectAnswer extends CustomEvent<number> {}
+
 export interface ActualAnswer
   extends CustomEvent<{ answer: number; time: number }> {}
+
 export interface Help extends Event {}
+
 export interface ConfigurationSet
   extends CustomEvent<{
     isForReferenceShape: boolean;

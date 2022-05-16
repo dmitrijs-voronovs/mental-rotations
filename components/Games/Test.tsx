@@ -4,7 +4,7 @@ import {Engine, Scene, SceneEventArgs} from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
 import {EventDisplay} from "@components/EventDisplay";
-import {generateGUI, GENERATION_SETTINGS_KEY, GuiConfig} from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
+import {generateGUI, GENERATION_SETTINGS_KEY, GuiConfig,} from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
 import {SceneInitializerCreator} from "@utils/SceneHelpers/SceneInitializer/ISceneInitializer";
 import type {GUI} from "dat.gui";
 import {defaultConfig, GenerationConfig,} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
