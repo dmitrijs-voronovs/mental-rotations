@@ -4,11 +4,10 @@ import {Engine, Scene, SceneEventArgs} from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
 import {EventDisplay} from "@components/EventDisplay";
-import {generateGUI} from "../../utils/SceneHelpers/SceneGenerators/GenerateGUI";
-import {SceneInitializerCreator} from "../../utils/SceneHelpers/SceneInitializer/ISceneInitializer";
+import {generateGUI, GENERATION_SETTINGS_KEY, GuiConfig} from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
+import {SceneInitializerCreator} from "@utils/SceneHelpers/SceneInitializer/ISceneInitializer";
 import type {GUI} from "dat.gui";
-import {GENERATION_SETTINGS_KEY, GuiConfig,} from "@components/../../utils/SceneHelpers/SceneGenerators/GenerateGUI";
-import {defaultConfig, GenerationConfig,} from "@components/../../utils/SceneHelpers/SceneGenerators/GenerateFigure";
+import {defaultConfig, GenerationConfig,} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
 
 function getConfigFromGui(gui: GUI) {
   const rawConfig = (gui.getSaveObject() as any).remembered[

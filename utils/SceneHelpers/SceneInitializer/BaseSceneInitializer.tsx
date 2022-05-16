@@ -16,7 +16,6 @@ import {launchTimer, Timer} from "@utils/LaunchTimer";
 import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
 import {positionConfig} from "../../../config/PositionConfig";
 import {KeyboardEventHandlerFactoryCreator} from "../EventHandlerFactories/IKeyboardEventHandlerFactory";
-// import { getShapeConfig } from "@utils/GetShapeConfig";
 import {dispatchProjectEvent} from "../../../events/Actions";
 import {getShapeConfig} from "@components/Games/Test";
 

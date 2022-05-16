@@ -3,12 +3,8 @@ import React from "react";
 import {Engine, Scene, SceneEventArgs} from "react-babylonjs";
 import {createAxis} from "@components/Axis/axisHelper";
 import {Container} from "@components/common/Container";
-import {
-  adjustCameraRadiusToFitMesh,
-  SHAPE_NAME,
-  SHAPE_SIZE,
-} from "../../utils/SceneHelpers/SceneGenerators/GenerateFigure";
-import {generateGUI} from "../../utils/SceneHelpers/SceneGenerators/GenerateGUI";
+import {adjustCameraRadiusToFitMesh, SHAPE_NAME, SHAPE_SIZE,} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
+import {generateGUI} from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
 
 const AXIS_SIZE = 5;
 
