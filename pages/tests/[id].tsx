@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "@lib/prisma";
 import { FC, useEffect, useRef, useState } from "react";
 import { CompletedTest, Prisma, Task, Test } from "@prisma/client";
 import {

@@ -1,5 +1,5 @@
 import nc from "next-connect";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 

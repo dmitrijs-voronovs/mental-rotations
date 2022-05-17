@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Test } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { Box, Heading, Link, Text, VStack } from "@chakra-ui/react";
-import { prisma } from "../lib/prisma";
+import { prisma } from "@lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const tests = await prisma.test.findMany({
