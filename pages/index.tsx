@@ -30,7 +30,7 @@ const links = [
     text: "Check your user info",
   },
   {
-    link: "/game",
+    link: "/configurationEditor",
     heading: "Configuration builder",
     text: "Build your own configuration",
   },
@@ -38,6 +38,11 @@ const links = [
     link: "/proto/App",
     heading: "PSVT:R Test",
     text: "Test your mental rotation abilities",
+  },
+  {
+    link: "/signIn",
+    heading: "Sing in",
+    text: "Sing into your account",
   },
 ];
 

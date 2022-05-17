@@ -46,9 +46,8 @@ const ConfigurationEditor = () => {
       },
     });
     createAxis(sceneEventArgs, AXIS_SIZE);
-    import("@babylonjs/inspector").then(() => scene.debugLayer.show());
+    // import("@babylonjs/inspector").then(() => scene.debugLayer.show());
 
-    // TODO: add to other editors
     scene.onDisposeObservable.add(() => gui.destroy());
   };
 
