@@ -3,11 +3,10 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "@pagestyles/theme";
+import { appWithTranslation } from "next-i18next";
+import i18nextConfig from "next-i18next.config";
 
-export default function MyApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <ChakraProvider theme={theme}>
@@ -16,3 +15,5 @@ export default function MyApp({
     </SessionProvider>
   );
 }
+
+export default appWithTranslation(MyApp, i18nextConfig);

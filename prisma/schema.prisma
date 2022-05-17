@@ -121,9 +121,10 @@ enum AdditionalTestType {
 }
 
 model AdditionalTest {
-  id     String             @id @default(cuid())
-  type   AdditionalTestType
-  data   Json
-  userId String
-  user   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String             @id @default(cuid())
+  createdAt DateTime           @default(now())
+  type      AdditionalTestType
+  data      Json
+  userId    String
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

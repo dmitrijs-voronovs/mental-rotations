@@ -34,9 +34,13 @@ type UserDetailsFormValues = {
 
 type UserDetailsFormProps = {
   onSubmit: (values: UserDetailsFormValues) => void;
+  initialValues?: Partial<UserDetailsFormValues>;
 };
 
-export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
+export function UserDetailsForm({
+  onSubmit,
+  initialValues = {},
+}: UserDetailsFormProps) {
   return (
     <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
       <VStack alignItems={"left"} mb={5}>
@@ -52,6 +56,7 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
           isRightHanded: true,
           hasNeurodegenerativeIllnesses: false,
           hasAgreedToPolicy: false,
+          ...initialValues,
         }}
         validateOnBlur
         onSubmit={(values) => {
@@ -81,6 +86,7 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                       max={100}
                       allowMouseWheel
                       onChange={(val) => form.setFieldValue("age", Number(val))}
+                      defaultValue={initialValues?.age}
                     >
                       <NumberInputField placeholder={"18"} />
                       <NumberInputStepper>
@@ -197,7 +203,7 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                       {...field}
                       id="isRightHanded"
                       size={"sm"}
-                      defaultChecked={true}
+                      defaultChecked={initialValues.isRightHanded || true}
                     />
                     <FormErrorMessage>
                       {form.errors.isRightHanded}
@@ -225,6 +231,9 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                       {...field}
                       id="hasNeurodegenerativeIllnesses"
                       size={"sm"}
+                      defaultChecked={
+                        initialValues.hasNeurodegenerativeIllnesses
+                      }
                     />
                     <FormErrorMessage>
                       {form.errors.occupation}
@@ -251,7 +260,12 @@ export function UserDetailsForm({ onSubmit }: UserDetailsFormProps) {
                       )
                     }
                   >
-                    <Checkbox {...field}>Accept policy</Checkbox>
+                    <Checkbox
+                      {...field}
+                      defaultChecked={initialValues?.hasAgreedToPolicy}
+                    >
+                      Accept policy
+                    </Checkbox>
                     <FormErrorMessage>
                       {form.errors.hasAgreedToPolicy}
                     </FormErrorMessage>

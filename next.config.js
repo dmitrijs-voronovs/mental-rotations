@@ -1,3 +1,5 @@
+const { i18n } = require("./next-i18next.config");
+
 /** @type {import('next').NextConfig} */
 const withTM = require("next-transpile-modules")([
   "@babylonjs/core",
@@ -8,6 +10,7 @@ const ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
 
 module.exports = withTM({
   reactStrictMode: true,
+  i18n,
   async headers() {
     return [
       {

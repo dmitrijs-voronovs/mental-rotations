@@ -1,5 +1,5 @@
 import nc from "next-connect";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = nc().post<NextApiRequest, NextApiResponse>(async (req, res) => {
