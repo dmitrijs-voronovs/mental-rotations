@@ -1,9 +1,10 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.scss";
 import { Box, Grid, GridItem, Heading, Link, Text } from "@chakra-ui/react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import NextLink from "next/link";
 
 const links = [
   {
@@ -50,11 +51,16 @@ const links = [
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
-    props: { ...(await serverSideTranslations(context.locale!, ["common"])) },
+    props: {
+      ...(await serverSideTranslations(context.locale!, ["common"])),
+      lang: context.locale,
+    },
   };
 };
 
-const Home: NextPage = () => {
+const Home: NextPage = ({
+  lang,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
@@ -88,10 +94,12 @@ const Home: NextPage = () => {
                 },
               }}
             >
-              <Link href={link}>
-                <h2>{heading} &rarr;</h2>
-                <p>{text}</p>
-              </Link>
+              <NextLink href={link} locale={lang}>
+                <Link href={link}>
+                  <h2>{heading} &rarr;</h2>
+                  <p>{text}</p>
+                </Link>
+              </NextLink>
             </GridItem>
           ))}
         </Grid>
