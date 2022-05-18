@@ -1,7 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { TestResults } from "@components/EventDisplay";
-
-const TEST_NAMES = ["1-easy", "2-easy-2d", "3-easy-isometric", "tutorial"];
+import { TEST_NAMES } from "../pages/tests";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +13,7 @@ async function addTest(testName: string) {
   const tasks = (await import(`../public/tests/${testName}/data.json`))
     .default as TestResults;
   const formattedTasks = formatTasks(tasks, testName);
-  const testData = await prisma.test.upsert({
+  await prisma.test.upsert({
     where: { name: testName },
     update: {
       tasks: {

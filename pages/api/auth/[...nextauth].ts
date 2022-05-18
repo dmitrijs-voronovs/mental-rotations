@@ -3,9 +3,8 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import Auth0Provider from "next-auth/providers/auth0";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@lib/prisma";
+import { createUserCallback } from "@utils/auth/createUserCallback";
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -26,12 +25,26 @@ export default NextAuth({
   ],
   callbacks: {
     async session({ session, token, user }) {
-      console.log({ session, token, user });
+      const { testGroupIdx } = (await prisma.userInfo.findUnique({
+        where: {
+          userId: user.id,
+        },
+        select: {
+          testGroupIdx: true,
+        },
+      }))!;
+      console.log({ session, token, user, testGroupIdx });
       if (session.user) {
         session.user.role = user.role;
         session.user.id = user.id;
+        session.user.testGroupIdx = testGroupIdx;
       }
       return session;
+    },
+  },
+  events: {
+    async createUser(message) {
+      await createUserCallback(message);
     },
   },
 });

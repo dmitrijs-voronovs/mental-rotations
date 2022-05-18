@@ -3,9 +3,20 @@ import { Test } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { Box, Heading, Link, Text, VStack } from "@chakra-ui/react";
 import { prisma } from "@lib/prisma";
+import { getSession } from "next-auth/react";
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const TUTORIAL_TEST = "tutorial";
+export const REGULAR_TESTS = ["1-easy", "2-easy-2d", "3-easy-isometric"];
+export const TEST_NAMES = [...REGULAR_TESTS, TUTORIAL_TEST];
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
   const tests = await prisma.test.findMany({
+    where: {
+      name: {
+        in: [TUTORIAL_TEST, REGULAR_TESTS[session!.user.testGroupIdx - 1]],
+      },
+    },
     include: {
       _count: {
         select: {
@@ -14,6 +25,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       },
     },
   });
+
   return {
     props: { tests },
   };

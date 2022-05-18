@@ -2,6 +2,7 @@ import nc from "next-connect";
 import { prisma } from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
+import { Prisma } from "@prisma/client";
 
 const handler = nc().post<NextApiRequest, NextApiResponse>(async (req, res) => {
   const session = await getSession({ req });
@@ -10,12 +11,14 @@ const handler = nc().post<NextApiRequest, NextApiResponse>(async (req, res) => {
     return res.end();
   }
 
+  const data = req.body as Partial<Prisma.UserInfoCreateInput>;
+
   const a = await prisma.userInfo.upsert({
     where: {
       userId: session.user.id,
     },
     update: {
-      info: req.body,
+      ...data,
     },
     create: {
       user: {
@@ -23,7 +26,8 @@ const handler = nc().post<NextApiRequest, NextApiResponse>(async (req, res) => {
           id: session.user.id,
         },
       },
-      info: req.body,
+      info: data.info || {},
+      testGroupIdx: data.testGroupIdx,
     },
   });
   res.json(a);
