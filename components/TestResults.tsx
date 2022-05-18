@@ -16,6 +16,9 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { TUTORIAL_TEST } from "../config/testNames";
+
+const timeFmt = new Intl.NumberFormat();
 
 export const TestResults: FC<{
   test: Test & { tasks: Task[] };
@@ -24,6 +27,7 @@ export const TestResults: FC<{
   const user = useSession();
   // const saveData =
   useEffect(() => {
+    if (test.name === TUTORIAL_TEST) return;
     console.log("sending");
     const userId = user.data?.user.id;
     if (userId) {
@@ -50,7 +54,8 @@ export const TestResults: FC<{
         .then(console.log)
         .catch(console.error);
     }
-  }, [user]);
+    // eslint-disable-next-line
+  }, []);
   // submit results here
   return (
     <Center>
@@ -74,7 +79,8 @@ export const TestResults: FC<{
               {data.map(({ time, correct }, i) => (
                 <Tr key={i}>
                   <Td>{i + 1}</Td>
-                  <Td>{time}</Td>
+                  {/*<Td>{time}</Td>*/}
+                  <Td>{timeFmt.format(time)}</Td>
                   <Td>{correct ? "YES" : "NO"}</Td>
                 </Tr>
               ))}
@@ -82,7 +88,11 @@ export const TestResults: FC<{
             <Tfoot>
               <Tr>
                 <Th>Total:</Th>
-                <Th />
+                <Th>
+                  {timeFmt.format(
+                    data.reduce((totalTime, d) => totalTime + d.time, 0)
+                  )}
+                </Th>
                 <Th>
                   {data.reduce(
                     (totalCorrect, d) => totalCorrect + Number(d.correct),
