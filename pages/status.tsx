@@ -56,19 +56,19 @@ export const getServerSideProps = async (
   const items: Item[] = [
     {
       name: "Emotion test",
-      description: "Emotion Test description",
+      description: "Test your emotions - tell me about your feeling",
       link: "/forms/emotionTest",
       done: !!completedItems[0],
     },
     {
       name: "Mental rotation test",
-      description: "Mental rotation test description",
+      description: "Test your mental rotation abilities",
       link: "/tests",
       done: !!completedItems[1],
     },
     {
-      name: "Depression test (PHQ9)",
-      description: "Depression test (PHQ9) description",
+      name: "Patient Health Questionnaire-9 (PHQ9)",
+      description: "Test how mentally healthy you are",
       link: "/forms/phq9",
       done: !!completedItems[2],
     },
@@ -99,14 +99,14 @@ export default function Status({
   }, [items]);
 
   return (
-    <>
-      <VStack>
+    <Box maxW={"xl"} mx={"auto"} my={5}>
+      <VStack alignItems={"start"} spacing={5}>
         <Box>
-          <Heading>Status</Heading>
-          <Text>This is your current test status</Text>
+          <Heading mb={5}>Test status</Heading>
+          <Text fontSize={"xl"}>This is your current test status:</Text>
         </Box>
         <Box>
-          <List spacing={3}>
+          <List spacing={5}>
             {items.map((item, idx) => {
               const ListItemDetails = (
                 <VStack alignItems={"start"} spacing={0}>
@@ -149,16 +149,16 @@ export default function Status({
               );
             })}
           </List>
-          {allDone && (
-            <Button
-              onClick={() => {
-                confetti.current?.addConfetti();
-              }}
-            >
-              You did it, hooray!!!
-            </Button>
-          )}
         </Box>
+        {allDone && (
+          <Button
+            onClick={() => {
+              confetti.current?.addConfetti();
+            }}
+          >
+            You did it, hooray!!!
+          </Button>
+        )}
       </VStack>
       <canvas
         style={{
@@ -171,6 +171,6 @@ export default function Status({
         }}
         ref={canvasRef}
       />
-    </>
+    </Box>
   );
 }
