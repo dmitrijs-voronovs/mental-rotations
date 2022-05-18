@@ -7,6 +7,10 @@ import { prisma } from "@lib/prisma";
 import { createUserCallback } from "@utils/auth/createUserCallback";
 
 export default NextAuth({
+  theme: {
+    brandColor: "rgb(128, 90, 213)",
+    colorScheme: "auto",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({

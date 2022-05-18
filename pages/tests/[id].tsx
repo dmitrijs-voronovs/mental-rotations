@@ -38,7 +38,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const TestDetails: FC<{
   test: (Test & { tasks: Task[]; completedTests: CompletedTest[] }) | null;
 }> = ({ test }) => {
-  const [taskIdx, setTaskIdx] = useState(-1);
+  // const [taskIdx, setTaskIdx] = useState(-1);
+  const [taskIdx, setTaskIdx] = useState(1);
   const [results, setResults] = useState<
     Prisma.CompletedTaskCreateWithoutTestInput[]
   >([]);
