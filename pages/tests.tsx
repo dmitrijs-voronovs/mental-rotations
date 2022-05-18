@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { GetServerSideProps } from "next";
 import {
   Box,
   Center,
@@ -18,6 +18,8 @@ import {
 } from "@utils/status/statusHelpers";
 import { Navbar } from "@components/Navbar";
 import NextLink from "next/link";
+import { FC } from "react";
+import { Test } from "@prisma/client";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -67,11 +69,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-// const Tests: FC<{ tests: (Test & { _count: { tasks: number } })[] }> = ({
-const Tests = ({
-  tests,
-  locale,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Tests: FC<{
+  tests: (Test & { _count: { tasks: number } })[];
+  locale: string | undefined;
+}> = ({ tests, locale }) => {
   return (
     <Center width={"100vw"} height={"100vh"}>
       <Navbar />

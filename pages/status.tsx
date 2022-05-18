@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import { ArrowRightIcon, CheckIcon, TimeIcon } from "@chakra-ui/icons";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import NextLink from "next/link";
 import JSConfetti from "js-confetti";
@@ -30,9 +30,7 @@ type Item = {
   link: string;
 };
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   if (!session?.user)
     return {
@@ -89,7 +87,10 @@ export const getServerSideProps = async (
 export default function Status({
   items,
   locale,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: {
+  items: Item[];
+  locale: string | undefined;
+}) {
   const allDone = items.every((i) => i.done);
   const pendingIdx = items.findIndex((i) => !i.done);
   const canvasRef = useRef<HTMLCanvasElement>(null);
