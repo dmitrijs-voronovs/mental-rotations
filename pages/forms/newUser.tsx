@@ -9,6 +9,14 @@ import { useRouter } from "next/dist/client/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await getSession(context);
+  if (!data?.user)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
   return {
     props: {
       userDetails: await prisma.userInfo.findUnique({

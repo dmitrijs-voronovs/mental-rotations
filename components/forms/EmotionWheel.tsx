@@ -8,7 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FastField, FieldProps, Formik } from "formik";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 const otherOptions = ["Nav emociju", "Citas emocijas"];
 const emotions = [
@@ -72,14 +72,14 @@ function getPositionShift(
   return { top, left, shiftAngle, angle };
 }
 
-const width = 880;
-const height = 880;
+const width = 680;
+const height = 680;
 const innerRadius = 84;
 
-const initialFormValues = emotions.reduce(
-  (initialVals, e) => ({ ...initialVals, [e]: 0 }),
-  {}
-);
+const initialFormValues = {
+  ...emotions.reduce((initialVals, e) => ({ ...initialVals, [e]: 0 }), {}),
+  other: "",
+};
 
 type EmotionWheelProps = {
   onSubmit: (values: Record<string, string | number>) => void;
@@ -90,32 +90,44 @@ export function EmotionWheel({
   onSubmit,
   coloured = false,
 }: EmotionWheelProps) {
-  const [other, setOther] = useState("");
-
   return (
     <Box
       p="5"
-      border={"1px solid"}
       borderRadius={"5px"}
       minW={`${width}px`}
       minH={`${height}px`}
       pos={"relative"}
     >
-      <VStack alignItems={"left"} mb={5}>
+      <VStack alignItems={"center"} mb={5} zIndex={2} spacing={4}>
         <Heading size={"lg"}>Geneva emotion wheel test</Heading>
-        <Text>Please fill additional information about yourself</Text>
+        <Text maxW={"lg"}>
+          Please indicate the emotion you experience at the moment by choosing
+          intensities for a single emotion or a blend of several emotions. There
+          is an option to add your own emotion by pressing on the
+          &quot;other&quot; button.
+        </Text>
       </VStack>
       <Formik
         initialValues={initialFormValues}
         validateOnBlur
+        // validate={(values) => {
+        //   const errors = {} as typeof initialFormValues;
+        //   const sum = Object.entries(values).reduce(
+        //     (acc, [k, v]) => (k !== "other" ? acc + Number(v) : acc),
+        //     0
+        //   );
+        //   if (!values.other && sum === 0)
+        //     errors.other = 'Please, select an emotion or specify "other"';
+        //   return errors;
+        // }}
         onSubmit={(values) => {
-          onSubmit({ ...values, other });
+          onSubmit(values);
         }}
       >
-        {({ handleSubmit, setValues }) => {
+        {({ handleSubmit, setValues, setFieldValue, values }) => {
           return (
             <form onSubmit={handleSubmit}>
-              <Box w={width} height={height} position={"relative"}>
+              <Box w={width} height={height} position={"relative"} my={12}>
                 {emotions.map((emotion, emotionIdx) => {
                   const { top, left, angle } = getPositionShift(
                     width,
@@ -178,7 +190,6 @@ export function EmotionWheel({
                                           ? "rotate(" + -angle + "rad)"
                                           : ""
                                       }`}
-                                      // })`}
                                     />
                                   );
                                 }
@@ -225,15 +236,25 @@ export function EmotionWheel({
                   transform={`translate(-50%, 0) scale(.94)`}
                   borderRadius={`0 0 ${innerRadius}px ${innerRadius}px`}
                   onClick={() => {
-                    const a = prompt("which one?", other);
-                    console.log(a);
-                    setOther(a || "");
+                    const a = prompt("which one?", values.other);
+                    setFieldValue("other", a || "");
                   }}
                 >
                   Other
                 </Button>
               </Box>
-              <Button type={"submit"}>Submit</Button>
+              <Box textAlign={"center"}>
+                {/*<Box mb={3} color={"red.500"}>*/}
+                {/*  {errors.other}*/}
+                {/*  /!*<ErrorMessage name={"other"} />*!/*/}
+                {/*</Box>*/}
+                <Button
+                  // disabled={!dirty}
+                  type={"submit"}
+                >
+                  Submit
+                </Button>
+              </Box>
             </form>
           );
         }}

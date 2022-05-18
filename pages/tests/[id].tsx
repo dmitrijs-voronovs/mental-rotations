@@ -18,10 +18,29 @@ import { launchTimer, Timer } from "@utils/LaunchTimer";
 import { TestResults } from "@components/TestResults";
 import { getSession } from "next-auth/react";
 import { TestScreenshots } from "@components/EventDisplay";
+import { getFirstEmotionTest } from "@utils/status/statusHelpers";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession({ ctx });
-  const id = ctx.params!.id as string;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session?.user)
+    return {
+      redirect: {
+        destination: `/${context.locale}/`,
+        permanent: false,
+      },
+    };
+
+  const completedBefore = await getFirstEmotionTest(session.user.id);
+
+  if (!completedBefore)
+    return {
+      redirect: {
+        destination: `/${context.locale}/status`,
+        permanent: false,
+      },
+    };
+
+  const id = context.params!.id as string;
   const test = await prisma.test.findUnique({
     where: { id },
     include: {
@@ -83,7 +102,7 @@ const TestDetails: FC<{
         if (name === "scene") return;
         const img = new Image();
         img.src = src;
-        img.onload = (e) => {
+        img.onload = (_e) => {
           setLoadingProgress((old) => old + 1);
         };
       });

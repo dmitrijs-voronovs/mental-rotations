@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Heading,
   Link,
   List,
@@ -20,6 +21,7 @@ import {
   getFirstEmotionTest,
   getFirstMentalRotationTest,
 } from "@utils/status/statusHelpers";
+import { Navbar } from "@components/Navbar";
 
 type Item = {
   done: boolean;
@@ -32,6 +34,22 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const session = await getSession(context);
+  if (!session?.user)
+    return {
+      redirect: {
+        destination: `/${context.locale}/api/auth/signin/`,
+        permanent: false,
+      },
+    };
+
+  if (!session.user.infoFilled)
+    return {
+      redirect: {
+        destination: `/${context.locale}/forms/newUser/`,
+        permanent: false,
+      },
+    };
+
   const userId = session!.user.id;
   const completedItems = await Promise.all([
     getFirstEmotionTest(userId),
@@ -42,7 +60,7 @@ export const getServerSideProps = async (
   const items: Item[] = [
     {
       name: "Emotion test",
-      description: "Test your emotions - tell me about your feeling",
+      description: "Test your emotions, tell about your feeling",
       link: "/forms/emotionTest",
       done: !!completedItems[0],
     },
@@ -85,80 +103,86 @@ export default function Status({
   }, [items]);
 
   return (
-    <Box maxW={"xl"} mx={"auto"} my={5}>
-      <VStack alignItems={"start"} spacing={5}>
-        <Box>
-          <Heading mb={5}>Test status</Heading>
-          <Text fontSize={"xl"}>This is your current test status:</Text>
-        </Box>
-        <Box>
-          <List spacing={5}>
-            {items.map((item, idx) => {
-              const ListItemDetails = (
-                <VStack alignItems={"start"} spacing={0}>
-                  <Text casing={"uppercase"} fontWeight={"bold"}>
-                    {item.name}
-                  </Text>
-                  <Text>{item.description}</Text>
-                </VStack>
-              );
-              return (
-                <ListItem
-                  key={item.name}
-                  display={"flex"}
-                  alignItems={"center"}
-                >
-                  <ListIcon
-                    alignSelf={"start"}
-                    mt={1}
-                    as={
-                      item.done
-                        ? CheckIcon
-                        : idx === pendingIdx
-                        ? ArrowRightIcon
-                        : CloseIcon
-                    }
-                    color={
-                      item.done
-                        ? "green.500"
-                        : idx === pendingIdx
-                        ? "blue.500"
-                        : "red.500"
-                    }
-                  />
-                  {item.done || idx !== pendingIdx ? (
-                    ListItemDetails
-                  ) : (
-                    <NextLink href={item.link} locale={locale}>
-                      <Link>{ListItemDetails}</Link>
-                    </NextLink>
-                  )}
-                </ListItem>
-              );
-            })}
-          </List>
-        </Box>
-        {allDone && (
-          <Button
-            onClick={() => {
-              confetti.current?.addConfetti();
-            }}
-          >
-            You did it, hooray!!!
-          </Button>
-        )}
-      </VStack>
-      <canvas
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          zIndex: -1,
-        }}
-        ref={canvasRef}
-      />
-    </Box>
+    <Center height={"100vh"}>
+      <Navbar />
+      <Box maxW={"xl"} mx={"auto"} my={5}>
+        <VStack alignItems={"start"} spacing={5}>
+          <Box mb={4}>
+            <Heading mb={5}>Test status</Heading>
+            <Text fontSize={"xl"}>
+              This is your current test status. <br />
+              Go through each item to complete the test:
+            </Text>
+          </Box>
+          <Box>
+            <List spacing={8}>
+              {items.map((item, idx) => {
+                const ListItemDetails = (
+                  <VStack alignItems={"start"} spacing={0}>
+                    <Text casing={"uppercase"} fontWeight={"bold"}>
+                      {item.name}
+                    </Text>
+                    <Text>{item.description}</Text>
+                  </VStack>
+                );
+                return (
+                  <ListItem
+                    key={item.name}
+                    display={"flex"}
+                    alignItems={"center"}
+                  >
+                    <ListIcon
+                      alignSelf={"start"}
+                      mt={1}
+                      as={
+                        item.done
+                          ? CheckIcon
+                          : idx === pendingIdx
+                          ? ArrowRightIcon
+                          : CloseIcon
+                      }
+                      color={
+                        item.done
+                          ? "green.500"
+                          : idx === pendingIdx
+                          ? "blue.500"
+                          : "red.500"
+                      }
+                    />
+                    {item.done || idx !== pendingIdx ? (
+                      ListItemDetails
+                    ) : (
+                      <NextLink href={item.link} locale={locale}>
+                        <Link>{ListItemDetails}</Link>
+                      </NextLink>
+                    )}
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Box>
+          {allDone && (
+            <Button
+              onClick={() => {
+                confetti.current?.addConfetti();
+              }}
+            >
+              You did it, hooray!!!
+            </Button>
+          )}
+        </VStack>
+        <canvas
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: -1,
+          }}
+          ref={canvasRef}
+        />
+      </Box>
+    </Center>
   );
 }

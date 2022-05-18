@@ -3,6 +3,36 @@ import { EmotionWheel } from "@components/forms/EmotionWheel";
 import axios from "axios";
 import { Prisma } from "@prisma/client";
 import { useRouter } from "next/dist/client/router";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import { getFirstEmotionTest } from "@utils/status/statusHelpers";
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session?.user)
+    return {
+      redirect: {
+        destination: `/${context.locale}/`,
+        permanent: false,
+      },
+    };
+
+  const completedBefore = await getFirstEmotionTest(session.user.id);
+
+  if (completedBefore)
+    return {
+      redirect: {
+        destination: `/${context.locale}/status`,
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {
+      session,
+    },
+  };
+};
 
 export default function EmotionTest() {
   const router = useRouter();
