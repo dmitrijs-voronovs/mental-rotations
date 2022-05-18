@@ -38,16 +38,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const TestDetails: FC<{
   test: (Test & { tasks: Task[]; completedTests: CompletedTest[] }) | null;
 }> = ({ test }) => {
-  // const [taskIdx, setTaskIdx] = useState(-1);
-  const [taskIdx, setTaskIdx] = useState(1);
+  const [taskIdx, setTaskIdx] = useState(-1);
   const [results, setResults] = useState<
     Prisma.CompletedTaskCreateWithoutTestInput[]
   >([]);
-  const [loading, setLoading] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const timer = useRef<Timer>();
   const router = useRouter();
-  console.log(test);
-  console.log(results);
 
   useEffect(() => {
     timer.current = launchTimer();
@@ -55,7 +52,6 @@ const TestDetails: FC<{
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onItemClick = (n: number) => {
-    console.log(test, taskIdx, test!.tasks[taskIdx]);
     setResults((res) => [
       ...res,
       {
@@ -88,7 +84,7 @@ const TestDetails: FC<{
         const img = new Image();
         img.src = src;
         img.onload = (e) => {
-          setLoading((old) => old + 1);
+          setLoadingProgress((old) => old + 1);
         };
       });
     }
@@ -116,9 +112,14 @@ const TestDetails: FC<{
         <p>Test consists of {test.tasks.length} tasks</p>
         <Box>
           <Heading fontSize={"md"}>
-            Loading test data {loading}/{testImageCount}
+            Loading test data {loadingProgress}/{testImageCount}
           </Heading>
-          <Progress size={"md"} value={loading} min={0} max={testImageCount} />
+          <Progress
+            size={"md"}
+            value={loadingProgress}
+            min={0}
+            max={testImageCount}
+          />
         </Box>
         {test.completedTests.length && (
           <>
@@ -133,7 +134,11 @@ const TestDetails: FC<{
             </UnorderedList>
           </>
         )}
-        <Button variant="solid" onClick={() => setTaskIdx(0)}>
+        <Button
+          disabled={loadingProgress !== testImageCount}
+          variant="solid"
+          onClick={() => setTaskIdx(0)}
+        >
           Start
         </Button>
       </VStack>

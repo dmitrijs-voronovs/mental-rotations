@@ -105,7 +105,6 @@ export function EmotionWheel({ onSubmit }: EmotionWheelProps) {
         initialValues={initialFormValues}
         validateOnBlur
         onSubmit={(values) => {
-          alert(JSON.stringify({ ...values, other }, null, 2));
           onSubmit({ ...values, other });
         }}
       >

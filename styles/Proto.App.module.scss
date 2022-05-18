@@ -95,11 +95,12 @@
   padding-bottom: .5rem;
 }
 
-.blockWithVariants2 {
-  grid-row: 4;
-
-  img {
-    //width: 20vw;
+.blockWithVariants {
+  .block {
     cursor: pointer;
   }
+}
+
+.blockWithVariants2 {
+  grid-row: 4;
 }
