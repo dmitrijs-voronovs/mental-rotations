@@ -72,7 +72,6 @@ const Tests = ({
   tests,
   locale,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log(tests);
   return (
     <Center width={"100vw"} height={"100vh"}>
       <Navbar />
