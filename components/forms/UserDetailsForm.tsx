@@ -42,7 +42,7 @@ export function UserDetailsForm({
   initialValues = {},
 }: UserDetailsFormProps) {
   return (
-    <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
+    <Box p="5" maxW={"lg"}>
       <VStack alignItems={"left"} mb={5}>
         <Heading size={"lg"}>Account details</Heading>
         <Text>Please fill additional information about yourself</Text>
@@ -60,7 +60,6 @@ export function UserDetailsForm({
         }}
         validateOnBlur
         onSubmit={(values) => {
-          alert(JSON.stringify(values, null, 2));
           onSubmit(values);
         }}
       >

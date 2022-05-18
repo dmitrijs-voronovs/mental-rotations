@@ -5,6 +5,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
 import { prisma } from "@lib/prisma";
 import { Prisma } from "@prisma/client";
+import { useRouter } from "next/dist/client/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await getSession(context);
@@ -22,13 +23,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function NewUser({
   userDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
   return (
     <Center minHeight={"100vh"} p={5}>
       <UserDetailsForm
-        onSubmit={(value) => {
-          axios.post("/api/users/details", {
+        onSubmit={async (value) => {
+          await axios.post("/api/users/details", {
             info: value,
           } as Partial<Prisma.UserInfoCreateInput>);
+          router.push("/status", "/status", { locale: router.locale });
         }}
         initialValues={userDetails?.info}
       />

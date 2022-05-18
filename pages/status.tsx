@@ -13,9 +13,13 @@ import { useEffect, useRef } from "react";
 import { ArrowRightIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
-import { prisma } from "@lib/prisma";
 import NextLink from "next/link";
 import JSConfetti from "js-confetti";
+import {
+  getFirstDepressionTest,
+  getFirstEmotionTest,
+  getFirstMentalRotationTest,
+} from "@utils/status/statusHelpers";
 
 type Item = {
   done: boolean;
@@ -30,29 +34,11 @@ export const getServerSideProps = async (
   const session = await getSession(context);
   const userId = session!.user.id;
   const completedItems = await Promise.all([
-    prisma.additionalTest.findFirst({
-      where: {
-        userId,
-        type: "EMOTION_WHEEL",
-      },
-      select: { id: true },
-    }),
-    prisma.completedTest.findFirst({
-      where: {
-        userId,
-      },
-      select: {
-        id: true,
-      },
-    }),
-    prisma.additionalTest.findFirst({
-      where: {
-        userId,
-        type: "PHQ9",
-      },
-      select: { id: true },
-    }),
+    getFirstEmotionTest(userId),
+    getFirstMentalRotationTest(userId),
+    getFirstDepressionTest(userId),
   ]);
+
   const items: Item[] = [
     {
       name: "Emotion test",
@@ -123,6 +109,8 @@ export default function Status({
                   alignItems={"center"}
                 >
                   <ListIcon
+                    alignSelf={"start"}
+                    mt={1}
                     as={
                       item.done
                         ? CheckIcon

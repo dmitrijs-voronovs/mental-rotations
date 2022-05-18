@@ -10,8 +10,8 @@ export default function Phq9() {
   return (
     <Center minHeight={"100vh"} p={5}>
       <PHQ9
-        onSubmit={(values) => {
-          axios.post("/api/tests/completeAdditionalTest", {
+        onSubmit={async (values) => {
+          await axios.post("/api/tests/completeAdditionalTest", {
             data: values,
             type: "PHQ9",
           } as Pick<Prisma.AdditionalTestUncheckedCreateInput, "type" | "data">);
