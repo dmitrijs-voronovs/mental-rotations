@@ -58,10 +58,11 @@ model User {
 }
 
 model UserInfo {
-  id     String @id @default(cuid())
-  info   Json
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  id        String @id @default(cuid())
+  info      Json
+  testGroup Int    @default(1)
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {

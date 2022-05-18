@@ -18,10 +18,29 @@ import { launchTimer, Timer } from "@utils/LaunchTimer";
 import { TestResults } from "@components/TestResults";
 import { getSession } from "next-auth/react";
 import { TestScreenshots } from "@components/EventDisplay";
+import { getFirstEmotionTest } from "@utils/status/statusHelpers";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession({ ctx });
-  const id = ctx.params!.id as string;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session?.user)
+    return {
+      redirect: {
+        destination: `/${context.locale}/`,
+        permanent: false,
+      },
+    };
+
+  const completedBefore = await getFirstEmotionTest(session.user.id);
+
+  if (!completedBefore)
+    return {
+      redirect: {
+        destination: `/${context.locale}/status`,
+        permanent: false,
+      },
+    };
+
+  const id = context.params!.id as string;
   const test = await prisma.test.findUnique({
     where: { id },
     include: {
@@ -42,11 +61,9 @@ const TestDetails: FC<{
   const [results, setResults] = useState<
     Prisma.CompletedTaskCreateWithoutTestInput[]
   >([]);
-  const [loading, setLoading] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const timer = useRef<Timer>();
   const router = useRouter();
-  console.log(test);
-  console.log(results);
 
   useEffect(() => {
     timer.current = launchTimer();
@@ -54,7 +71,6 @@ const TestDetails: FC<{
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onItemClick = (n: number) => {
-    console.log(test, taskIdx, test!.tasks[taskIdx]);
     setResults((res) => [
       ...res,
       {
@@ -86,8 +102,8 @@ const TestDetails: FC<{
         if (name === "scene") return;
         const img = new Image();
         img.src = src;
-        img.onload = (e) => {
-          setLoading((old) => old + 1);
+        img.onload = (_e) => {
+          setLoadingProgress((old) => old + 1);
         };
       });
     }
@@ -115,9 +131,14 @@ const TestDetails: FC<{
         <p>Test consists of {test.tasks.length} tasks</p>
         <Box>
           <Heading fontSize={"md"}>
-            Loading test data {loading}/{testImageCount}
+            Loading test data {loadingProgress}/{testImageCount}
           </Heading>
-          <Progress size={"md"} value={loading} min={0} max={testImageCount} />
+          <Progress
+            size={"md"}
+            value={loadingProgress}
+            min={0}
+            max={testImageCount}
+          />
         </Box>
         {test.completedTests.length && (
           <>
@@ -132,7 +153,11 @@ const TestDetails: FC<{
             </UnorderedList>
           </>
         )}
-        <Button variant="solid" onClick={() => setTaskIdx(0)}>
+        <Button
+          disabled={loadingProgress !== testImageCount}
+          variant="solid"
+          onClick={() => setTaskIdx(0)}
+        >
           Start
         </Button>
       </VStack>

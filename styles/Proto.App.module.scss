@@ -5,8 +5,11 @@
   display: grid;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  align-items: center;
+  justify-items: center;
 }
 
 .blockGrid2 {
@@ -38,7 +41,16 @@
 }
 
 .block {
-  text-align: center;
+  overflow: hidden;
+  width: 105%;
+  height: 105%;
+  object-fit: scale-down;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .block1, .block2, .block3 {
@@ -74,6 +86,7 @@
 }
 
 .blockWithVariants, .blockWithVariants2 {
+  width: 100%;
   display: flex;
   grid-row: 3;
   grid-column: 1 / span 5;
@@ -82,11 +95,12 @@
   padding-bottom: .5rem;
 }
 
-.blockWithVariants2 {
-  grid-row: 4;
-
-  img {
-    width: 20vw;
+.blockWithVariants {
+  .block {
     cursor: pointer;
   }
+}
+
+.blockWithVariants2 {
+  grid-row: 4;
 }

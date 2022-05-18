@@ -47,6 +47,8 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "UserInfo" (
     "id" TEXT NOT NULL,
+    "info" JSONB NOT NULL,
+    "testGroup" INTEGER NOT NULL DEFAULT 1,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "UserInfo_pkey" PRIMARY KEY ("id")
@@ -106,6 +108,7 @@ CREATE TABLE "CompletedTask" (
 -- CreateTable
 CREATE TABLE "AdditionalTest" (
     "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "type" "AdditionalTestType" NOT NULL,
     "data" JSONB NOT NULL,
     "userId" TEXT NOT NULL,
@@ -121,6 +124,9 @@ CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserInfo_userId_key" ON "UserInfo"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token");

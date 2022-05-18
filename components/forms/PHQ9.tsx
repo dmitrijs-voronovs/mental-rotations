@@ -100,7 +100,6 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
         validateOnBlur
         onSubmit={(values) => {
           const total = sumAllValues(values);
-          alert(JSON.stringify({ ...values, total }, null, 2));
           onSubmit({ ...values, total: String(total) });
         }}
       >

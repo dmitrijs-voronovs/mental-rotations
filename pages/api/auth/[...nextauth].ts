@@ -3,11 +3,14 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import Auth0Provider from "next-auth/providers/auth0";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@lib/prisma";
+import { createUserCallback } from "@utils/auth/createUserCallback";
 
 export default NextAuth({
+  theme: {
+    brandColor: "rgb(128, 90, 213)",
+    colorScheme: "auto",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -26,12 +29,30 @@ export default NextAuth({
   ],
   callbacks: {
     async session({ session, token, user }) {
-      console.log({ session, token, user });
+      const { testGroup, info } = (await prisma.userInfo.findUnique({
+        where: {
+          userId: user.id,
+        },
+        select: {
+          testGroup: true,
+          info: true,
+        },
+      }))!;
       if (session.user) {
         session.user.role = user.role;
         session.user.id = user.id;
+        session.user.testGroup = testGroup;
+        session.user.infoFilled = Boolean(
+          info && Object.entries(info).length > 0
+        );
       }
+      console.log({ session });
       return session;
+    },
+  },
+  events: {
+    async createUser(message) {
+      await createUserCallback(message);
     },
   },
 });
