@@ -27,7 +27,7 @@ const handler = nc().post<NextApiRequest, NextApiResponse>(async (req, res) => {
         },
       },
       info: data.info || {},
-      testGroupIdx: data.testGroupIdx,
+      testGroup: data.testGroup,
     },
   });
   res.json(a);

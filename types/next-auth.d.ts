@@ -7,7 +7,8 @@ declare module "next-auth" {
   interface User {
     role: UserRole;
     id: string;
-    testGroupIdx: UserInfo.testGroupIdx;
+    testGroup: UserInfo.testGroup;
+    infoFilled: boolean;
   }
 
   /**

@@ -25,20 +25,24 @@ export default NextAuth({
   ],
   callbacks: {
     async session({ session, token, user }) {
-      const { testGroupIdx } = (await prisma.userInfo.findUnique({
+      const { testGroup, info } = (await prisma.userInfo.findUnique({
         where: {
           userId: user.id,
         },
         select: {
-          testGroupIdx: true,
+          testGroup: true,
+          info: true,
         },
       }))!;
-      console.log({ session, token, user, testGroupIdx });
       if (session.user) {
         session.user.role = user.role;
         session.user.id = user.id;
-        session.user.testGroupIdx = testGroupIdx;
+        session.user.testGroup = testGroup;
+        session.user.infoFilled = Boolean(
+          info && Object.entries(info).length > 0
+        );
       }
+      console.log({ session });
       return session;
     },
   },

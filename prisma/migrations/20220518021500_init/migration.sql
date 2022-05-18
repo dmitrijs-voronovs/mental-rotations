@@ -48,7 +48,7 @@ CREATE TABLE "User" (
 CREATE TABLE "UserInfo" (
     "id" TEXT NOT NULL,
     "info" JSONB NOT NULL,
-    "testGroupIdx" INTEGER NOT NULL DEFAULT 1,
+    "testGroup" INTEGER NOT NULL DEFAULT 1,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "UserInfo_pkey" PRIMARY KEY ("id")
@@ -150,7 +150,7 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserInfo" ADD CONSTRAINT "UserInfo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserInfo" ADD CONSTRAINT "UserInfo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Task" ADD CONSTRAINT "Task_testId_fkey" FOREIGN KEY ("testId") REFERENCES "Test"("id") ON DELETE CASCADE ON UPDATE CASCADE;

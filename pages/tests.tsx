@@ -4,17 +4,14 @@ import { GetServerSideProps } from "next";
 import { Box, Heading, Link, Text, VStack } from "@chakra-ui/react";
 import { prisma } from "@lib/prisma";
 import { getSession } from "next-auth/react";
-
-export const TUTORIAL_TEST = "tutorial";
-export const REGULAR_TESTS = ["1-easy", "2-easy-2d", "3-easy-isometric"];
-export const TEST_NAMES = [...REGULAR_TESTS, TUTORIAL_TEST];
+import { REGULAR_TESTS, TUTORIAL_TEST } from "../config/testNames";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const tests = await prisma.test.findMany({
     where: {
       name: {
-        in: [TUTORIAL_TEST, REGULAR_TESTS[session!.user.testGroupIdx - 1]],
+        in: [TUTORIAL_TEST, REGULAR_TESTS[session!.user!.testGroup - 1]],
       },
     },
     include: {
@@ -25,6 +22,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     },
   });
+
+  // reorder tutorial test to be the first
+  const tutorialIdx = tests.findIndex((t) => t.name === TUTORIAL_TEST);
+  const tutorialTest = tests.splice(tutorialIdx, 1);
+  tests.splice(0, 0, ...tutorialTest);
 
   return {
     props: { tests },

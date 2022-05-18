@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { TestResults } from "@components/EventDisplay";
-import { TEST_NAMES } from "../pages/tests";
+import { TEST_NAMES } from "../config/testNames";
 
 const prisma = new PrismaClient();
 

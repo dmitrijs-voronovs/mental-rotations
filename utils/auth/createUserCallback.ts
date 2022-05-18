@@ -7,36 +7,36 @@ const ALL_GROUPS = [1, 2, 3];
 function getGroupWithLeastMembers(
   allGroupsInfo: (Prisma.PickArray<
     Prisma.UserInfoGroupByOutputType,
-    "testGroupIdx"[]
+    "testGroup"[]
   > & { _count: { _all: number } })[]
 ): number {
   if (allGroupsInfo.length !== ALL_GROUPS.length) {
     return ALL_GROUPS.find(
-      (groupId) => !allGroupsInfo.some((info) => info.testGroupIdx === groupId)
+      (groupId) => !allGroupsInfo.some((info) => info.testGroup === groupId)
     )!;
   }
 
-  const { testGroupIdx } = allGroupsInfo.slice(1).reduce(
+  const { testGroup } = allGroupsInfo.slice(1).reduce(
     (acc, group) => {
       return group._count._all < acc.min
         ? {
             min: group._count._all,
-            testGroupIdx: group.testGroupIdx,
+            testGroup: group.testGroup,
           }
         : acc;
     },
     {
       min: allGroupsInfo[0]._count._all,
-      testGroupIdx: allGroupsInfo[0].testGroupIdx,
+      testGroup: allGroupsInfo[0].testGroup,
     }
   );
-  return testGroupIdx;
+  return testGroup;
 }
 
 export async function createUserCallback(message: { user: User }) {
   console.log("starting to create", message.user);
   const allGroupsInfo = await prisma.userInfo.groupBy({
-    by: ["testGroupIdx"],
+    by: ["testGroup"],
     _count: {
       _all: true,
     },
@@ -48,7 +48,7 @@ export async function createUserCallback(message: { user: User }) {
           id: message.user.id,
         },
       },
-      testGroupIdx: getGroupWithLeastMembers(allGroupsInfo),
+      testGroup: getGroupWithLeastMembers(allGroupsInfo),
       info: {},
     },
   });
