@@ -11,7 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
-import { ArrowRightIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { ArrowRightIcon, CheckIcon, TimeIcon } from "@chakra-ui/icons";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
 import NextLink from "next/link";
@@ -115,10 +115,15 @@ export default function Status({
             </Text>
           </Box>
           <Box>
-            <List spacing={8}>
+            <List spacing={4}>
               {items.map((item, idx) => {
                 const ListItemDetails = (
-                  <VStack alignItems={"start"} spacing={0}>
+                  <VStack
+                    cursor={idx === pendingIdx ? "pointer" : "not-allowed"}
+                    alignItems={"start"}
+                    spacing={0}
+                    pl={2}
+                  >
                     <Text casing={"uppercase"} fontWeight={"bold"}>
                       {item.name}
                     </Text>
@@ -130,6 +135,9 @@ export default function Status({
                     key={item.name}
                     display={"flex"}
                     alignItems={"center"}
+                    p={3}
+                    borderRadius={"5px"}
+                    _hover={{ background: "purple.50" }}
                   >
                     <ListIcon
                       alignSelf={"start"}
@@ -139,15 +147,9 @@ export default function Status({
                           ? CheckIcon
                           : idx === pendingIdx
                           ? ArrowRightIcon
-                          : CloseIcon
+                          : TimeIcon
                       }
-                      color={
-                        item.done
-                          ? "green.500"
-                          : idx === pendingIdx
-                          ? "blue.500"
-                          : "red.500"
-                      }
+                      color={item.done ? "green.500" : "blue.500"}
                     />
                     {item.done || idx !== pendingIdx ? (
                       ListItemDetails

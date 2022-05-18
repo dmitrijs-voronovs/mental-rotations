@@ -6,7 +6,7 @@ export function Navbar() {
   const router = useRouter();
   return (
     <Box
-      pos={"absolute"}
+      pos={"fixed"}
       top={0}
       background={"purple.50"}
       p={15}

@@ -79,7 +79,7 @@ const Home: NextPage = ({
           objectFit={"contain"}
           src={"/homepage.png"}
           sx={{ filter: "blur(8px)" }}
-          opacity={0.3}
+          opacity={0.2}
           height={"120%"}
           left={"50%"}
           top={"-10%"}
@@ -90,7 +90,7 @@ const Home: NextPage = ({
         {t("PSVT:R digital test")}
       </Heading>
       <p className={styles.description}>
-        Welcome to digitalized configurable PSVT:R
+        Welcome to digitalized configurable Mental Rotation Test
       </p>
       <Button
         onClick={() => {
