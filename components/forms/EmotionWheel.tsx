@@ -83,9 +83,13 @@ const initialFormValues = emotions.reduce(
 
 type EmotionWheelProps = {
   onSubmit: (values: Record<string, string | number>) => void;
+  coloured?: boolean;
 };
 
-export function EmotionWheel({ onSubmit }: EmotionWheelProps) {
+export function EmotionWheel({
+  onSubmit,
+  coloured = false,
+}: EmotionWheelProps) {
   const [other, setOther] = useState("");
 
   return (
@@ -125,9 +129,9 @@ export function EmotionWheel({ onSubmit }: EmotionWheelProps) {
                       <FastField name={emotion}>
                         {({ field, form }: FieldProps<string>) => {
                           // TODO: make dynamic calculations according to formulas https://docs.google.com/spreadsheets/d/1xM3PbcXFuv7EVcMSmpiFVCuJ5xqCXDHr3jqt1V3ZOtg/edit#gid=0
-                          const origSize = 16;
-                          const offset = 90;
-                          const scales = emotions.map((_e, i) => 1 + i * 0.5);
+                          // const origSize = 16;
+                          // const offset = 90;
+                          // const scales = emotions.map((_e, i) => 1 + i * 0.5);
                           // const positions = [75, 91, 115, 147, 187, 235];
                           // const positions = [100, 116, 140, 172, 212, 260];
                           const positions = [100, 118, 145, 181, 226, 280];
@@ -161,7 +165,11 @@ export function EmotionWheel({ onSubmit }: EmotionWheelProps) {
                                       position={"absolute"}
                                       left={left}
                                       top={top}
-                                      // background={colors[emotionIdx]}
+                                      background={
+                                        coloured
+                                          ? colors[emotionIdx]
+                                          : undefined
+                                      }
                                       borderRadius={optionIdx === 0 ? 0 : "50%"}
                                       transform={`translate(-50%, -50%) scale(${
                                         1 + optionIdx * 0.5
