@@ -11,6 +11,8 @@ export function Navbar() {
       background={"purple.50"}
       p={15}
       borderBottomRadius={"8px"}
+      color={"purple"}
+      fontSize={20}
     >
       <HStack spacing={20} mx={10}>
         <NextLink href={"/"} locale={router.locale}>
@@ -19,8 +21,7 @@ export function Navbar() {
         <NextLink href={"/status"} locale={router.locale}>
           <Link>Status</Link>
         </NextLink>
-        <Heading>PSVT:R</Heading>
-        {/*<Image src={"/icon-192x192.png"} w={10} h={10} />*/}
+        <Heading>PSVT:RR</Heading>
         <NextLink href={"/userInfo"} locale={router.locale}>
           <Link>User Info</Link>
         </NextLink>

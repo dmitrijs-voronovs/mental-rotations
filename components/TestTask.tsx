@@ -5,6 +5,10 @@ import s from "../styles/Proto.App.module.scss";
 import classNames from "classnames";
 import { TestScreenshots } from "@components/EventDisplay";
 
+export const TOP_ROW_ID = "top-row";
+export const BOTTOM_ROW_ID = "bottom-row";
+export const TEST_OBJ_ID = "test-obj";
+
 export const TestTask: FC<{
   task: Task;
   taskIdx: number;
@@ -35,6 +39,7 @@ export const TestTask: FC<{
       />
       <div className={classNames(s.block2, s.block, s.text)}>as</div>
       <img
+        id={TEST_OBJ_ID}
         alt={"test image"}
         src={testShape}
         className={classNames(s.block22, s.block)}
@@ -94,6 +99,24 @@ export const TestTask: FC<{
         <Box>4</Box>
         <Box>5</Box>
       </div>
+      <Box
+        id={TOP_ROW_ID}
+        pos={"absolute"}
+        top={0}
+        left={"20%"}
+        width={"60%"}
+        height={"30%"}
+        zIndex={-1}
+      />
+      <Box
+        id={BOTTOM_ROW_ID}
+        pos={"absolute"}
+        bottom={0}
+        left={0}
+        width={"100%"}
+        height={"40%"}
+        zIndex={-1}
+      />
     </Box>
   );
 };

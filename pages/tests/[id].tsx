@@ -1,24 +1,38 @@
 import { GetServerSideProps } from "next";
 import { prisma } from "@lib/prisma";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, MutableRefObject, useEffect, useRef, useState } from "react";
 import { CompletedTest, Prisma, Task, Test } from "@prisma/client";
 import {
   Box,
   Button,
   Heading,
+  Kbd,
   Link,
   ListItem,
   Progress,
+  Text,
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import { TestTask } from "@components/TestTask";
+import {
+  BOTTOM_ROW_ID,
+  TEST_OBJ_ID,
+  TestTask,
+  TOP_ROW_ID,
+} from "@components/TestTask";
 import { launchTimer, Timer } from "@utils/LaunchTimer";
 import { TestResults } from "@components/TestResults";
 import { getSession } from "next-auth/react";
-import { TestScreenshots } from "@components/EventDisplay";
 import { getFirstEmotionTest } from "@utils/status/statusHelpers";
+import { useImagePreloading } from "@utils/hooks/UseImagePreloading";
+import ReactJoyride, {
+  ACTIONS,
+  CallBackProps,
+  Step,
+  StoreHelpers,
+} from "react-joyride";
+import { TUTORIAL_TEST } from "../../config/testNames";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -54,16 +68,131 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const TestDetails: FC<{
+export type TestDetailsProps = {
   test: (Test & { tasks: Task[]; completedTests: CompletedTest[] }) | null;
-}> = ({ test }) => {
+};
+
+const TestDetails: FC<TestDetailsProps> = ({ test }) => {
+  const [joyride, setJoyride] = useState<{ run: boolean; steps: Array<Step> }>({
+    steps: [
+      {
+        target: "body",
+        placement: "center",
+        title: <Heading fontSize={"xl"}>Mental Rotation Test</Heading>,
+        content: (
+          <Text>
+            It tests your ability to rotate mental representations of
+            two-dimensional and three-dimensional objects.
+            <br />
+            <br />
+            But how does it work?
+          </Text>
+        ),
+      },
+      {
+        target: `#${TOP_ROW_ID}`,
+        placement: "bottom-start",
+        // title: "Mental Rotation Test 2",
+        content: (
+          <Text>
+            The reference object is presented in the first row both before (on
+            the left) and after (on the right) the rotation is applied.
+            <br />
+            <br />
+            In this case it is a single{" "}
+            <b>90 degree rotation counterclockwise</b>.
+          </Text>
+        ),
+      },
+      {
+        target: `#${TEST_OBJ_ID}`,
+        placement: "left",
+        // title: "Mental Rotation Test 2",
+        content: (
+          <Text>
+            This is the target object. <br />
+            Your goal is to perform the same rotation on this object mentally.
+          </Text>
+        ),
+      },
+      {
+        target: `#${BOTTOM_ROW_ID}`,
+        placement: "top-start",
+        disableOverlayClose: true,
+        // title: "Mental Rotation Test 2",
+        content: (
+          <Text>
+            And pick the correct result out of 5.
+            <br />
+            You can either click on the resulting object or use your keyboard
+            buttons <Kbd>1</Kbd> to <Kbd>5</Kbd>.
+          </Text>
+        ),
+      },
+      {
+        target: "body",
+        placement: "center",
+        title: <Heading fontSize={"xl"}>Now you are ready</Heading>,
+        content: <Text>Good luck!</Text>,
+      },
+    ],
+    run: false,
+  });
+  const helpers = useRef<StoreHelpers>();
+
+  const joyrideCallback = (data: CallBackProps): void => {
+    console.log(data);
+    if (data.action === ACTIONS.CLOSE || data.action === ACTIONS.SKIP) {
+      setJoyride((s) => ({ ...s, run: false }));
+    }
+  };
+
+  console.log(helpers.current?.info());
+
+  return (
+    <Box overflow={"hidden"}>
+      <PregeneratedTestRunner
+        test={test}
+        helpers={helpers}
+        start={() => setJoyride((s) => ({ ...s, run: true }))}
+      />
+      {/* TODO: use locale prop */}
+      <ReactJoyride
+        disableScrolling
+        steps={joyride.steps}
+        callback={joyrideCallback}
+        continuous
+        run={joyride.run}
+        showProgress
+        getHelpers={(h) => {
+          helpers.current = h;
+        }}
+        showSkipButton
+      />
+    </Box>
+  );
+};
+
+export type PregeneratedTestRunnerProps = TestDetailsProps & {
+  helpers: MutableRefObject<StoreHelpers | undefined>;
+  start: () => void;
+};
+
+const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
+  test,
+  helpers,
+  start,
+}) => {
   const [taskIdx, setTaskIdx] = useState(-1);
   const [results, setResults] = useState<
     Prisma.CompletedTaskCreateWithoutTestInput[]
   >([]);
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const timer = useRef<Timer>();
   const router = useRouter();
+
+  const { total: totalImages, progress: loadedImages } = useImagePreloading({
+    test,
+  });
 
   useEffect(() => {
     timer.current = launchTimer();
@@ -96,33 +225,10 @@ const TestDetails: FC<{
     };
   }, [onItemClick]);
 
-  useEffect(() => {
-    function loadTaskImages(imgNames: TestScreenshots) {
-      Object.entries(imgNames).forEach(([name, src]) => {
-        if (name === "scene") return;
-        const img = new Image();
-        img.src = src;
-        img.onload = (_e) => {
-          setLoadingProgress((old) => old + 1);
-        };
-      });
-    }
-
-    if (test) {
-      test.tasks.forEach((task) =>
-        loadTaskImages(task.images as TestScreenshots)
-      );
-    }
-  }, [test]);
-
   if (!test) {
     router.push("/tests");
     return null;
   }
-
-  const testImageCount =
-    test.tasks.length *
-    (Object.values(test.tasks[0].images as TestScreenshots).length - 1);
 
   if (taskIdx < 0)
     return (
@@ -131,13 +237,13 @@ const TestDetails: FC<{
         <p>Test consists of {test.tasks.length} tasks</p>
         <Box>
           <Heading fontSize={"md"}>
-            Loading test data {loadingProgress}/{testImageCount}
+            Loading test data {loadedImages}/{totalImages}
           </Heading>
           <Progress
             size={"md"}
-            value={loadingProgress}
+            value={loadedImages}
             min={0}
-            max={testImageCount}
+            max={totalImages}
           />
         </Box>
         {test.completedTests.length && (
@@ -154,9 +260,19 @@ const TestDetails: FC<{
           </>
         )}
         <Button
-          disabled={loadingProgress !== testImageCount}
+          disabled={loadedImages !== totalImages}
           variant="solid"
-          onClick={() => setTaskIdx(0)}
+          onClick={() => {
+            setTaskIdx(0);
+            if (test.name === TUTORIAL_TEST) {
+              console.log("here", helpers.current);
+              start();
+              // helpers.current?.reset(false);
+              helpers.current?.open();
+              helpers.current?.open();
+              helpers.current?.open();
+            }
+          }}
         >
           Start
         </Button>

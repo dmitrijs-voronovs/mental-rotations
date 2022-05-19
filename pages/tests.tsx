@@ -79,7 +79,7 @@ const Tests: FC<{
       <Box maxW={"xl"} textAlign={"center"} mt={20}>
         <VStack spacing={5}>
           <Heading>Tests</Heading>
-          <Text fontSize={"xl"}>
+          <Text fontSize={"xl"} pb={3}>
             Please, start with the tutorial to understand the test specifics.
             Then proceed to the real test!
           </Text>
