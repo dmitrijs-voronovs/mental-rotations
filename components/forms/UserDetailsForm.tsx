@@ -26,7 +26,7 @@ type UserDetailsFormValues = {
   age: number;
   gender: string;
   occupation: string;
-  fieldOfActivity: string;
+  academicField: string;
   isRightHanded: boolean;
   hasNeurodegenerativeIllnesses: boolean;
   hasAgreedToPolicy: boolean;
@@ -52,7 +52,7 @@ export function UserDetailsForm({
           age: 15,
           gender: "Male",
           occupation: "",
-          fieldOfActivity: "",
+          academicField: "",
           isRightHanded: true,
           hasNeurodegenerativeIllnesses: false,
           hasAgreedToPolicy: false,
@@ -150,12 +150,12 @@ export function UserDetailsForm({
                 )}
               </Field>
               <Field
-                name={"fieldOfActivity"}
+                name={"academicField"}
                 validate={(val?: string) =>
                   !val
                     ? "Value is required"
                     : val.length < 4
-                    ? "Field of activity length should be > 3"
+                    ? "Academic field length should be > 3"
                     : undefined
                 }
               >
@@ -164,21 +164,20 @@ export function UserDetailsForm({
                     isRequired
                     isInvalid={
                       !!(
-                        form.touched.fieldOfActivity &&
-                        form.errors.fieldOfActivity
+                        form.touched.academicField && form.errors.academicField
                       )
                     }
                   >
-                    <FormLabel htmlFor="fieldOfActivity">
-                      Field of activity
+                    <FormLabel htmlFor="academicField">
+                      Academic field
                     </FormLabel>
                     <Input
                       {...field}
-                      id="fieldOfActivity"
+                      id="academicField"
                       placeholder={"Mathematician"}
                     />
                     <FormErrorMessage>
-                      {form.errors.fieldOfActivity}
+                      {form.errors.academicField}
                     </FormErrorMessage>
                   </FormControl>
                 )}

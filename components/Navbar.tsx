@@ -25,7 +25,8 @@ export function Navbar() {
         <NextLink href={"/userInfo"} locale={router.locale}>
           <Link>User Info</Link>
         </NextLink>
-        <NextLink href={"/api/auth/signout"} locale={router.locale}>
+        {/*<NextLink href={"/api/auth/signout"} locale={router.locale}>*/}
+        <NextLink href={"/api/auth/signout"}>
           <Link>Logout</Link>
         </NextLink>
       </HStack>

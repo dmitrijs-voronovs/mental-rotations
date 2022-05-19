@@ -76,7 +76,7 @@ const Tests: FC<{
   return (
     <Center width={"100vw"} height={"100vh"}>
       <Navbar />
-      <Box maxW={"xl"} textAlign={"center"} mt={20}>
+      <Box maxW={"xl"} textAlign={"center"} mt={-10}>
         <VStack spacing={5}>
           <Heading>Tests</Heading>
           <Text fontSize={"xl"} pb={3}>
