@@ -299,10 +299,10 @@ export function UserDetailsForm({
                       <Stack direction="column">
                         <Radio value="No">No</Radio>
                         <Radio value="Alzheimer">
-                          Yes, Alzheimer's disease
+                          Yes, Alzheimer&apos;s disease
                         </Radio>
                         <Radio value="Huntington">
-                          Yes, Huntington's disease
+                          Yes, Huntington&apos;s disease
                         </Radio>
                         <Radio value="Another">Yes, another</Radio>
                       </Stack>
