@@ -22,13 +22,14 @@ export default NextAuth({
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     }),
     Auth0Provider({
+      name: "Email",
       clientId: process.env.AUTH0_CLIENT_ID!,
       clientSecret: process.env.AUTH0_CLIENT_SECRET!,
       issuer: process.env.AUTH0_ISSUER,
     }),
   ],
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, user }) {
       const { testGroup, info } = (await prisma.userInfo.findUnique({
         where: {
           userId: user.id,

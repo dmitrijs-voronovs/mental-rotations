@@ -87,11 +87,11 @@ const Home: NextPage = ({
         />
       </Box>
       <Heading mb={3} mt={-10}>
-        {t("Mental Rotation Test")}
+        {t("Object Rotation")}
       </Heading>
       <Box className={styles.description} maxW={"2xl"}>
-        Mental rotation refers to moving things around in your head. It is one
-        of the numerous visuospatial skills that we all have.
+        Object mental rotation refers to moving things around in your head. It
+        is one of the numerous visual and spatial skills that we all have.
       </Box>
       <Button
         onClick={() => {
@@ -107,7 +107,7 @@ const Home: NextPage = ({
         size={"lg"}
         my={10}
       >
-        Test it!
+        Start!
       </Button>
 
       <VStack position={"absolute"} bottom={5} textAlign={"center"}>

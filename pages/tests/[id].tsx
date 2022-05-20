@@ -58,7 +58,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {
         target: "body",
         placement: "center",
-        title: <Heading fontSize={"xl"}>Mental Rotation Test</Heading>,
+        title: <Heading fontSize={"xl"}>Object Rotation</Heading>,
         content: (
           <Text>
             It tests your ability to rotate mental representations of
@@ -72,7 +72,6 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {
         target: `#${TOP_ROW_ID}`,
         placement: "bottom-start",
-        // title: "Mental Rotation Test 2",
         content: (
           <Text>
             The reference object is presented in the first row both before (on
@@ -87,7 +86,6 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {
         target: `#${TEST_OBJ_ID}`,
         placement: "left",
-        // title: "Mental Rotation Test 2",
         content: (
           <Text>
             This is the target object. <br />
@@ -99,7 +97,6 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
         target: `#${BOTTOM_ROW_ID}`,
         placement: "top-start",
         disableOverlayClose: true,
-        // title: "Mental Rotation Test 2",
         content: (
           <Text>
             And pick the correct result out of 5.

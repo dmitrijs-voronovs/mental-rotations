@@ -19,8 +19,8 @@ export function SwitchToDesktopOverlay() {
             <ModalHeader>Please, switch to a desktop device</ModalHeader>
             <ModalBody>
               <Text mb={5}>
-                Mobile devices are not suitable for Mental Rotation tests, sorry
-                for the inconvenience.
+                Mobile devices are not suitable for Object Rotation exercises,
+                sorry for the inconvenience.
               </Text>
             </ModalBody>
           </ModalContent>

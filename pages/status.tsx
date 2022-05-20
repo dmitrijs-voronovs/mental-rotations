@@ -57,20 +57,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const items: Item[] = [
     {
-      name: "Emotion test",
-      description: "Test your emotions, tell about your feeling",
+      name: "Emotions",
+      description:
+        "The emotions and feelings you have experienced for the past 2 weeks",
       link: "/forms/emotionTest",
       done: !!completedItems[0],
     },
     {
-      name: "Mental rotation test",
-      description: "Test your mental rotation abilities",
+      name: "Object rotation",
+      description: "Discover your mental rotation abilities",
       link: "/tests",
       done: !!completedItems[1],
     },
     {
-      name: "Patient Health Questionnaire-9 (PHQ9)",
-      description: "Test how mentally healthy you are",
+      name: "Health and depression",
+      description: "Your health and depression state",
       link: "/forms/phq9",
       done: !!completedItems[2],
     },
