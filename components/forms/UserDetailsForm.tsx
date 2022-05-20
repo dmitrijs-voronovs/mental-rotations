@@ -8,6 +8,9 @@ import {
   FormLabel,
   Heading,
   Input,
+  Link,
+  ModalCloseButton,
+  ModalFooter,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -18,9 +21,17 @@ import {
   Stack,
   Switch,
   Text,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import { FastField as Field, FieldProps, Formik } from "formik";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/modal";
 
 type UserDetailsFormValues = {
   age: number;
@@ -36,6 +47,53 @@ type UserDetailsFormProps = {
   onSubmit: (values: UserDetailsFormValues) => void;
   initialValues?: Partial<UserDetailsFormValues>;
 };
+
+function PrivacyPolicy() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      Accept privacy policy and terms of use{" "}
+      <Link href={"#"} onClick={onOpen} color={"purple"}>
+        (read)
+      </Link>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Privacy policy and terms of use</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack textAlign={"start"} alignItems={"start"} spacing={3}>
+              <Heading size={"md"}>Application purposes</Heading>
+              <Text>
+                The application is designed to test mental rotation skills of
+                two groups of users - regular users and ones with the
+                neurodegenerative diseases -, and collect data for future
+                analysis.
+              </Text>
+              <Heading size={"md"}>Your information</Heading>
+              <Text>
+                Your information is stored privately and is used only to
+                associate a single data entry with a certain person. Each person
+                later on is referred only by the generated identification
+                number, thus personal details are not disclosed.
+              </Text>
+              <Heading size={"md"}>Your Data</Heading>
+              <Text>
+                Each answer for the tests and exersises is being securely stored
+                in the database. The data is later processed in bulks.
+              </Text>
+            </VStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
 
 export function UserDetailsForm({
   onSubmit,
@@ -278,7 +336,7 @@ export function UserDetailsForm({
                       {...field}
                       defaultChecked={initialValues?.hasAgreedToPolicy}
                     >
-                      Accept policy
+                      <PrivacyPolicy />
                     </Checkbox>
                     <FormErrorMessage>
                       {form.errors.hasAgreedToPolicy}

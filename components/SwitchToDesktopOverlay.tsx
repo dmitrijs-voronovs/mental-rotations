@@ -13,7 +13,7 @@ export function SwitchToDesktopOverlay() {
   if (isMobile)
     return (
       <>
-        <Modal isOpen={isOpen} onClose={() => {}}>
+        <Modal isOpen={isOpen} onClose={() => {}} isCentered>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Please, switch to a desktop device</ModalHeader>
