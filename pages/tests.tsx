@@ -78,10 +78,10 @@ const Tests: FC<{
       <Navbar />
       <Box maxW={"xl"} textAlign={"center"} mt={-10}>
         <VStack spacing={5}>
-          <Heading>Tests</Heading>
+          <Heading textTransform={"uppercase"}>Object rotation</Heading>
           <Text fontSize={"xl"} pb={3}>
-            Please, start with the tutorial to understand the test specifics.
-            Then proceed to the real test!
+            Please, start with the tutorial to understand the object rotation
+            specifics. Then proceed to the real exercise!
           </Text>
           <List spacing={4}>
             {tests.map((t) => {

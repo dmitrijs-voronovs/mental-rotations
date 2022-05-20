@@ -1,5 +1,4 @@
-import { FC, MutableRefObject, useEffect, useRef, useState } from "react";
-import { StoreHelpers } from "react-joyride";
+import { FC, useEffect, useRef, useState } from "react";
 import { Prisma } from "@prisma/client";
 import { launchTimer, Timer } from "@utils/LaunchTimer";
 import { useRouter } from "next/dist/client/router";
@@ -10,24 +9,20 @@ import {
   Center,
   Heading,
   Link,
-  ListItem,
   Progress,
-  UnorderedList,
   VStack,
 } from "@chakra-ui/react";
 import { TUTORIAL_TEST } from "../config/testNames";
 import { TestTask } from "@components/TestTask";
-import { TestResults } from "@components/TestResults";
+import { TestCompleted } from "@components/TestCompleted";
 import { TestDetailsProps } from "../pages/tests/[id]";
 import { Navbar } from "@components/Navbar";
 
 export type PregeneratedTestRunnerProps = TestDetailsProps & {
-  helpers: MutableRefObject<StoreHelpers | undefined>;
   start: () => void;
 };
 export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
   test,
-  helpers,
   start,
 }) => {
   const [taskIdx, setTaskIdx] = useState(-1);
@@ -83,7 +78,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
         <Navbar />
         <VStack mt={-10} spacing={2}>
           <Heading textTransform={"uppercase"}>{test.name}</Heading>
-          <p>Test consists of {test.tasks.length} tasks</p>
+          <p>Exercise consists of {test.tasks.length} tasks</p>
           <p>{test.description}</p>
           <Box py={5}>
             <Heading fontSize={"md"} mb={4}>
@@ -96,31 +91,27 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
               max={totalImages}
             />
           </Box>
-          {test.completedTests.length && (
-            <>
-              <Heading fontSize={"md"}>Was already completed:</Heading>
-              <UnorderedList>
-                {test.completedTests.map((t) => (
-                  <ListItem key={t.id}>
-                    {new Date(t.createdAt).toDateString()} -{" "}
-                    {new Date(t.createdAt).toLocaleTimeString()}
-                  </ListItem>
-                ))}
-              </UnorderedList>
-            </>
-          )}
+          {/* TODO: change query to have only completed tests for the concrete user */}
+          {/*{test.completedTests.length && (*/}
+          {/*  <>*/}
+          {/*    <Heading fontSize={"md"}>Was already completed:</Heading>*/}
+          {/*    <UnorderedList>*/}
+          {/*      {test.completedTests.map((t) => (*/}
+          {/*        <ListItem key={t.id}>*/}
+          {/*          {new Date(t.createdAt).toDateString()} -{" "}*/}
+          {/*          {new Date(t.createdAt).toLocaleTimeString()}*/}
+          {/*        </ListItem>*/}
+          {/*      ))}*/}
+          {/*    </UnorderedList>*/}
+          {/*  </>*/}
+          {/*)}*/}
           <Button
             disabled={loadedImages !== totalImages}
             variant="solid"
             onClick={() => {
               setTaskIdx(0);
               if (test.name === TUTORIAL_TEST) {
-                console.log("here", helpers.current);
                 start();
-                // helpers.current?.reset(false);
-                helpers.current?.open();
-                helpers.current?.open();
-                helpers.current?.open();
               }
             }}
           >
@@ -140,7 +131,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
     );
 
   if (taskIdx === test.tasks.length)
-    return <TestResults data={results} test={test} />;
+    return <TestCompleted data={results} test={test} />;
 
   return (
     <Box>
