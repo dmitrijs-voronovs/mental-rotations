@@ -19,7 +19,7 @@ const emotions = [
   "Bauda",
   "Apmierinājums",
   "Apbrīna",
-  "Milestība",
+  "Mīlestība",
   "Atvieglojums",
   "Līdzjutība",
   "Skumjas",
@@ -99,12 +99,12 @@ export function EmotionWheel({
       pos={"relative"}
     >
       <VStack alignItems={"center"} mb={5} zIndex={2} spacing={4}>
-        <Heading size={"lg"}>Geneva emotion wheel test</Heading>
-        <Text maxW={"lg"}>
-          Please indicate the emotion you experience at the moment by choosing
-          intensities for a single emotion or a blend of several emotions. There
-          is an option to add your own emotion by pressing on the
-          &quot;other&quot; button.
+        <Heading size={"lg"}>Geneva emotion wheel</Heading>
+        <Text align={"center"} maxW={"lg"}>
+          Please indicate the emotion you have experienced during the last 2
+          weeks by choosing intensities for a single emotion or a blend of
+          several emotions. There is an option to add your own emotion by
+          pressing the &quot;other&quot; button.
         </Text>
       </VStack>
       <Formik
@@ -171,6 +171,7 @@ export function EmotionWheel({
                                   );
                                   return (
                                     <Radio
+                                      colorScheme={"gray"}
                                       border={"1px"}
                                       key={optionIdx}
                                       value={optionIdx}
@@ -212,6 +213,7 @@ export function EmotionWheel({
                   );
                 })}
                 <Button
+                  colorScheme={"gray"}
                   size={"lg"}
                   position={"absolute"}
                   top={height / 2}
@@ -226,6 +228,7 @@ export function EmotionWheel({
                   No emotions
                 </Button>
                 <Button
+                  colorScheme={"gray"}
                   size={"lg"}
                   position={"absolute"}
                   top={height / 2}

@@ -1,18 +1,14 @@
 import { GetServerSideProps } from "next";
 import { prisma } from "@lib/prisma";
-import { FC, useRef, useState } from "react";
-import { CompletedTest, Task, Test } from "@prisma/client";
+import { FC, useState } from "react";
+import { Task, Test } from "@prisma/client";
 import { Box, Heading, Kbd, Text } from "@chakra-ui/react";
 import { BOTTOM_ROW_ID, TEST_OBJ_ID, TOP_ROW_ID } from "@components/TestTask";
 import { getSession } from "next-auth/react";
 import { getFirstEmotionTest } from "@utils/status/statusHelpers";
-import ReactJoyride, {
-  ACTIONS,
-  CallBackProps,
-  Step,
-  StoreHelpers,
-} from "react-joyride";
+import ReactJoyride, { ACTIONS, CallBackProps, Step } from "react-joyride";
 import { PregeneratedTestRunner } from "@components/PregeneratedTestRunner";
+import { TUTORIAL_TEST } from "../../config/testNames";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -39,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     where: { id },
     include: {
       tasks: true,
-      completedTests: true,
     },
   });
 
@@ -49,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export type TestDetailsProps = {
-  test: (Test & { tasks: Task[]; completedTests: CompletedTest[] }) | null;
+  test: (Test & { tasks: Task[] }) | null;
 };
 
 const TestDetails: FC<TestDetailsProps> = ({ test }) => {
@@ -58,11 +53,11 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {
         target: "body",
         placement: "center",
-        title: <Heading fontSize={"xl"}>Mental Rotation Test</Heading>,
+        title: <Heading fontSize={"xl"}>Object Rotation</Heading>,
         content: (
           <Text>
-            It tests your ability to rotate mental representations of
-            two-dimensional and three-dimensional objects.
+            The exercise tests your ability to rotate mental representations of
+            three-dimensional objects.
             <br />
             <br />
             But how does it work?
@@ -72,7 +67,6 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {
         target: `#${TOP_ROW_ID}`,
         placement: "bottom-start",
-        // title: "Mental Rotation Test 2",
         content: (
           <Text>
             The reference object is presented in the first row both before (on
@@ -87,7 +81,6 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {
         target: `#${TEST_OBJ_ID}`,
         placement: "left",
-        // title: "Mental Rotation Test 2",
         content: (
           <Text>
             This is the target object. <br />
@@ -99,7 +92,6 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
         target: `#${BOTTOM_ROW_ID}`,
         placement: "top-start",
         disableOverlayClose: true,
-        // title: "Mental Rotation Test 2",
         content: (
           <Text>
             And pick the correct result out of 5.
@@ -118,10 +110,8 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
     ],
     run: false,
   });
-  const helpers = useRef<StoreHelpers>();
 
   const joyrideCallback = (data: CallBackProps): void => {
-    console.log(data);
     if (data.action === ACTIONS.CLOSE || data.action === ACTIONS.SKIP) {
       setJoyride((s) => ({ ...s, run: false }));
     }
@@ -131,22 +121,21 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
     <Box overflow={"hidden"}>
       <PregeneratedTestRunner
         test={test}
-        helpers={helpers}
         start={() => setJoyride((s) => ({ ...s, run: true }))}
       />
       {/* TODO: use locale prop */}
-      <ReactJoyride
-        disableScrolling
-        steps={joyride.steps}
-        callback={joyrideCallback}
-        continuous
-        run={joyride.run}
-        showProgress
-        getHelpers={(h) => {
-          helpers.current = h;
-        }}
-        showSkipButton
-      />
+      {/*  TODO: hide when not a tutorial */}
+      {test?.name === TUTORIAL_TEST && (
+        <ReactJoyride
+          disableScrolling
+          steps={joyride.steps}
+          callback={joyrideCallback}
+          continuous
+          run={joyride.run}
+          showProgress
+          showSkipButton
+        />
+      )}
     </Box>
   );
 };

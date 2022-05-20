@@ -13,8 +13,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     <SessionProvider session={session}>
       <ChakraProvider theme={theme}>
         <Head>
-          <title>Mental Rotation Test</title>
-          <meta name="description" content="Mental rotation test" />
+          <title>Object Rotation</title>
+          <meta name="description" content="Object Rotation" />
           <link rel="icon" href="/icon-192x192.png" />
         </Head>
         <SwitchToDesktopOverlay />

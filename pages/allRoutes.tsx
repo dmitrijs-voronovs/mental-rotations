@@ -9,8 +9,8 @@ import NextLink from "next/link";
 const links = [
   {
     link: "/tests",
-    heading: "Mental rotation test",
-    text: "Complete mental rotation test and get the score",
+    heading: "Object rotation test",
+    text: "Complete object rotation test and get the score",
   },
   {
     link: "/forms/emotionTest",

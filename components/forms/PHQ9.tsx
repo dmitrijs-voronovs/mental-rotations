@@ -21,9 +21,8 @@ const questions = [
   "Poor appetite or overeating?",
   "Feeling bad about yourself — or that you are a failure or have let yourself or your family down?",
   "Trouble concentrating on things, such as reading the newspaper or watching television?",
-  "Moving or speaking so slowly that other people cou… that you have been moving a lot more than usual?",
+  "Moving or speaking so slowly that other people could have noticed? Or so fidgety or restless that you have been moving a lot more than usual?",
   "Thoughts that you would be better off dead, or thoughts of hurting yourself in some way?",
-  // "Ask the patient: how difficult have these problems…f things at home, or get along with other people?",
 ];
 
 const answers = {
@@ -62,7 +61,6 @@ const QuestionField: FC<{ question: string; id: number }> = ({
       >
         <FormLabel htmlFor={String(id)}>{question}</FormLabel>
         <RadioGroup
-          // defaultValue={}
           {...field}
           onChange={(nextValue) =>
             form.setFieldValue(String(field.name), Number(nextValue))
@@ -92,8 +90,11 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
   return (
     <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
       <VStack alignItems={"left"} mb={5}>
-        <Heading size={"lg"}>PHQ9 test</Heading>
-        <Text>Please fill additional information about yourself</Text>
+        <Heading size={"lg"}>Health and depression</Heading>
+        <Text>
+          Please answer the questions below to better understand your health and
+          depression states.
+        </Text>
       </VStack>
       <Formik
         initialValues={Object.fromEntries(questions.map((_q, i) => [i, ""]))}
