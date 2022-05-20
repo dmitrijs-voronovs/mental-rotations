@@ -66,7 +66,7 @@ function PrivacyPolicy() {
               <Heading size={"md"}>Application purposes</Heading>
               <Text>
                 The application is designed to test mental rotation skills of
-                two groups of users - regular users and ones with the
+                two groups of users - regular users and users with the
                 neurodegenerative diseases -, and collect data for future
                 analysis.
               </Text>
