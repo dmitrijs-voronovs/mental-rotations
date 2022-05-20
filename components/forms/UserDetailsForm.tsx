@@ -20,7 +20,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Field, FieldProps, Formik } from "formik";
+import { FastField as Field, FieldProps, Formik } from "formik";
 
 type UserDetailsFormValues = {
   age: number;
@@ -219,22 +219,38 @@ export function UserDetailsForm({
                         form.errors.hasNeurodegenerativeIllnesses
                       )
                     }
-                    display={"flex"}
-                    alignItems={"baseline"}
                   >
                     <FormLabel htmlFor="hasNeurodegenerativeIllnesses">
-                      Do you have neurodegenerative illnesses?
+                      Do you have neurodegenerative disorder?
                     </FormLabel>
-                    <Switch
+                    {/*<Switch*/}
+                    {/*  {...field}*/}
+                    {/*  id="hasNeurodegenerativeIllnesses"*/}
+                    {/*  size={"sm"}*/}
+                    {/*  defaultChecked={*/}
+                    {/*    initialValues.hasNeurodegenerativeIllnesses*/}
+                    {/*  }*/}
+                    {/*/>*/}
+                    <RadioGroup
+                      defaultValue={"No"}
                       {...field}
-                      id="hasNeurodegenerativeIllnesses"
-                      size={"sm"}
-                      defaultChecked={
-                        initialValues.hasNeurodegenerativeIllnesses
+                      onChange={(nextValue) =>
+                        form.setFieldValue(field.name, nextValue)
                       }
-                    />
+                    >
+                      <Stack direction="column">
+                        <Radio value="No">No</Radio>
+                        <Radio value="Alzheimer">
+                          Yes, Alzheimer's disease
+                        </Radio>
+                        <Radio value="Huntington">
+                          Yes, Huntington's disease
+                        </Radio>
+                        <Radio value="Another">Yes, another</Radio>
+                      </Stack>
+                    </RadioGroup>
                     <FormErrorMessage>
-                      {form.errors.occupation}
+                      {form.errors.hasNeurodegenerativeIllnesses}
                     </FormErrorMessage>
                   </FormControl>
                 )}
