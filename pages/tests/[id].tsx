@@ -124,7 +124,6 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
         start={() => setJoyride((s) => ({ ...s, run: true }))}
       />
       {/* TODO: use locale prop */}
-      {/*  TODO: hide when not a tutorial */}
       {test?.name === TUTORIAL_TEST && (
         <ReactJoyride
           disableScrolling

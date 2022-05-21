@@ -110,10 +110,9 @@ export default function Status({
       <Box maxW={"xl"} mx={"auto"} my={5}>
         <VStack alignItems={"start"} spacing={5}>
           <Box mb={4}>
-            <Heading mb={5}>Test status</Heading>
+            <Heading mb={5}>Experiment status</Heading>
             <Text fontSize={"xl"}>
-              This is your current test status. <br />
-              Go through each item to complete the test:
+              Go through each item to complete the experiment:
             </Text>
           </Box>
           <Box>
