@@ -59,35 +59,30 @@ export const TestTask: FC<{
         <img
           alt={"test image"}
           onClick={() => onClick(1)}
-          onTouchStart={() => onClick(1)}
           src={testShape1}
           className={s.block}
         />
         <img
           alt={"test image"}
           onClick={() => onClick(2)}
-          onTouchStart={() => onClick(2)}
           src={testShape2}
           className={s.block}
         />
         <img
           alt={"test image"}
           onClick={() => onClick(3)}
-          onTouchStart={() => onClick(3)}
           src={testShape3}
           className={s.block}
         />
         <img
           alt={"test image"}
           onClick={() => onClick(4)}
-          onTouchStart={() => onClick(4)}
           src={testShape4}
           className={s.block}
         />
         <img
           alt={"test image"}
           onClick={() => onClick(5)}
-          onTouchStart={() => onClick(5)}
           src={testShape5}
           className={s.block}
         />
