@@ -13,6 +13,7 @@ export function Navbar() {
       borderBottomRadius={"8px"}
       color={"purple"}
       fontSize={20}
+      zIndex={999}
     >
       <HStack spacing={20} mx={10}>
         <NextLink href={"/"} locale={router.locale}>
