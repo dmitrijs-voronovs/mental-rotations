@@ -1,12 +1,16 @@
-import {Center} from "@chakra-ui/react";
-import {PHQ9} from "@components/forms/PHQ9";
+import { Center } from "@chakra-ui/react";
+import { PHQ9 } from "@components/forms/PHQ9";
 import axios from "axios";
-import {Prisma} from "@prisma/client";
-import {useRouter} from "next/dist/client/router";
-import {getSession} from "next-auth/react";
-import {GetServerSideProps} from "next";
-import {getFirstDepressionTest, getFirstEmotionTest, getFirstMentalRotationTest,} from "@utils/status/statusHelpers";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { Prisma } from "@prisma/client";
+import { useRouter } from "next/dist/client/router";
+import { getSession } from "next-auth/react";
+import { GetServerSideProps } from "next";
+import {
+  getFirstDepressionTest,
+  getFirstEmotionTest,
+  getFirstMentalRotationTest,
+} from "@utils/status/statusHelpers";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);

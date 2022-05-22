@@ -1,10 +1,23 @@
-import type {GetServerSideProps, InferGetServerSidePropsType, NextPage,} from "next";
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import styles from "../styles/Home.module.scss";
-import {Box, Button, Heading, Image, Text, VStack, Wrap, WrapItem,} from "@chakra-ui/react";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useTranslation} from "next-i18next";
-import {getSession, signIn, useSession} from "next-auth/react";
-import {useRouter} from "next/dist/client/router";
+import {
+  Box,
+  Button,
+  Heading,
+  Image,
+  Text,
+  VStack,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { getSession, signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/dist/client/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);

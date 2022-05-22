@@ -1,12 +1,25 @@
-import {FC, useEffect} from "react";
-import {Prisma, Task, Test} from "@prisma/client";
-import {Box, Center, Heading, Link, Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr,} from "@chakra-ui/react";
+import { FC, useEffect } from "react";
+import { Prisma, Task, Test } from "@prisma/client";
+import {
+  Box,
+  Center,
+  Heading,
+  Link,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import axios from "axios";
-import {useSession} from "next-auth/react";
-import {TUTORIAL_TEST} from "../config/testNames";
+import { useSession } from "next-auth/react";
+import { TUTORIAL_TEST } from "../config/testNames";
 import NextLink from "next/link";
-import {useRouter} from "next/dist/client/router";
-import {useTranslation} from "next-i18next";
+import { useRouter } from "next/dist/client/router";
+import { useTranslation } from "next-i18next";
 
 const timeFmt = new Intl.NumberFormat();
 

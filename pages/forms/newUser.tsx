@@ -1,13 +1,13 @@
-import {UserDetailsForm} from "@components/forms/UserDetailsForm";
-import {Center} from "@chakra-ui/react";
+import { UserDetailsForm } from "@components/forms/UserDetailsForm";
+import { Center } from "@chakra-ui/react";
 import axios from "axios";
-import {GetServerSideProps, InferGetServerSidePropsType} from "next";
-import {getSession} from "next-auth/react";
-import {prisma} from "@lib/prisma";
-import {Prisma} from "@prisma/client";
-import {useRouter} from "next/dist/client/router";
-import {Navbar} from "@components/Navbar";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { getSession } from "next-auth/react";
+import { prisma } from "@lib/prisma";
+import { Prisma } from "@prisma/client";
+import { useRouter } from "next/dist/client/router";
+import { Navbar } from "@components/Navbar";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await getSession(context);

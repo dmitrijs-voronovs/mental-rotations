@@ -1,10 +1,10 @@
-import {FC} from "react";
-import {Task} from "@prisma/client";
-import {Box} from "@chakra-ui/react";
+import { FC } from "react";
+import { Task } from "@prisma/client";
+import { Box } from "@chakra-ui/react";
 import s from "../styles/Proto.App.module.scss";
 import classNames from "classnames";
-import {TestScreenshots} from "@components/EventDisplay";
-import {useTranslation} from "next-i18next";
+import { TestScreenshots } from "@components/EventDisplay";
+import { useTranslation } from "next-i18next";
 
 export const TOP_ROW_ID = "top-row";
 export const BOTTOM_ROW_ID = "bottom-row";

@@ -1,7 +1,13 @@
-import {isMobile} from "react-device-detect";
-import {Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay,} from "@chakra-ui/modal";
-import {Text, useDisclosure} from "@chakra-ui/react";
-import {useTranslation} from "next-i18next";
+import { isMobile } from "react-device-detect";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/modal";
+import { Text, useDisclosure } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 
 export function SwitchToDesktopOverlay() {
   const { t } = useTranslation();

@@ -1,7 +1,17 @@
-import {Box, Button, FormControl, FormLabel, Heading, Radio, RadioGroup, Text, VStack,} from "@chakra-ui/react";
-import {FastField, FieldProps, Formik} from "formik";
-import {FC} from "react";
-import {useTranslation} from "next-i18next";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Heading,
+  Radio,
+  RadioGroup,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { FastField, FieldProps, Formik } from "formik";
+import { FC } from "react";
+import { useTranslation } from "next-i18next";
 
 const questions = [
   "Little interest or pleasure in doing things?",

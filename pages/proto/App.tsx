@@ -1,9 +1,9 @@
 import React from "react";
 
 import dynamic from "next/dynamic";
-import {DynamicSceneInitializer} from "@utils/SceneHelpers/SceneInitializer/DynamicSceneInitializer";
-import {GetServerSideProps} from "next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { DynamicSceneInitializer } from "@utils/SceneHelpers/SceneInitializer/DynamicSceneInitializer";
+import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {

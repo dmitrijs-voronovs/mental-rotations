@@ -1,15 +1,27 @@
-import {GetServerSideProps} from "next";
-import {Box, Center, Heading, Link, List, ListItem, Text, VStack,} from "@chakra-ui/react";
-import {prisma} from "@lib/prisma";
-import {getSession} from "next-auth/react";
-import {REGULAR_TESTS, TUTORIAL_TEST} from "../config/testNames";
-import {getFirstEmotionTest, getFirstMentalRotationTest,} from "@utils/status/statusHelpers";
-import {Navbar} from "@components/Navbar";
+import { GetServerSideProps } from "next";
+import {
+  Box,
+  Center,
+  Heading,
+  Link,
+  List,
+  ListItem,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { prisma } from "@lib/prisma";
+import { getSession } from "next-auth/react";
+import { REGULAR_TESTS, TUTORIAL_TEST } from "../config/testNames";
+import {
+  getFirstEmotionTest,
+  getFirstMentalRotationTest,
+} from "@utils/status/statusHelpers";
+import { Navbar } from "@components/Navbar";
 import NextLink from "next/link";
-import {FC} from "react";
-import {Test} from "@prisma/client";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { FC } from "react";
+import { Test } from "@prisma/client";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);

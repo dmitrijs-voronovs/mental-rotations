@@ -1,7 +1,7 @@
-import {signIn, signOut, useSession} from "next-auth/react";
-import {GetServerSideProps} from "next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useTranslation} from "next-i18next";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {

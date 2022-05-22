@@ -1,14 +1,21 @@
-import {Color3, Color4, Vector3} from "@babylonjs/core";
-import React, {FC, useEffect} from "react";
-import {Engine, Scene, SceneEventArgs} from "react-babylonjs";
+import { Color3, Color4, Vector3 } from "@babylonjs/core";
+import React, { FC, useEffect } from "react";
+import { Engine, Scene, SceneEventArgs } from "react-babylonjs";
 import s from "../../styles/Proto.App.module.scss";
 import classNames from "classnames";
-import {EventDisplay} from "@components/EventDisplay";
-import {generateGUI, GENERATION_SETTINGS_KEY, GuiConfig,} from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
-import {SceneInitializerCreator} from "@utils/SceneHelpers/SceneInitializer/ISceneInitializer";
-import type {GUI} from "dat.gui";
-import {defaultConfig, GenerationConfig,} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
-import {useTranslation} from "next-i18next";
+import { EventDisplay } from "@components/EventDisplay";
+import {
+  generateGUI,
+  GENERATION_SETTINGS_KEY,
+  GuiConfig,
+} from "@utils/SceneHelpers/SceneGenerators/GenerateGUI";
+import { SceneInitializerCreator } from "@utils/SceneHelpers/SceneInitializer/ISceneInitializer";
+import type { GUI } from "dat.gui";
+import {
+  defaultConfig,
+  GenerationConfig,
+} from "@utils/SceneHelpers/SceneGenerators/GenerateFigure";
+import { useTranslation } from "next-i18next";
 
 function getConfigFromGui(gui: GUI) {
   const rawConfig = (gui.getSaveObject() as any).remembered[

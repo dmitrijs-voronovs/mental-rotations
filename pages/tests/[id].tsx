@@ -1,16 +1,21 @@
-import {GetServerSideProps} from "next";
-import {prisma} from "@lib/prisma";
-import {FC, useState} from "react";
-import {Task, Test} from "@prisma/client";
-import {Box, Heading, Kbd, Text} from "@chakra-ui/react";
-import {BOTTOM_ROW_ID, TEST_OBJ_ID, TOP_ROW_ID} from "@components/TestTask";
-import {getSession} from "next-auth/react";
-import {getFirstEmotionTest} from "@utils/status/statusHelpers";
-import ReactJoyride, {ACTIONS, CallBackProps, STATUS, Step,} from "react-joyride";
-import {PregeneratedTestRunner} from "@components/PregeneratedTestRunner";
-import {TUTORIAL_TEST} from "../../config/testNames";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useTranslation} from "next-i18next";
+import { GetServerSideProps } from "next";
+import { prisma } from "@lib/prisma";
+import { FC, useState } from "react";
+import { Task, Test } from "@prisma/client";
+import { Box, Heading, Kbd, Text } from "@chakra-ui/react";
+import { BOTTOM_ROW_ID, TEST_OBJ_ID, TOP_ROW_ID } from "@components/TestTask";
+import { getSession } from "next-auth/react";
+import { getFirstEmotionTest } from "@utils/status/statusHelpers";
+import ReactJoyride, {
+  ACTIONS,
+  CallBackProps,
+  STATUS,
+  Step,
+} from "react-joyride";
+import { PregeneratedTestRunner } from "@components/PregeneratedTestRunner";
+import { TUTORIAL_TEST } from "../../config/testNames";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);

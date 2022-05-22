@@ -1,7 +1,15 @@
-import {Box, Button, Heading, Radio, RadioGroup, Text, VStack,} from "@chakra-ui/react";
-import {FastField, FieldProps, Formik} from "formik";
-import {Fragment} from "react";
-import {useTranslation} from "next-i18next";
+import {
+  Box,
+  Button,
+  Heading,
+  Radio,
+  RadioGroup,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { FastField, FieldProps, Formik } from "formik";
+import { Fragment } from "react";
+import { useTranslation } from "next-i18next";
 
 const otherOptions = ["Nav emociju", "Citas emocijas"];
 const emotions = [

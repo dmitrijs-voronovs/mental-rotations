@@ -1,15 +1,23 @@
-import {FC, useEffect, useRef, useState} from "react";
-import {Prisma} from "@prisma/client";
-import {launchTimer, Timer} from "@utils/LaunchTimer";
-import {useRouter} from "next/dist/client/router";
-import {useImagePreloading} from "@utils/hooks/UseImagePreloading";
-import {Box, Button, Center, Heading, Link, Progress, VStack,} from "@chakra-ui/react";
-import {TUTORIAL_TEST} from "../config/testNames";
-import {TestTask} from "@components/TestTask";
-import {TestCompleted} from "@components/TestCompleted";
-import {TestDetailsProps} from "../pages/tests/[id]";
-import {Navbar} from "@components/Navbar";
-import {useTranslation} from "next-i18next";
+import { FC, useEffect, useRef, useState } from "react";
+import { Prisma } from "@prisma/client";
+import { launchTimer, Timer } from "@utils/LaunchTimer";
+import { useRouter } from "next/dist/client/router";
+import { useImagePreloading } from "@utils/hooks/UseImagePreloading";
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  Link,
+  Progress,
+  VStack,
+} from "@chakra-ui/react";
+import { TUTORIAL_TEST } from "../config/testNames";
+import { TestTask } from "@components/TestTask";
+import { TestCompleted } from "@components/TestCompleted";
+import { TestDetailsProps } from "../pages/tests/[id]";
+import { Navbar } from "@components/Navbar";
+import { useTranslation } from "next-i18next";
 
 export type PregeneratedTestRunnerProps = TestDetailsProps & {
   start: () => void;

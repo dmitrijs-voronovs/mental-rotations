@@ -24,9 +24,15 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import {FastField as Field, FieldProps, Formik} from "formik";
-import {Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay,} from "@chakra-ui/modal";
-import {useTranslation} from "next-i18next";
+import { FastField as Field, FieldProps, Formik } from "formik";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/modal";
+import { useTranslation } from "next-i18next";
 
 type UserDetailsFormValues = {
   age: number;

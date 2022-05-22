@@ -1,7 +1,7 @@
-import {useRouter} from "next/dist/client/router";
-import {Box, Heading, HStack, Link} from "@chakra-ui/react";
+import { useRouter } from "next/dist/client/router";
+import { Box, Heading, HStack, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
-import {useTranslation} from "next-i18next";
+import { useTranslation } from "next-i18next";
 
 export function Navbar() {
   const router = useRouter();

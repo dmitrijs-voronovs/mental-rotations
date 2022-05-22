@@ -4,9 +4,9 @@ import React from "react";
 
 import dynamic from "next/dynamic";
 import classNames from "classnames";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {GetServerSideProps} from "next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
 
 const GameComponent = dynamic(
   () => import("@components/Games/ConfigurationEditor"),

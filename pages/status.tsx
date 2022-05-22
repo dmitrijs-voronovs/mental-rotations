@@ -1,14 +1,29 @@
-import {Box, Button, Center, Heading, Link, List, ListIcon, ListItem, Text, VStack,} from "@chakra-ui/react";
-import {useEffect, useRef} from "react";
-import {ArrowRightIcon, CheckIcon, TimeIcon} from "@chakra-ui/icons";
-import {GetServerSideProps} from "next";
-import {getSession} from "next-auth/react";
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  Link,
+  List,
+  ListIcon,
+  ListItem,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useEffect, useRef } from "react";
+import { ArrowRightIcon, CheckIcon, TimeIcon } from "@chakra-ui/icons";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
 import NextLink from "next/link";
 import JSConfetti from "js-confetti";
-import {getFirstDepressionTest, getFirstEmotionTest, getFirstMentalRotationTest,} from "@utils/status/statusHelpers";
-import {Navbar} from "@components/Navbar";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useTranslation} from "next-i18next";
+import {
+  getFirstDepressionTest,
+  getFirstEmotionTest,
+  getFirstMentalRotationTest,
+} from "@utils/status/statusHelpers";
+import { Navbar } from "@components/Navbar";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 type Item = {
   done: boolean;
