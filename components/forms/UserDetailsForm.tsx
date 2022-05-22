@@ -68,7 +68,7 @@ function PrivacyPolicy() {
               <Heading size={"md"}>{t("Application purposes")}</Heading>
               <Text>
                 {t(
-                  "The application is designed to test mental rotation skills of two groups of users - regular users and users with the neurodegenerative diseases -, and collect data for future analysis."
+                  "The application is designed to test mental rotation skills and collect data for future analysis. Additionally, it collects data about user emotions and well-being."
                 )}
               </Text>
               <Heading size={"md"}>{t("Your information")}</Heading>
