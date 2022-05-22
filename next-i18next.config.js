@@ -7,5 +7,7 @@ module.exports = {
     defaultLocale: "en",
   },
   nsSeparator: "|",
+  ns: ["common", "emotions", "depression", "other"],
+  defaultNS: "common",
   localePath: path.resolve("./public/locales"),
 };

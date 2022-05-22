@@ -1,5 +1,4 @@
 {
-  "Emotions": "Emotions",
   "Interese": "Interest",
   "Uzjautrinājums": "Amusement",
   "Lepnums": "Pride",
@@ -20,8 +19,8 @@
   "Nicinājums": "Hate",
   "Naids": "Hatred",
   "Dusmas": "Anger",
-  "Geneva emotion wheel": "",
-  "Please indicate the emotion you have experienced during the last 2 weeks by choosing intensities for a single emotion or a blend of several emotions. There is an option to add your own emotion by pressing the &quot;other&quot; button.": "",
-  "No emotions": "",
-  "Other": ""
+  "Geneva emotion wheel": "Geneva emotion wheel",
+  "Please indicate the emotion you have experienced during the last 2 weeks by choosing intensities for a single emotion or a blend of several emotions. There is an option to add your own emotion by pressing the &quot;other&quot; button.": "Please indicate the emotion you have experienced during the last 2 weeks by choosing intensities for a single emotion or a blend of several emotions. There is an option to add your own emotion by pressing the 'other' button.",
+  "No emotions": "No emotions",
+  "Other": "Other"
 }
