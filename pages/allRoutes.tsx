@@ -1,9 +1,9 @@
-import type {GetStaticProps, InferGetStaticPropsType, NextPage} from "next";
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.scss";
-import {Box, Grid, GridItem, Heading, Link, Text} from "@chakra-ui/react";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useTranslation} from "next-i18next";
+import { Box, Grid, GridItem, Heading, Link, Text } from "@chakra-ui/react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import NextLink from "next/link";
 
 const links = [
