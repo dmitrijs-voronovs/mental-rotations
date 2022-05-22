@@ -14,6 +14,7 @@
   "The application is designed to test mental rotation skills of two groups of users - regular users and users with the neurodegenerative diseases -, and collect data for future analysis.": "Приложение предназначено для тестирования навыков умственной ротации двух групп пользователей - обычных пользователей и пользователей с нейродегенеративными заболеваниями - и сбора данных для будущего анализа.",
   "Your information": "Ваша информация",
   "Your information is stored privately and is used only to associate a single data entry with a certain person. Each person later on is referred only by the generated identification number, thus personal details are not disclosed.": "Ваша информация хранится в частном порядке и используется только для связывания одной записи данных с определенным лицом. Каждый человек в дальнейшем упоминается только по сгенерированному идентификационному номеру, поэтому личные данные не разглашаются.",
+  "Your Data": "Ваши данные",
   "Each answer for the tests and exercises is being securely stored in the database. The data is later processed in bulks.": "Каждый ответ на тесты и упражнения надежно хранится в базе данных. Позже данные обрабатываются пакетами.",
   "Close": "Закрывать",
   "Account details": "Данные аккаунта",

@@ -13,6 +13,7 @@
   "The application is designed to test mental rotation skills of two groups of users - regular users and users with the neurodegenerative diseases -, and collect data for future analysis.": "Aplikācija ir veidota, lai pārbaudītu divu lietotāju grupu garīgās rotācijas prasmes - regulāros lietotājus un lietotājus ar neirodeģeneratīvajām slimībām - un vāktu datus turpmākajai analīzei.",
   "Your information": "Jūsu informācija",
   "Your information is stored privately and is used only to associate a single data entry with a certain person. Each person later on is referred only by the generated identification number, thus personal details are not disclosed.": "Jūsu informācija tiek glabāta privāti un tiek izmantota tikai, lai saistītu vienu datu ierakstu ar konkrētu personu. Uz katru nākamo personu attiecas tikai ģenerētais identifikācijas numurs, tādējādi personas dati netiek publiskoti.",
+  "Your Data": "Jūsu dati",
   "Each answer for the tests and exercises is being securely stored in the database. The data is later processed in bulks.": "Katra atbilde uz testiem un vingrinājumiem tiek droši glabāta datu bāzē. Dati vēlāk tiek apstrādāti stabiņos.",
   "Close": "Aizvērt",
   "Account details": "Konta dati",
