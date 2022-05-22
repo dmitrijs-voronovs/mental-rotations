@@ -1,14 +1,7 @@
-import {
-  Box,
-  Button,
-  Heading,
-  Radio,
-  RadioGroup,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { FastField, FieldProps, Formik } from "formik";
-import { Fragment } from "react";
+import {Box, Button, Heading, Radio, RadioGroup, Text, VStack,} from "@chakra-ui/react";
+import {FastField, FieldProps, Formik} from "formik";
+import {Fragment} from "react";
+import {useTranslation} from "next-i18next";
 
 const otherOptions = ["Nav emociju", "Citas emocijas"];
 const emotions = [
@@ -90,6 +83,7 @@ export function EmotionWheel({
   onSubmit,
   coloured = false,
 }: EmotionWheelProps) {
+  const { t } = useTranslation(["common", "emotions"]);
   return (
     <Box
       p="5"
@@ -99,12 +93,11 @@ export function EmotionWheel({
       pos={"relative"}
     >
       <VStack alignItems={"center"} mb={5} zIndex={2} spacing={4}>
-        <Heading size={"lg"}>Geneva emotion wheel</Heading>
+        <Heading size={"lg"}>{t("emotions|Geneva emotion wheel")}</Heading>
         <Text align={"center"} maxW={"lg"}>
-          Please indicate the emotion you have experienced during the last 2
-          weeks by choosing intensities for a single emotion or a blend of
-          several emotions. There is an option to add your own emotion by
-          pressing the &quot;other&quot; button.
+          {t(
+            "emotions|Please indicate the emotion you have experienced during the last 2 weeks by choosing intensities for a single emotion or a blend of several emotions. There is an option to add your own emotion by pressing the &quot;other&quot; button."
+          )}
         </Text>
       </VStack>
       <Formik
@@ -207,7 +200,7 @@ export function EmotionWheel({
                           -50 + Math.cos(angle) * 50
                         }%)`}
                       >
-                        <Text fontSize={"lg"}>{emotion}</Text>
+                        <Text fontSize={"lg"}>{t(`emotions|${emotion}`)}</Text>
                       </Box>
                     </Fragment>
                   );
@@ -225,7 +218,7 @@ export function EmotionWheel({
                   borderRadius={`${innerRadius}px ${innerRadius}px 0 0`}
                   onClick={() => setValues(initialFormValues)}
                 >
-                  No emotions
+                  {t("emotions|No emotions")}
                 </Button>
                 <Button
                   colorScheme={"gray"}
@@ -239,11 +232,11 @@ export function EmotionWheel({
                   transform={`translate(-50%, 0) scale(.94)`}
                   borderRadius={`0 0 ${innerRadius}px ${innerRadius}px`}
                   onClick={() => {
-                    const a = prompt("which one?", values.other);
+                    const a = prompt(t("Indicate your emotion"), values.other);
                     setFieldValue("other", a || "");
                   }}
                 >
-                  Other
+                  {t("emotions|Other")}
                 </Button>
               </Box>
               <Box textAlign={"center"}>
@@ -255,7 +248,7 @@ export function EmotionWheel({
                   // disabled={!dirty}
                   type={"submit"}
                 >
-                  Submit
+                  {t("Submit")}
                 </Button>
               </Box>
             </form>

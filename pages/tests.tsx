@@ -1,25 +1,15 @@
-import { GetServerSideProps } from "next";
-import {
-  Box,
-  Center,
-  Heading,
-  Link,
-  List,
-  ListItem,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { prisma } from "@lib/prisma";
-import { getSession } from "next-auth/react";
-import { REGULAR_TESTS, TUTORIAL_TEST } from "../config/testNames";
-import {
-  getFirstEmotionTest,
-  getFirstMentalRotationTest,
-} from "@utils/status/statusHelpers";
-import { Navbar } from "@components/Navbar";
+import {GetServerSideProps} from "next";
+import {Box, Center, Heading, Link, List, ListItem, Text, VStack,} from "@chakra-ui/react";
+import {prisma} from "@lib/prisma";
+import {getSession} from "next-auth/react";
+import {REGULAR_TESTS, TUTORIAL_TEST} from "../config/testNames";
+import {getFirstEmotionTest, getFirstMentalRotationTest,} from "@utils/status/statusHelpers";
+import {Navbar} from "@components/Navbar";
 import NextLink from "next/link";
-import { FC } from "react";
-import { Test } from "@prisma/client";
+import {FC} from "react";
+import {Test} from "@prisma/client";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -65,7 +55,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   tests.splice(0, 0, ...tutorialTest);
 
   return {
-    props: { tests, locale: context.locale },
+    props: {
+      tests,
+      locale: context.locale,
+      ...(await serverSideTranslations(context.locale!, ["common", "other"])),
+    },
   };
 };
 
@@ -73,34 +67,37 @@ const Tests: FC<{
   tests: (Test & { _count: { tasks: number } })[];
   locale: string | undefined;
 }> = ({ tests, locale }) => {
+  const { t } = useTranslation(["common", "other"]);
   return (
     <Center width={"100vw"} height={"100vh"}>
       <Navbar />
       <Box maxW={"xl"} textAlign={"center"} mt={-10}>
         <VStack spacing={5}>
-          <Heading textTransform={"uppercase"}>Object rotation</Heading>
+          <Heading textTransform={"uppercase"}>{t("Object rotation")}</Heading>
           <Text fontSize={"xl"} pb={3}>
-            Please, start with the tutorial to understand the object rotation
-            specifics. Then proceed to the real exercise!
+            {t(
+              "Please, start with the tutorial to understand the object rotation specifics. Then proceed to the real exercise!"
+            )}
           </Text>
           <List spacing={4}>
-            {tests.map((t) => {
+            {tests.map((test) => {
               return (
                 <ListItem
-                  key={t.id}
+                  key={test.id}
                   display={"flex"}
                   alignItems={"center"}
                   p={3}
                   borderRadius={"5px"}
                   _hover={{ background: "purple.50" }}
                 >
-                  <NextLink href={`/tests/${t.id}`} locale={locale}>
+                  <NextLink href={`/tests/${test.id}`} locale={locale}>
                     <Link>
                       <VStack alignItems={"start"} spacing={0} pl={2}>
                         <Text casing={"uppercase"} fontWeight={"bold"}>
-                          {t.name} ({t._count.tasks} tasks)
+                          {t(`other|${test.name}`)} (
+                          {t("{{count}} tasks", { count: test._count.tasks })})
                         </Text>
-                        <Text>{t.description}</Text>
+                        <Text>{t(`other|${test.description}`)}</Text>
                       </VStack>
                     </Link>
                   </NextLink>

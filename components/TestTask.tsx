@@ -1,9 +1,10 @@
-import { FC } from "react";
-import { Task } from "@prisma/client";
-import { Box } from "@chakra-ui/react";
+import {FC} from "react";
+import {Task} from "@prisma/client";
+import {Box} from "@chakra-ui/react";
 import s from "../styles/Proto.App.module.scss";
 import classNames from "classnames";
-import { TestScreenshots } from "@components/EventDisplay";
+import {TestScreenshots} from "@components/EventDisplay";
+import {useTranslation} from "next-i18next";
 
 export const TOP_ROW_ID = "top-row";
 export const BOTTOM_ROW_ID = "bottom-row";
@@ -14,6 +15,7 @@ export const TestTask: FC<{
   taskIdx: number;
   onClick: (n: number) => void;
 }> = ({ task, onClick }) => {
+  const { t } = useTranslation();
   const {
     referenceShape,
     referenceShapeRotated,
@@ -31,13 +33,15 @@ export const TestTask: FC<{
         src={referenceShape}
         className={classNames(s.block11, s.block)}
       />
-      <div className={classNames(s.block1, s.block, s.text)}>is rotated to</div>
+      <div className={classNames(s.block1, s.block, s.text)}>
+        {t("is rotated to")}
+      </div>
       <img
         alt={"test image"}
         src={referenceShapeRotated}
         className={classNames(s.block13, s.block)}
       />
-      <div className={classNames(s.block2, s.block, s.text)}>as</div>
+      <div className={classNames(s.block2, s.block, s.text)}>{t("as")}</div>
       <img
         id={TEST_OBJ_ID}
         alt={"test image"}
@@ -54,7 +58,9 @@ export const TestTask: FC<{
           background: "#00000033",
         }}
       />
-      <div className={classNames(s.block3, s.block, s.text)}>is rotated to</div>
+      <div className={classNames(s.block3, s.block, s.text)}>
+        {t("is rotated to")}
+      </div>
       <div className={classNames(s.blockWithVariants, s.block)}>
         <img
           alt={"test image"}

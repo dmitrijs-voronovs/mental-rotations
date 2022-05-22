@@ -1,22 +1,15 @@
-import { FC, useEffect, useRef, useState } from "react";
-import { Prisma } from "@prisma/client";
-import { launchTimer, Timer } from "@utils/LaunchTimer";
-import { useRouter } from "next/dist/client/router";
-import { useImagePreloading } from "@utils/hooks/UseImagePreloading";
-import {
-  Box,
-  Button,
-  Center,
-  Heading,
-  Link,
-  Progress,
-  VStack,
-} from "@chakra-ui/react";
-import { TUTORIAL_TEST } from "../config/testNames";
-import { TestTask } from "@components/TestTask";
-import { TestCompleted } from "@components/TestCompleted";
-import { TestDetailsProps } from "../pages/tests/[id]";
-import { Navbar } from "@components/Navbar";
+import {FC, useEffect, useRef, useState} from "react";
+import {Prisma} from "@prisma/client";
+import {launchTimer, Timer} from "@utils/LaunchTimer";
+import {useRouter} from "next/dist/client/router";
+import {useImagePreloading} from "@utils/hooks/UseImagePreloading";
+import {Box, Button, Center, Heading, Link, Progress, VStack,} from "@chakra-ui/react";
+import {TUTORIAL_TEST} from "../config/testNames";
+import {TestTask} from "@components/TestTask";
+import {TestCompleted} from "@components/TestCompleted";
+import {TestDetailsProps} from "../pages/tests/[id]";
+import {Navbar} from "@components/Navbar";
+import {useTranslation} from "next-i18next";
 
 export type PregeneratedTestRunnerProps = TestDetailsProps & {
   start: () => void;
@@ -25,6 +18,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
   test,
   start,
 }) => {
+  const { t } = useTranslation(["common", "other"]);
   const [taskIdx, setTaskIdx] = useState(-1);
   const [results, setResults] = useState<
     Prisma.CompletedTaskCreateWithoutTestInput[]
@@ -77,12 +71,18 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
       <Center height={"100vh"}>
         <Navbar />
         <VStack mt={-10} spacing={2}>
-          <Heading textTransform={"uppercase"}>{test.name}</Heading>
-          <p>Exercise consists of {test.tasks.length} tasks</p>
-          <p>{test.description}</p>
+          <Heading textTransform={"uppercase"}>
+            {t(`other|${test.name}`)}
+          </Heading>
+          <p>
+            {t("Exercise consists of {{count}} tasks", {
+              count: test.tasks.length,
+            })}
+          </p>
+          <p>{t(`other|${test.description}`)}</p>
           <Box py={5}>
             <Heading fontSize={"md"} mb={4}>
-              Loading test data {loadedImages}/{totalImages}
+              {t("Loading exercise data")} {loadedImages}/{totalImages}
             </Heading>
             <Progress
               size={"md"}
@@ -115,7 +115,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
               }
             }}
           >
-            Start
+            {t("Start")}
           </Button>
         </VStack>
       </Center>
@@ -123,11 +123,13 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
 
   if (taskIdx < test.tasks.length)
     return (
-      <TestTask
-        task={test.tasks[taskIdx]}
-        taskIdx={taskIdx}
-        onClick={onItemClick}
-      />
+      <>
+        <TestTask
+          task={test.tasks[taskIdx]}
+          taskIdx={taskIdx}
+          onClick={onItemClick}
+        />
+      </>
     );
 
   if (taskIdx === test.tasks.length)
@@ -135,8 +137,8 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
 
   return (
     <Box>
-      <Heading fontSize={"xl"}>Oops, something went wrong</Heading>
-      <Link href={"/tests"}>Return back to tests</Link>
+      <Heading fontSize={"xl"}>{t("Oops, something went wrong")}</Heading>
+      <Link href={"/tests"}>{t("Return back to exercises")}</Link>
     </Box>
   );
 };
