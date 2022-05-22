@@ -1,9 +1,11 @@
 import { useRouter } from "next/dist/client/router";
 import { Box, Heading, HStack, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useTranslation } from "next-i18next";
 
 export function Navbar() {
   const router = useRouter();
+  const { t } = useTranslation();
   return (
     <Box
       pos={"fixed"}
@@ -13,21 +15,24 @@ export function Navbar() {
       borderBottomRadius={"8px"}
       color={"purple"}
       fontSize={20}
+      zIndex={999}
     >
       <HStack spacing={20} mx={10}>
         <NextLink href={"/"} locale={router.locale}>
-          <Link>Home</Link>
+          <Link>{t("Home")}</Link>
         </NextLink>
         <NextLink href={"/status"} locale={router.locale}>
-          <Link>Status</Link>
+          <Link>{t("Status")}</Link>
         </NextLink>
-        <Heading>PSVT:RR</Heading>
+        <Heading>{t("PSVT:RR")}</Heading>
         <NextLink href={"/userInfo"} locale={router.locale}>
-          <Link>User Info</Link>
+          <Link>{t("User Info")}</Link>
         </NextLink>
-        {/*<NextLink href={"/api/auth/signout"} locale={router.locale}>*/}
-        <NextLink href={"/api/auth/signout"}>
-          <Link>Logout</Link>
+        <NextLink
+          href={`/api/auth/signout?callbackUrl=/${router.locale}`}
+          locale={""}
+        >
+          <Link>{t("Logout")}</Link>
         </NextLink>
       </HStack>
     </Box>

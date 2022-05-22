@@ -10,6 +10,7 @@ import {
   getFirstEmotionTest,
   getFirstMentalRotationTest,
 } from "@utils/status/statusHelpers";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -38,6 +39,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       session,
+      ...(await serverSideTranslations(context.locale!, [
+        "common",
+        "depression",
+      ])),
     },
   };
 };

@@ -6,6 +6,7 @@ import { useRouter } from "next/dist/client/router";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { getFirstEmotionTest } from "@utils/status/statusHelpers";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -29,6 +30,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
+      ...(await serverSideTranslations(context.locale!, [
+        "common",
+        "emotions",
+      ])),
       session,
     },
   };

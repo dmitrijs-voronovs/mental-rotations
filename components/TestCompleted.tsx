@@ -19,6 +19,7 @@ import { useSession } from "next-auth/react";
 import { TUTORIAL_TEST } from "../config/testNames";
 import NextLink from "next/link";
 import { useRouter } from "next/dist/client/router";
+import { useTranslation } from "next-i18next";
 
 const timeFmt = new Intl.NumberFormat();
 
@@ -27,6 +28,7 @@ export const TestCompleted: FC<{
   data: Prisma.CompletedTaskCreateWithoutTestInput[];
   showResults?: boolean;
 }> = ({ test, data, showResults = false }) => {
+  const { t } = useTranslation();
   const user = useSession();
   const router = useRouter();
 
@@ -60,16 +62,16 @@ export const TestCompleted: FC<{
     <Center height={"100vh"} width={"100vw"}>
       <Box w={"xl"} mt={-10} textAlign={"center"}>
         <Heading fontSize={"3xl"} pb={"2rem"}>
-          Hooray! Exercise completed.
+          {t("Hooray! Exercise completed!")}
         </Heading>
         {showResults && <TestResults data={data} />}
         {test.name === TUTORIAL_TEST ? (
           <NextLink href={"/tests"} locale={router.locale}>
-            <Link m={"1rem"}>Go back to the real test</Link>
+            <Link m={"1rem"}>{t("Go back to the real exercise")}</Link>
           </NextLink>
         ) : (
           <NextLink href={"/status"} locale={router.locale}>
-            <Link m={"1rem"}>Go back to main menu</Link>
+            <Link m={"1rem"}>{t("Go back to main menu")}</Link>
           </NextLink>
         )}
       </Box>
@@ -79,47 +81,52 @@ export const TestCompleted: FC<{
 
 const TestResults: FC<{
   data: Prisma.CompletedTaskCreateWithoutTestInput[];
-}> = ({ data }) => (
-  <>
-    <Heading fontSize={"xl"} pb={"1rem"}>
-      Your results:
-    </Heading>
-    <TableContainer mb={"1rem"}>
-      <Table variant="simple" size={"sm"}>
-        <Thead>
-          <Tr>
-            <Th>Task No.</Th>
-            <Th>Time (sec)</Th>
-            <Th>Correct</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map(({ time, correct }, i) => (
-            <Tr key={i}>
-              <Td>{i + 1}</Td>
-              <Td>{timeFmt.format(time)}</Td>
-              <Td>{correct ? "YES" : "NO"}</Td>
+}> = ({ data }) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Heading fontSize={"xl"} pb={"1rem"}>
+        {t("Your results:")}
+      </Heading>
+      <TableContainer mb={"1rem"}>
+        <Table variant="simple" size={"sm"}>
+          <Thead>
+            <Tr>
+              <Th>{t("Task No.")}</Th>
+              <Th>{t("Time (sec)")}</Th>
+              <Th>{t("Correct")}</Th>
             </Tr>
-          ))}
-        </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th>Total:</Th>
-            <Th textTransform={"lowercase"}>
-              {timeFmt.format(
-                data.reduce((totalTime, d) => totalTime + d.time, 0)
-              ) + " sec"}
-            </Th>
-            <Th>
-              {data.reduce(
-                (totalCorrect, d) => totalCorrect + Number(d.correct),
-                0
-              )}
-              /{data.length}
-            </Th>
-          </Tr>
-        </Tfoot>
-      </Table>
-    </TableContainer>
-  </>
-);
+          </Thead>
+          <Tbody>
+            {data.map(({ time, correct }, i) => (
+              <Tr key={i}>
+                <Td>{i + 1}</Td>
+                <Td>{timeFmt.format(time)}</Td>
+                <Td>{correct ? t("YES") : t("NO")}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+          <Tfoot>
+            <Tr>
+              <Th>Total:</Th>
+              <Th textTransform={"lowercase"}>
+                {timeFmt.format(
+                  data.reduce((totalTime, d) => totalTime + d.time, 0)
+                ) +
+                  " " +
+                  t("sec")}
+              </Th>
+              <Th>
+                {data.reduce(
+                  (totalCorrect, d) => totalCorrect + Number(d.correct),
+                  0
+                )}
+                /{data.length}
+              </Th>
+            </Tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
+    </>
+  );
+};

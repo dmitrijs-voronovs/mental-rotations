@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "restore_db": "pg_restore -U postgres --verbose --clean --no-acl --no-owner  -d postgres C:/Users/Dmitrijs/uni/kursa-darbs/mental-rotations/latest.dump",
+    "export_db": "npx heroku pg:backups:capture -a psvt-r-db",
+    "get-translations": "i18next './{pages,components}/**/*.{ts,tsx}'"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

@@ -36,18 +36,18 @@ function ChangeLanguage() {
 
   return (
     <Wrap spacing={5}>
-      {otherLocales.map((l) => (
-        <WrapItem key={l}>
+      {otherLocales.map((loc) => (
+        <WrapItem key={loc}>
           <Button
             w={"40px"}
             h={"40px"}
             background={"purple.300"}
             fontSize={14}
             borderRadius={"100%"}
-            onClick={() => push(pathname, pathname, { locale: l })}
+            onClick={() => push(pathname, pathname, { locale: loc })}
             textDecoration={"uppercase"}
           >
-            {l}
+            {loc}
           </Button>
         </WrapItem>
       ))}
@@ -90,8 +90,9 @@ const Home: NextPage = ({
         {t("Object Rotation")}
       </Heading>
       <Box className={styles.description} maxW={"2xl"}>
-        Object mental rotation refers to moving things around in your head. It
-        is one of the numerous visual and spatial skills that we all have.
+        {t(
+          "Object mental rotation refers to moving things around in your head. It is one of the numerous visual and spatial skills that we all have."
+        )}
       </Box>
       <Button
         onClick={() => {
@@ -107,13 +108,13 @@ const Home: NextPage = ({
         size={"lg"}
         my={10}
       >
-        Start!
+        {t("Start")}!
       </Button>
 
       <VStack position={"absolute"} bottom={5} textAlign={"center"}>
         <ChangeLanguage />
         <Text pt={2}>
-          Made by <Text as={"b"}>Dmitry Voronov</Text>
+          {t("Made by")} <Text as={"b"}>{t("Dmitry Voronov")}</Text>
         </Text>
       </VStack>
     </Box>

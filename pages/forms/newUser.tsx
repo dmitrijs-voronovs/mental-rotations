@@ -7,6 +7,7 @@ import { prisma } from "@lib/prisma";
 import { Prisma } from "@prisma/client";
 import { useRouter } from "next/dist/client/router";
 import { Navbar } from "@components/Navbar";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await getSession(context);
@@ -25,6 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           userId: data!.user.id,
         },
       }),
+      ...(await serverSideTranslations(context.locale!, ["common"])),
     },
   };
 };

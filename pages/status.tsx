@@ -22,6 +22,8 @@ import {
   getFirstMentalRotationTest,
 } from "@utils/status/statusHelpers";
 import { Navbar } from "@components/Navbar";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 type Item = {
   done: boolean;
@@ -64,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       done: !!completedItems[0],
     },
     {
-      name: "Object rotation",
+      name: "Object Rotation",
       description: "Discover your mental rotation abilities",
       link: "/tests",
       done: !!completedItems[1],
@@ -81,6 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       items,
       locale: context.locale,
+      ...(await serverSideTranslations(context.locale!, ["common", "other"])),
     },
   };
 };
@@ -92,6 +95,7 @@ export default function Status({
   items: Item[];
   locale: string | undefined;
 }) {
+  const { t } = useTranslation(["common", "other"]);
   const allDone = items.every((i) => i.done);
   const pendingIdx = items.findIndex((i) => !i.done);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -100,6 +104,7 @@ export default function Status({
   useEffect(() => {
     if (items.every((i) => i.done)) {
       confetti.current = new JSConfetti({ canvas: canvasRef.current! });
+      setTimeout(() => confetti.current!.addConfetti(), 500);
       setInterval(() => confetti.current!.addConfetti(), 2000);
     }
   }, [items]);
@@ -110,10 +115,9 @@ export default function Status({
       <Box maxW={"xl"} mx={"auto"} my={5}>
         <VStack alignItems={"start"} spacing={5}>
           <Box mb={4}>
-            <Heading mb={5}>Test status</Heading>
+            <Heading mb={5}>{t("Experiment status")}</Heading>
             <Text fontSize={"xl"}>
-              This is your current test status. <br />
-              Go through each item to complete the test:
+              {t("Go through each item to complete the experiment:")}
             </Text>
           </Box>
           <Box>
@@ -127,9 +131,9 @@ export default function Status({
                     pl={2}
                   >
                     <Text casing={"uppercase"} fontWeight={"bold"}>
-                      {item.name}
+                      {t(`other|${item.name}`)}
                     </Text>
-                    <Text>{item.description}</Text>
+                    <Text>{t(`other|${item.description}`)}</Text>
                   </VStack>
                 );
                 return (
@@ -171,7 +175,7 @@ export default function Status({
                 confetti.current?.addConfetti();
               }}
             >
-              You did it, hooray!!!
+              {t("You did it, HOORAY!!!")}
             </Button>
           )}
         </VStack>

@@ -7,8 +7,10 @@ import {
   ModalOverlay,
 } from "@chakra-ui/modal";
 import { Text, useDisclosure } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 
 export function SwitchToDesktopOverlay() {
+  const { t } = useTranslation();
   const { isOpen } = useDisclosure({ isOpen: true });
   if (isMobile)
     return (
@@ -16,11 +18,12 @@ export function SwitchToDesktopOverlay() {
         <Modal isOpen={isOpen} onClose={() => {}} isCentered>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Please, switch to a desktop device</ModalHeader>
+            <ModalHeader>{t("Please, switch to a desktop device")}</ModalHeader>
             <ModalBody>
               <Text mb={5}>
-                Mobile devices are not suitable for Object Rotation exercises,
-                sorry for the inconvenience.
+                {t(
+                  "Mobile devices are not suitable for Object Rotation exercises, sorry for the inconvenience."
+                )}
               </Text>
             </ModalBody>
           </ModalContent>

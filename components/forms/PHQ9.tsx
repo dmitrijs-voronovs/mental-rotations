@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Heading,
   Radio,
@@ -12,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FastField, FieldProps, Formik } from "formik";
 import { FC } from "react";
+import { useTranslation } from "next-i18next";
 
 const questions = [
   "Little interest or pleasure in doing things?",
@@ -52,34 +52,38 @@ const getResults = (points: number) => {
 const QuestionField: FC<{ question: string; id: number }> = ({
   question,
   id,
-}) => (
-  <FastField name={id} type={"string"} key={id}>
-    {({ field, form }: FieldProps<number>) => (
-      <FormControl
-        isInvalid={!!(form.touched[id] && form.errors[id])}
-        isRequired
-      >
-        <FormLabel htmlFor={String(id)}>{question}</FormLabel>
-        <RadioGroup
-          {...field}
-          onChange={(nextValue) =>
-            form.setFieldValue(String(field.name), Number(nextValue))
-          }
-          name={String(id)}
+}) => {
+  const { t } = useTranslation();
+  return (
+    <FastField name={id} type={"string"} key={id}>
+      {({ field, form }: FieldProps<number>) => (
+        <FormControl
+          isInvalid={!!(form.touched[id] && form.errors[id])}
+          isRequired
         >
-          <VStack alignItems={"left"}>
-            {Object.entries(answers).map(([answer, points]) => (
-              <Radio key={answer} value={points}>
-                {answer}
-              </Radio>
-            ))}
-          </VStack>
-        </RadioGroup>
-        <FormErrorMessage>{form.errors.gender}</FormErrorMessage>
-      </FormControl>
-    )}
-  </FastField>
-);
+          <FormLabel htmlFor={String(id)}>
+            {t(`depression|${question}`)}
+          </FormLabel>
+          <RadioGroup
+            {...field}
+            onChange={(nextValue) =>
+              form.setFieldValue(String(field.name), Number(nextValue))
+            }
+            name={String(id)}
+          >
+            <VStack alignItems={"left"}>
+              {Object.entries(answers).map(([answer, points]) => (
+                <Radio key={answer} value={points}>
+                  {t(`depression|${answer}`)}
+                </Radio>
+              ))}
+            </VStack>
+          </RadioGroup>
+        </FormControl>
+      )}
+    </FastField>
+  );
+};
 
 type PHQ9Props = {
   onSubmit: (values: Record<string, string>) => void;
@@ -87,13 +91,15 @@ type PHQ9Props = {
 };
 
 export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
+  const { t } = useTranslation();
   return (
     <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
       <VStack alignItems={"left"} mb={5}>
-        <Heading size={"lg"}>Health and depression</Heading>
+        <Heading size={"lg"}>{t("Health and depression")}</Heading>
         <Text>
-          Please answer the questions below to better understand your health and
-          depression states.
+          {t(
+            "Please answer the questions below to better understand your health and depression states."
+          )}
         </Text>
       </VStack>
       <Formik
@@ -113,7 +119,7 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
                   <QuestionField key={i} question={q} id={i} />
                 ))}
                 <Button type="submit" isFullWidth>
-                  Submit
+                  {t("Submit")}
                 </Button>
                 {showDetails && (
                   <Box
@@ -133,9 +139,9 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
                       <Text fontSize={"6xl"} mr={1}>
                         {totalPoints}
                       </Text>
-                      point{totalPoints !== 1 && "s"}
+                      {t("point", { count: totalPoints })}
                     </Heading>
-                    <Text>{getResults(totalPoints)}</Text>
+                    <Text>{t(getResults(totalPoints))}</Text>
                   </Box>
                 )}
               </VStack>

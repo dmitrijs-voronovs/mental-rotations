@@ -32,6 +32,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/modal";
+import { useTranslation } from "next-i18next";
 
 type UserDetailsFormValues = {
   age: number;
@@ -49,44 +50,44 @@ type UserDetailsFormProps = {
 };
 
 function PrivacyPolicy() {
+  const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      Accept privacy policy and terms of use{" "}
+      {t("Accept privacy policy and terms of use ")}
       <Link href={"#"} onClick={onOpen} color={"purple"}>
-        (read)
+        ({t("read")})
       </Link>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Privacy policy and terms of use</ModalHeader>
+          <ModalHeader>{t("Privacy policy and terms of use")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack textAlign={"start"} alignItems={"start"} spacing={3}>
-              <Heading size={"md"}>Application purposes</Heading>
+              <Heading size={"md"}>{t("Application purposes")}</Heading>
               <Text>
-                The application is designed to test mental rotation skills of
-                two groups of users - regular users and users with the
-                neurodegenerative diseases -, and collect data for future
-                analysis.
+                {t(
+                  "The application is designed to test mental rotation skills and collect data for future analysis. Additionally, it collects data about user emotions and well-being."
+                )}
               </Text>
-              <Heading size={"md"}>Your information</Heading>
+              <Heading size={"md"}>{t("Your information")}</Heading>
               <Text>
-                Your information is stored privately and is used only to
-                associate a single data entry with a certain person. Each person
-                later on is referred only by the generated identification
-                number, thus personal details are not disclosed.
+                {t(
+                  "Your information is stored privately and is used only to associate a single data entry with a certain person. Each person later on is referred only by the generated identification number, thus personal details are not disclosed."
+                )}
               </Text>
-              <Heading size={"md"}>Your Data</Heading>
+              <Heading size={"md"}>{t("Your Data")}</Heading>
               <Text>
-                Each answer for the tests and exersises is being securely stored
-                in the database. The data is later processed in bulks.
+                {t(
+                  "Each answer for the tests and exercises is being securely stored in the database. The data is later processed in bulks."
+                )}
               </Text>
             </VStack>
           </ModalBody>
           <ModalFooter>
             <Button mr={3} onClick={onClose}>
-              Close
+              {t("Close")}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -99,11 +100,12 @@ export function UserDetailsForm({
   onSubmit,
   initialValues = {},
 }: UserDetailsFormProps) {
+  const { t } = useTranslation();
   return (
     <Box p="5" maxW={"lg"}>
       <VStack alignItems={"left"} mb={5}>
-        <Heading size={"lg"}>Account details</Heading>
-        <Text>Please fill additional information about yourself</Text>
+        <Heading size={"lg"}>{t("Account details")}</Heading>
+        <Text>{t("Please fill additional information about yourself")}</Text>
       </VStack>
       <Formik
         initialValues={{
@@ -126,9 +128,9 @@ export function UserDetailsForm({
             <VStack spacing={4} align="flex-start">
               <Field
                 validate={(val?: number) =>
-                  !val ? "Age is required" : undefined
+                  !val ? t("Age is required") : undefined
                 }
-                name="age"
+                name={"age"}
                 type={"number"}
               >
                 {({ form }: FieldProps<number>) => (
@@ -136,7 +138,7 @@ export function UserDetailsForm({
                     isInvalid={!!(form.touched.age && form.errors.age)}
                     isRequired
                   >
-                    <FormLabel htmlFor="age">Age</FormLabel>
+                    <FormLabel htmlFor="age">{t("Age")}</FormLabel>
                     <NumberInput
                       step={1}
                       min={10}
@@ -155,13 +157,13 @@ export function UserDetailsForm({
                   </FormControl>
                 )}
               </Field>
-              <Field name="gender" type={"string"}>
+              <Field name={"gender"} type={"string"}>
                 {({ field, form }: FieldProps<number>) => (
                   <FormControl
                     isInvalid={!!(form.touched.gender && form.errors.gender)}
                     isRequired
                   >
-                    <FormLabel htmlFor="gender">Gender</FormLabel>
+                    <FormLabel htmlFor="gender">{t("Gender")}</FormLabel>
                     <RadioGroup
                       defaultValue={"Male"}
                       {...field}
@@ -170,8 +172,9 @@ export function UserDetailsForm({
                       }
                     >
                       <Stack direction="row">
-                        <Radio value="Male">Male</Radio>
-                        <Radio value="Female">Female</Radio>
+                        <Radio value="Male">{t("Male")}</Radio>
+                        <Radio value="Female">{t("Female")}</Radio>
+                        <Radio value="Another">{t("Another")}</Radio>
                       </Stack>
                     </RadioGroup>
                     <FormErrorMessage>{form.errors.gender}</FormErrorMessage>
@@ -182,9 +185,9 @@ export function UserDetailsForm({
                 name={"occupation"}
                 validate={(val?: string) =>
                   !val
-                    ? "Value is required"
-                    : val.length < 4
-                    ? "Occupation length should be > 3"
+                    ? t("Value is required")
+                    : val.length < 3
+                    ? t("Value should be at least 3 characters long")
                     : undefined
                 }
               >
@@ -195,11 +198,13 @@ export function UserDetailsForm({
                       !!(form.touched.occupation && form.errors.occupation)
                     }
                   >
-                    <FormLabel htmlFor="occupation">Occupation</FormLabel>
+                    <FormLabel htmlFor="occupation">
+                      {t("Occupation")}
+                    </FormLabel>
                     <Input
                       {...field}
                       id="occupation"
-                      placeholder={"Scientist"}
+                      placeholder={t("Scientist")}
                     />
                     <FormErrorMessage>
                       {form.errors.occupation}
@@ -211,9 +216,9 @@ export function UserDetailsForm({
                 name={"academicField"}
                 validate={(val?: string) =>
                   !val
-                    ? "Value is required"
-                    : val.length < 4
-                    ? "Academic field length should be > 3"
+                    ? t("Value is required")
+                    : val.length < 3
+                    ? t("Value should be at least 3 characters long")
                     : undefined
                 }
               >
@@ -227,12 +232,12 @@ export function UserDetailsForm({
                     }
                   >
                     <FormLabel htmlFor="academicField">
-                      Academic field
+                      {t("Academic field")}
                     </FormLabel>
                     <Input
                       {...field}
                       id="academicField"
-                      placeholder={"Mathematician"}
+                      placeholder={t("Mathematician")}
                     />
                     <FormErrorMessage>
                       {form.errors.academicField}
@@ -253,7 +258,7 @@ export function UserDetailsForm({
                     alignItems={"baseline"}
                   >
                     <FormLabel htmlFor="isRightHanded">
-                      Are you right handed?
+                      {t("Are you right handed?")}
                     </FormLabel>
                     <Switch
                       {...field}
@@ -279,7 +284,7 @@ export function UserDetailsForm({
                     }
                   >
                     <FormLabel htmlFor="hasNeurodegenerativeIllnesses">
-                      Do you have neurodegenerative disorder?
+                      {t("Do you have neurodegenerative disorder?")}
                     </FormLabel>
                     {/*<Switch*/}
                     {/*  {...field}*/}
@@ -297,14 +302,17 @@ export function UserDetailsForm({
                       }
                     >
                       <Stack direction="column">
-                        <Radio value="No">No</Radio>
+                        <Radio value="No">{t("No")}</Radio>
                         <Radio value="Alzheimer">
-                          Yes, Alzheimer&apos;s disease
+                          {t("Yes, Alzheimer's disease")}
                         </Radio>
                         <Radio value="Huntington">
-                          Yes, Huntington&apos;s disease
+                          {t("Yes, Huntington's disease")}
                         </Radio>
-                        <Radio value="Another">Yes, another</Radio>
+                        <Radio value="Parkinson">
+                          {t("Yes, Parkinson's Disease")}
+                        </Radio>
+                        <Radio value="Another">{t("Yes, another")}</Radio>
                       </Stack>
                     </RadioGroup>
                     <FormErrorMessage>
@@ -316,14 +324,13 @@ export function UserDetailsForm({
               <Divider />
               <Field
                 id="hasAgreedToPolicy"
-                name="hasAgreedToPolicy"
+                name={"hasAgreedToPolicy"}
                 validate={(val?: boolean) =>
-                  !val ? "Should be accepter" : undefined
+                  !val ? t("Should be checked") : undefined
                 }
               >
                 {({ field, form }: FieldProps<string>) => (
                   <FormControl
-                    name={"hasAgreedToPolicy"}
                     isRequired
                     isInvalid={
                       !!(
@@ -345,7 +352,7 @@ export function UserDetailsForm({
                 )}
               </Field>
               <Button type="submit" isFullWidth>
-                Submit
+                {t("Submit")}
               </Button>
             </VStack>
           </form>
