@@ -78,12 +78,16 @@ const Home: NextPage = ({
           overflow={"hidden"}
           objectFit={"contain"}
           src={"/homepage.png"}
-          sx={{ filter: "blur(8px)" }}
-          opacity={0.2}
+          sx={{ filter: ["blur(2px)", "blur(3px)", "blur(5px)"] }}
+          opacity={[0.1, 0.1, 0.15]}
           height={"120%"}
           left={"50%"}
           top={"-10%"}
-          transform={"translate(-50%)"}
+          transform={[
+            "scale(2.2) translate(-20%)",
+            "scale(1.5) translate(-30%)",
+            "translate(-50%)",
+          ]}
         />
       </Box>
       <Heading mb={3}>{t("Object Rotation")}</Heading>
