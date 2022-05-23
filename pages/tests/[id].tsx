@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
 import { prisma } from "@lib/prisma";
-import { createRef, FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { Task, Test } from "@prisma/client";
-import { Box, Heading, Kbd, Text, useDimensions } from "@chakra-ui/react";
+import { Heading, Kbd, Text } from "@chakra-ui/react";
 import { BOTTOM_ROW_ID, TEST_OBJ_ID, TOP_ROW_ID } from "@components/TestTask";
 import { getSession } from "next-auth/react";
 import { getFirstEmotionTest } from "@utils/status/statusHelpers";
@@ -71,8 +71,7 @@ export type TestDetailsProps = {
 const TUTORIAL_RENDERING_THRESHOLD = 415;
 const TestDetails: FC<TestDetailsProps> = ({ test }) => {
   const { t } = useTranslation();
-  const wrapperRef = createRef<HTMLDivElement>();
-  const dim = useDimensions(wrapperRef);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [joyride, setJoyride] = useState<{ run: boolean; steps: Array<Step> }>({
     steps: [
       {
@@ -152,7 +151,8 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
   };
 
   return (
-    <Box overflow={"hidden"} ref={wrapperRef}>
+    // <Box overflow={"hidden"} ref={wrapperRef}>
+    <div style={{ overflow: "hidden" }} ref={wrapperRef}>
       <RotateDeviceOverlay />
       <PregeneratedTestRunner
         test={test}
@@ -166,7 +166,8 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
           steps={joyride.steps}
           callback={joyrideCallback}
           continuous={
-            (dim?.contentBox.height || 0) >= TUTORIAL_RENDERING_THRESHOLD
+            (wrapperRef?.current?.getBoundingClientRect().height ||
+              TUTORIAL_RENDERING_THRESHOLD) >= TUTORIAL_RENDERING_THRESHOLD
           }
           run={joyride.run}
           locale={{
@@ -189,7 +190,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
           }}
         />
       )}
-    </Box>
+    </div>
   );
 };
 
