@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Center,
   Heading,
   Link,
   List,
@@ -21,9 +20,9 @@ import {
   getFirstEmotionTest,
   getFirstMentalRotationTest,
 } from "@utils/status/statusHelpers";
-import { Navbar } from "@components/Navbar";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import { NavbarCenter } from "@components/NavbarCenter";
 
 type Item = {
   done: boolean;
@@ -110,8 +109,7 @@ export default function Status({
   }, [items]);
 
   return (
-    <Center height={"100vh"}>
-      <Navbar />
+    <NavbarCenter>
       <Box maxW={"xl"} mx={"auto"} my={5}>
         <VStack alignItems={"start"} spacing={5}>
           <Box mb={4}>
@@ -184,13 +182,14 @@ export default function Status({
             position: "absolute",
             top: 0,
             left: 0,
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "100%",
             zIndex: -1,
+            overflow: "hidden",
           }}
           ref={canvasRef}
         />
       </Box>
-    </Center>
+    </NavbarCenter>
   );
 }

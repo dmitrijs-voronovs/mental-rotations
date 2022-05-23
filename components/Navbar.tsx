@@ -3,6 +3,8 @@ import { Box, Heading, HStack, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useTranslation } from "next-i18next";
 
+export const NAVBAR_HEIGHT = "75px";
+
 export function Navbar() {
   const router = useRouter();
   const { t } = useTranslation();
@@ -16,6 +18,7 @@ export function Navbar() {
       color={"purple"}
       fontSize={20}
       zIndex={999}
+      h={NAVBAR_HEIGHT}
     >
       <HStack spacing={20} mx={10}>
         <NextLink href={"/"} locale={router.locale}>

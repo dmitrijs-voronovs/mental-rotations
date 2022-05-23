@@ -35,7 +35,7 @@ import {
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 
-type UserDetailsFormValues = {
+export type UserDetailsFormValues = {
   age: number;
   gender: string;
   occupation: string;
