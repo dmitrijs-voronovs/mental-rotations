@@ -48,7 +48,8 @@ export async function createUserCallback(message: { user: User }) {
           id: message.user.id,
         },
       },
-      testGroup: getGroupWithLeastMembers(allGroupsInfo),
+      // testGroup: getGroupWithLeastMembers(allGroupsInfo),
+      testGroup: 4,
       info: {},
     },
   });
