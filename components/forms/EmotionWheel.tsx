@@ -289,8 +289,8 @@ export function EmotionWheel({
                   mt={[
                     `${600 * 0.4}px`,
                     `${600 * 0.5}px`,
-                    `${600 * 0.8}px`,
-                    `600px`,
+                    `${600 * 0.9}px`,
+                    `${600 * 1.1}px`,
                   ]}
                   isLoading={loading}
                   // disabled={!dirty}
