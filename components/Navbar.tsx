@@ -1,5 +1,5 @@
 import { useRouter } from "next/dist/client/router";
-import { Box, Heading, HStack, Link } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useTranslation } from "next-i18next";
 
@@ -20,7 +20,11 @@ export function Navbar() {
       zIndex={999}
       h={NAVBAR_HEIGHT}
     >
-      <HStack spacing={20} mx={10}>
+      <Flex
+        justifyContent={"space-evenly"}
+        alignItems={"center"}
+        minW={["md", "lg", "xl"]}
+      >
         <NextLink href={"/"} locale={router.locale}>
           <Link>{t("Home")}</Link>
         </NextLink>
@@ -37,7 +41,7 @@ export function Navbar() {
         >
           <Link>{t("Logout")}</Link>
         </NextLink>
-      </HStack>
+      </Flex>
     </Box>
   );
 }

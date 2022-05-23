@@ -8,22 +8,28 @@ import {
 } from "@chakra-ui/modal";
 import { Text, useDisclosure } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
+import useScreenOrientation from "react-hook-screen-orientation";
 
-export function SwitchToDesktopOverlay() {
+export function RotateDeviceOverlay() {
+  const scr = useScreenOrientation();
+  console.log({ scr });
   const { t } = useTranslation();
   const { isOpen } = useDisclosure({ isOpen: true });
-  if (isMobile)
+  if (isMobile && scr === "portrait-primary")
     return (
       <>
         <Modal isOpen={isOpen} onClose={() => {}} isCentered>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>{t("Please, switch to a desktop device")}</ModalHeader>
+            <ModalHeader>
+              {t("Please, rotate your device horizontally")}
+            </ModalHeader>
             <ModalBody>
               <Text mb={5}>
                 {t(
-                  "Mobile devices are not suitable for Object Rotation exercises, sorry for the inconvenience."
+                  "Exercises require landscape orientation. Sorry for the inconvenience."
                 )}
+                <br />
               </Text>
             </ModalBody>
           </ModalContent>
