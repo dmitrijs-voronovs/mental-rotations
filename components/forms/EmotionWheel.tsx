@@ -8,10 +8,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FastField, FieldProps, Formik } from "formik";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-const otherOptions = ["Nav emociju", "Citas emocijas"];
 const emotions = [
   "Interese",
   "Uzjautrinājums",
@@ -91,6 +90,7 @@ export function EmotionWheel({
   onSubmit,
   coloured = false,
 }: EmotionWheelProps) {
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation(["common", "emotions"]);
   return (
     <Box
@@ -122,6 +122,7 @@ export function EmotionWheel({
         //   return errors;
         // }}
         onSubmit={(values) => {
+          setLoading(true);
           onSubmit(values);
         }}
       >
@@ -253,6 +254,7 @@ export function EmotionWheel({
                 {/*  /!*<ErrorMessage name={"other"} />*!/*/}
                 {/*</Box>*/}
                 <Button
+                  isLoading={loading}
                   // disabled={!dirty}
                   type={"submit"}
                 >

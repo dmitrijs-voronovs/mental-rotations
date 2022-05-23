@@ -8,6 +8,7 @@ import { Prisma } from "@prisma/client";
 import { useRouter } from "next/dist/client/router";
 import { Navbar } from "@components/Navbar";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { reloadSession } from "@utils/reloadSession";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await getSession(context);
@@ -43,6 +44,7 @@ export default function NewUser({
           await axios.post("/api/users/details", {
             info: value,
           } as Partial<Prisma.UserInfoCreateInput>);
+          reloadSession();
           router.push("/status", "/status", { locale: router.locale });
         }}
         initialValues={userDetails?.info}

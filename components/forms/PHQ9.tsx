@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FastField, FieldProps, Formik } from "formik";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 const questions = [
@@ -91,6 +91,7 @@ type PHQ9Props = {
 };
 
 export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   return (
     <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
@@ -106,6 +107,7 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
         initialValues={Object.fromEntries(questions.map((_q, i) => [i, ""]))}
         validateOnBlur
         onSubmit={(values) => {
+          setLoading(true);
           const total = sumAllValues(values);
           onSubmit({ ...values, total: String(total) });
         }}
@@ -118,7 +120,7 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
                 {questions.map((q, i) => (
                   <QuestionField key={i} question={q} id={i} />
                 ))}
-                <Button type="submit" isFullWidth>
+                <Button type="submit" isFullWidth isLoading={loading}>
                   {t("Submit")}
                 </Button>
                 {showDetails && (
