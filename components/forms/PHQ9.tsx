@@ -94,8 +94,8 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   return (
-    <Box p="5" maxW={"lg"} border={"1px solid"} borderRadius={"5px"}>
-      <VStack alignItems={"left"} mb={5}>
+    <Box p="5" maxW={"lg"}>
+      <VStack alignItems={"left"} mb={5} spacing={4}>
         <Heading size={"lg"}>{t("Health and depression")}</Heading>
         <Text>
           {t(
@@ -120,7 +120,12 @@ export function PHQ9({ onSubmit, showDetails = false }: PHQ9Props) {
                 {questions.map((q, i) => (
                   <QuestionField key={i} question={q} id={i} />
                 ))}
-                <Button type="submit" isFullWidth isLoading={loading}>
+                <Button
+                  type="submit"
+                  isFullWidth
+                  isLoading={loading}
+                  w={"auto"}
+                >
                   {t("Submit")}
                 </Button>
                 {showDetails && (

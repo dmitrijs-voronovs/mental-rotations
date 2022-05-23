@@ -23,7 +23,7 @@ const links = [
     text: "Complete user details form and get the score",
   },
   {
-    link: "/forms/phq9",
+    link: "/forms/depressionTest",
     heading: "Psychological test",
     text: "Complete psychological test and get the score",
   },

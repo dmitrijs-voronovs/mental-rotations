@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default function Phq9() {
+export default function DepressionTest() {
   const router = useRouter();
 
   return (

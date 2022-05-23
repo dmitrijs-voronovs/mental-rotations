@@ -73,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     {
       name: "Health and depression",
       description: "Your health and depression state",
-      link: "/forms/phq9",
+      link: "/forms/depressionTest",
       done: !!completedItems[2],
     },
   ];
