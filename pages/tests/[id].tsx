@@ -17,6 +17,16 @@ import { TUTORIAL_TEST } from "../../config/testNames";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
+import dynamic from "next/dynamic";
+
+const RotateDeviceOverlay = dynamic(
+  async () =>
+    (await import("@components/RotateDeviceOverlay")).RotateDeviceOverlay,
+  {
+    ssr: false,
+  }
+);
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   if (!session?.user)
@@ -81,7 +91,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
         target: `#${TOP_ROW_ID}`,
         placement: "bottom",
         content: (
-          <Text>
+          <Text fontSize={"sm"}>
             {t(
               "The reference object is presented in the first row before (on the left) and after (on the right) the rotation is applied."
             )}
@@ -140,6 +150,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
 
   return (
     <Box overflow={"hidden"}>
+      <RotateDeviceOverlay />
       <PregeneratedTestRunner
         test={test}
         start={() => setJoyride((s) => ({ ...s, run: true }))}
@@ -147,10 +158,11 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {/* TODO: use locale prop */}
       {test?.name === TUTORIAL_TEST && (
         <ReactJoyride
-          disableScrolling
+          scrollToFirstStep
+          // disableScrolling
           steps={joyride.steps}
           callback={joyrideCallback}
-          continuous
+          // continuous
           run={joyride.run}
           locale={{
             back: t("back"),
