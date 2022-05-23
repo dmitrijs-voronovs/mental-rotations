@@ -18,7 +18,7 @@ const links = [
     text: "Complete emotion wheel test",
   },
   {
-    link: "/forms/newUser",
+    link: "/forms/userDetails",
     heading: "User details",
     text: "Complete user details form and get the score",
   },

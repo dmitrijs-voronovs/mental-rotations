@@ -78,7 +78,7 @@ const UserInfo: FC<{ locale: string; info: PrismaUserInfo }> = ({
             </>
           )}
         </VStack>
-        <NextLink href={"/forms/newUser"} locale={locale}>
+        <NextLink href={"/forms/userDetails"} locale={locale}>
           <Link>
             <Button>{t("Change")}</Button>
           </Link>

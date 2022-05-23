@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!session.user.infoFilled)
     return {
       redirect: {
-        destination: `/${context.locale}/forms/newUser/`,
+        destination: `/${context.locale}/forms/userDetails/`,
         permanent: false,
       },
     };

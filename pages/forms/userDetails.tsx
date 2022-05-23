@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default function NewUser({
+export default function UserDetails({
   userDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
