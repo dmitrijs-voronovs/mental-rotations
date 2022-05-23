@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { TestResults } from "@components/EventDisplay";
 import { TEST_NAMES } from "../config/testNames";
+// const TEST_NAMES = ["4-clinical-sorted"];
 
 const prisma = new PrismaClient();
 
@@ -26,6 +27,9 @@ async function addTest(testName: string) {
     create: {
       name: testName,
       description: "The first test to conduct with 10 tasks of 7 blocks each",
+      // name: "Exercise 4 - 7 blocks",
+      // description:
+      // 	"Exercise is based on objects in 3D space that are generated only in two dimensions.",
       tasks: {
         createMany: {
           data: formattedTasks,
