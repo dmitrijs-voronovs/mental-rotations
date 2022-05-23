@@ -60,7 +60,7 @@ export const TestCompleted: FC<{
   }, []);
   return (
     <Center height={"100vh"} width={"100vw"}>
-      <Box w={"xl"} mt={-10} textAlign={"center"}>
+      <Box w={"xl"} textAlign={"center"}>
         <Heading fontSize={"3xl"} pb={"2rem"}>
           {t("Hooray! Exercise completed!")}
         </Heading>

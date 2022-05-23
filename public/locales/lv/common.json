@@ -89,7 +89,7 @@
   "{{count}} tasks_other": "{{count}} uzdevumi",
   "The exercise tests your ability to rotate mental representations of three-dimensional objects.": "Vingrinājums pārbauda jūsu spēju rotēt trīsdimensionālu priekšmeta attēlojumu galvā.",
   "But how does it work?": "Bet kā tas darbojas?",
-  "The reference object is presented in the first row both before (on the left) and after (on the right) the rotation is applied.": "References objekts tiek parādīts pirmajā rindā gan pirms (kreisajā pusē), gan pēc (labajā pusē) rotācijas.",
+  "The reference object is presented in the first row before (on the left) and after (on the right) the rotation is applied.": "References objekts tiek parādīts pirmajā rindā gan pirms (kreisajā pusē), gan pēc (labajā pusē) rotācijas.",
   "In this case it is": "Šajā gadījumā tā ir",
   "a single 90 degree rotation counterclockwise": "viena 90 grādu rotācija pretpulksteņrādītājvirzienā",
   "This is the target object.": "Šis ir mērķa objekts.",

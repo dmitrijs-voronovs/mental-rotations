@@ -6,15 +6,6 @@ import { theme } from "@pagestyles/theme";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import i18nextConfig from "next-i18next.config";
 import Head from "next/head";
-import dynamic from "next/dynamic";
-
-const SwitchToDesktopOverlay = dynamic(
-  async () =>
-    (await import("@components/RotateDeviceOverlay")).RotateDeviceOverlay,
-  {
-    ssr: false,
-  }
-);
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const { t } = useTranslation();
@@ -26,7 +17,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           <meta name="description" content="Object Rotation" />
           <link rel="icon" href="/icon-192x192.png" />
         </Head>
-        <SwitchToDesktopOverlay />
         <Component {...pageProps} />
       </ChakraProvider>
     </SessionProvider>

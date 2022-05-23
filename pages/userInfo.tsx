@@ -46,7 +46,13 @@ const UserInfo: FC<{ locale: string; info: PrismaUserInfo }> = ({
 
   return (
     <NavbarCenter>
-      <VStack spacing={5} alignItems={"start"} maxW={"lg"} overflow={"clip"}>
+      <VStack
+        spacing={5}
+        alignItems={"start"}
+        maxW={["sm", "lg"]}
+        overflow={"clip"}
+        wordBreak={"break-word"}
+      >
         <Heading>{t("User information:")}</Heading>
         <Heading fontSize={"2xl"}>
           {t("Your id is")} <i>{session.data.user.id}</i>

@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
 import { prisma } from "@lib/prisma";
-import { FC, useState } from "react";
+import { createRef, FC, useState } from "react";
 import { Task, Test } from "@prisma/client";
-import { Box, Heading, Kbd, Text } from "@chakra-ui/react";
+import { Box, Heading, Kbd, Text, useDimensions } from "@chakra-ui/react";
 import { BOTTOM_ROW_ID, TEST_OBJ_ID, TOP_ROW_ID } from "@components/TestTask";
 import { getSession } from "next-auth/react";
 import { getFirstEmotionTest } from "@utils/status/statusHelpers";
@@ -16,6 +16,16 @@ import { PregeneratedTestRunner } from "@components/PregeneratedTestRunner";
 import { TUTORIAL_TEST } from "../../config/testNames";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+
+import dynamic from "next/dynamic";
+
+const RotateDeviceOverlay = dynamic(
+  async () =>
+    (await import("@components/RotateDeviceOverlay")).RotateDeviceOverlay,
+  {
+    ssr: false,
+  }
+);
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -58,8 +68,11 @@ export type TestDetailsProps = {
   test: (Test & { tasks: Task[] }) | null;
 };
 
+const TUTORIAL_RENDERING_THRESHOLD = 415;
 const TestDetails: FC<TestDetailsProps> = ({ test }) => {
   const { t } = useTranslation();
+  const wrapperRef = createRef<HTMLDivElement>();
+  const dim = useDimensions(wrapperRef);
   const [joyride, setJoyride] = useState<{ run: boolean; steps: Array<Step> }>({
     steps: [
       {
@@ -81,9 +94,9 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
         target: `#${TOP_ROW_ID}`,
         placement: "bottom",
         content: (
-          <Text>
+          <Text fontSize={"sm"}>
             {t(
-              "The reference object is presented in the first row both before (on the left) and after (on the right) the rotation is applied."
+              "The reference object is presented in the first row before (on the left) and after (on the right) the rotation is applied."
             )}
             <br />
             <br />
@@ -139,7 +152,8 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
   };
 
   return (
-    <Box overflow={"hidden"}>
+    <Box overflow={"hidden"} ref={wrapperRef}>
+      <RotateDeviceOverlay />
       <PregeneratedTestRunner
         test={test}
         start={() => setJoyride((s) => ({ ...s, run: true }))}
@@ -147,10 +161,13 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       {/* TODO: use locale prop */}
       {test?.name === TUTORIAL_TEST && (
         <ReactJoyride
-          disableScrolling
+          scrollToFirstStep
+          // disableScrolling
           steps={joyride.steps}
           callback={joyrideCallback}
-          continuous
+          continuous={
+            (dim?.contentBox.height || 0) >= TUTORIAL_RENDERING_THRESHOLD
+          }
           run={joyride.run}
           locale={{
             back: t("back"),
@@ -163,6 +180,9 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
           showProgress
           showSkipButton
           styles={{
+            // tooltip: {
+            //   transform: "scale(.5)",
+            // },
             options: {
               zIndex: 10000,
             },

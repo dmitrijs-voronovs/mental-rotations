@@ -12,7 +12,6 @@ import useScreenOrientation from "react-hook-screen-orientation";
 
 export function RotateDeviceOverlay() {
   const scr = useScreenOrientation();
-  console.log({ scr });
   const { t } = useTranslation();
   const { isOpen } = useDisclosure({ isOpen: true });
   if (isMobile && scr === "portrait-primary")

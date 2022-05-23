@@ -81,7 +81,7 @@ const Tests: FC<{
   const { t } = useTranslation(["common", "other"]);
   return (
     <NavbarCenter>
-      <Box maxW={"xl"} textAlign={"center"} mt={-10}>
+      <Box maxW={"xl"} textAlign={"center"}>
         <VStack spacing={5}>
           <Heading textTransform={"uppercase"}>{t("Object rotation")}</Heading>
           <Text fontSize={"xl"} pb={3}>
@@ -102,7 +102,12 @@ const Tests: FC<{
                 >
                   <NextLink href={`/tests/${test.id}`} locale={locale}>
                     <Link>
-                      <VStack alignItems={"start"} spacing={0} pl={2}>
+                      <VStack
+                        alignItems={"start"}
+                        textAlign={"left"}
+                        spacing={0}
+                        pl={2}
+                      >
                         <Text casing={"uppercase"} fontWeight={"bold"}>
                           {t(`other|${test.name}`)} (
                           {t("{{count}} tasks", { count: test._count.tasks })})

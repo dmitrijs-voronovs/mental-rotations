@@ -69,7 +69,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
   if (taskIdx < 0)
     return (
       <NavbarCenter>
-        <VStack mt={-10} spacing={2}>
+        <VStack spacing={2}>
           <Heading textTransform={"uppercase"}>
             {t(`other|${test.name}`)}
           </Heading>
