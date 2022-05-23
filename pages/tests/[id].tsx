@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
 import { prisma } from "@lib/prisma";
-import { FC, useState } from "react";
+import { createRef, FC, useState } from "react";
 import { Task, Test } from "@prisma/client";
-import { Box, Heading, Kbd, Text } from "@chakra-ui/react";
+import { Box, Heading, Kbd, Text, useDimensions } from "@chakra-ui/react";
 import { BOTTOM_ROW_ID, TEST_OBJ_ID, TOP_ROW_ID } from "@components/TestTask";
 import { getSession } from "next-auth/react";
 import { getFirstEmotionTest } from "@utils/status/statusHelpers";
@@ -68,8 +68,11 @@ export type TestDetailsProps = {
   test: (Test & { tasks: Task[] }) | null;
 };
 
+const TUTORIAL_RENDERING_THRESHOLD = 415;
 const TestDetails: FC<TestDetailsProps> = ({ test }) => {
   const { t } = useTranslation();
+  const wrapperRef = createRef<HTMLDivElement>();
+  const dim = useDimensions(wrapperRef);
   const [joyride, setJoyride] = useState<{ run: boolean; steps: Array<Step> }>({
     steps: [
       {
@@ -149,7 +152,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
   };
 
   return (
-    <Box overflow={"hidden"}>
+    <Box overflow={"hidden"} ref={wrapperRef}>
       <RotateDeviceOverlay />
       <PregeneratedTestRunner
         test={test}
@@ -162,7 +165,9 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
           // disableScrolling
           steps={joyride.steps}
           callback={joyrideCallback}
-          // continuous
+          continuous={
+            (dim?.contentBox.height || 0) >= TUTORIAL_RENDERING_THRESHOLD
+          }
           run={joyride.run}
           locale={{
             back: t("back"),
