@@ -104,7 +104,7 @@ export function EmotionWheel({
         <Heading size={"lg"}>{t("emotions|Geneva emotion wheel")}</Heading>
         <Text align={"center"} maxW={"lg"}>
           {t(
-            "emotions|Please indicate the emotion you have experienced during the last 2 weeks by choosing intensities for a single emotion or a blend of several emotions. There is an option to add your own emotion by pressing the &quot;other&quot; button."
+            "emotions|Please indicate the emotion(-s) you have experienced during the last 2 weeks and their intensities. Click on smaller circles to specify lower intensity and on bigger circles for bigger intensity. Also there is an option to add your own emotion by pressing the 'other' button."
           )}
         </Text>
       </VStack>
