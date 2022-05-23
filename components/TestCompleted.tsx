@@ -64,7 +64,8 @@ export const TestCompleted: FC<{
         <Heading fontSize={"3xl"} pb={"2rem"}>
           {t("Hooray! Exercise completed!")}
         </Heading>
-        {showResults && <TestResults data={data} />}
+        {showResults ||
+          (test.name === TUTORIAL_TEST && <TestResults data={data} />)}
         {test.name === TUTORIAL_TEST ? (
           <NextLink href={"/tests"} locale={router.locale}>
             <Link m={"1rem"}>{t("Go back to the real exercise")}</Link>
@@ -88,7 +89,7 @@ const TestResults: FC<{
       <Heading fontSize={"xl"} pb={"1rem"}>
         {t("Your results:")}
       </Heading>
-      <TableContainer mb={"1rem"}>
+      <TableContainer mt={4} mb={6}>
         <Table variant="simple" size={"sm"}>
           <Thead>
             <Tr>
@@ -108,7 +109,7 @@ const TestResults: FC<{
           </Tbody>
           <Tfoot>
             <Tr>
-              <Th>Total:</Th>
+              <Th>{t("Total")}:</Th>
               <Th textTransform={"lowercase"}>
                 {timeFmt.format(
                   data.reduce((totalTime, d) => totalTime + d.time, 0)
