@@ -83,7 +83,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
         content: (
           <Text>
             {t(
-              "The reference object is presented in the first row both before (on the left) and after (on the right) the rotation is applied."
+              "The reference object is presented in the first row before (on the left) and after (on the right) the rotation is applied."
             )}
             <br />
             <br />
@@ -163,6 +163,9 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
           showProgress
           showSkipButton
           styles={{
+            // tooltip: {
+            //   transform: "scale(.5)",
+            // },
             options: {
               zIndex: 10000,
             },

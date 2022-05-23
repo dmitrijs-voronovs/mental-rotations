@@ -92,7 +92,7 @@
   "{{count}} tasks_other": "{{count}} задания",
   "The exercise tests your ability to rotate mental representations of three-dimensional objects.": "Упражнение проверяет вашу способность мысленно вращать трехмерные объекты.",
   "But how does it work?": "Но как это работает?",
-  "The reference object is presented in the first row both before (on the left) and after (on the right) the rotation is applied.": "Показательный объект представлен в первом ряду как до (слева), так и после (справа) вращения.",
+  "The reference object is presented in the first row before (on the left) and after (on the right) the rotation is applied.": "Показательный объект представлен в первом ряду как до (слева), так и после (справа) вращения.",
   "In this case it is": "В данном случае он",
   "a single 90 degree rotation counterclockwise": "повёрнут на 90 градусов против часовой стрелки",
   "This is the target object.": "Это объект задания.",

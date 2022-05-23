@@ -86,9 +86,7 @@ const Home: NextPage = ({
           transform={"translate(-50%)"}
         />
       </Box>
-      <Heading mb={3} mt={-10}>
-        {t("Object Rotation")}
-      </Heading>
+      <Heading mb={3}>{t("Object Rotation")}</Heading>
       <Box className={styles.description} maxW={"2xl"}>
         {t(
           "Object mental rotation refers to moving things around in your head. It is one of the numerous visual and spatial skills that we all have."

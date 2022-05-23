@@ -86,7 +86,7 @@
   "{{count}} tasks_other": "{{count}} tasks",
   "The exercise tests your ability to rotate mental representations of three-dimensional objects.": "The exercise tests your ability to rotate mental representations of three-dimensional objects.",
   "But how does it work?": "But how does it work?",
-  "The reference object is presented in the first row both before (on the left) and after (on the right) the rotation is applied.": "The reference object is presented in the first row both before (on the left) and after (on the right) the rotation is applied.",
+  "The reference object is presented in the first row before (on the left) and after (on the right) the rotation is applied.": "The reference object is presented in the first row before (on the left) and after (on the right) the rotation is applied.",
   "In this case it is": "In this case it is",
   "a single 90 degree rotation counterclockwise": "a single 90 degree rotation counterclockwise",
   "This is the target object.": "This is the target object.",
@@ -104,7 +104,7 @@
   "User is not logged in": "User is not logged in",
   "User information:": "User information:",
   "Your id is": "Your id is",
-  "Name": "Иня",
+  "Name": "Имя",
   "Email": "Э-почта",
   "Change": "Change"
 }

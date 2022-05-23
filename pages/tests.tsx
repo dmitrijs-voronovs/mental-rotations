@@ -81,7 +81,7 @@ const Tests: FC<{
   const { t } = useTranslation(["common", "other"]);
   return (
     <NavbarCenter>
-      <Box maxW={"xl"} textAlign={"center"} mt={-10}>
+      <Box maxW={"xl"} textAlign={"center"}>
         <VStack spacing={5}>
           <Heading textTransform={"uppercase"}>{t("Object rotation")}</Heading>
           <Text fontSize={"xl"} pb={3}>
