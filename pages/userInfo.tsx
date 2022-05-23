@@ -53,10 +53,10 @@ const UserInfo: FC<{ locale: string; info: PrismaUserInfo }> = ({
         </Heading>
         <VStack spacing={3} alignItems={"start"}>
           <Text>
-            <b>{t("name")}:</b> {session.data.user.name}
+            <b>{t("Name")}:</b> {session.data.user.name}
           </Text>
           <Text>
-            <b>{t("email")}:</b> {session.data.user.email}
+            <b>{t("Email")}:</b> {session.data.user.email}
           </Text>
           {info && Object.keys(info).length && (
             <>
