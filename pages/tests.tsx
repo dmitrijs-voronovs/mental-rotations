@@ -102,7 +102,12 @@ const Tests: FC<{
                 >
                   <NextLink href={`/tests/${test.id}`} locale={locale}>
                     <Link>
-                      <VStack alignItems={"start"} spacing={0} pl={2}>
+                      <VStack
+                        alignItems={"start"}
+                        textAlign={"left"}
+                        spacing={0}
+                        pl={2}
+                      >
                         <Text casing={"uppercase"} fontWeight={"bold"}>
                           {t(`other|${test.name}`)} (
                           {t("{{count}} tasks", { count: test._count.tasks })})

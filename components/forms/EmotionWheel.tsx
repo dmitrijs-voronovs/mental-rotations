@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   Heading,
   Radio,
   RadioGroup,
@@ -93,16 +94,16 @@ export function EmotionWheel({
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation(["common", "emotions"]);
   return (
-    <Box
-      p="5"
-      borderRadius={"5px"}
-      minW={`${width}px`}
-      minH={`${height}px`}
-      pos={"relative"}
-    >
-      <VStack alignItems={"center"} mb={5} zIndex={2} spacing={4}>
+    <Box m="5" borderRadius={"5px"} minH={`${height}px`} pos={"relative"}>
+      <VStack
+        alignItems={"center"}
+        textAlign={"center"}
+        mb={5}
+        zIndex={2}
+        spacing={4}
+      >
         <Heading size={"lg"}>{t("emotions|Geneva emotion wheel")}</Heading>
-        <Text align={"center"} maxW={"lg"}>
+        <Text align={"center"} maxW={["xs", "md", "lg"]}>
           {t(
             "emotions|Please indicate the emotion(-s) you have experienced during the last 2 weeks and their intensities. Click on smaller circles to specify lower intensity and on bigger circles for bigger intensity. Also there is an option to add your own emotion by pressing the 'other' button."
           )}
@@ -129,138 +130,175 @@ export function EmotionWheel({
         {({ handleSubmit, setValues, setFieldValue, values }) => {
           return (
             <form onSubmit={handleSubmit}>
-              <Box w={width} height={height} position={"relative"} my={12}>
-                {emotions.map((emotion, emotionIdx) => {
-                  const { top, left, angle } = getPositionShift(
-                    width,
-                    height,
-                    emotionIdx,
-                    315
-                  );
-                  const answerRange = 6;
-                  return (
-                    <Fragment key={emotion}>
-                      <FastField name={emotion}>
-                        {({ field, form }: FieldProps<string>) => {
-                          // TODO: make dynamic calculations according to formulas https://docs.google.com/spreadsheets/d/1xM3PbcXFuv7EVcMSmpiFVCuJ5xqCXDHr3jqt1V3ZOtg/edit#gid=0
-                          // const origSize = 16;
-                          // const offset = 90;
-                          // const scales = emotions.map((_e, i) => 1 + i * 0.5);
-                          // const positions = [75, 91, 115, 147, 187, 235];
-                          // const positions = [100, 116, 140, 172, 212, 260];
-                          const positions = [100, 118, 145, 181, 226, 280];
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                pos={"relative"}
+                h={"100px"}
+              >
+                <Box
+                  w={["sm", "md", "lg", "xl", "2xl"]}
+                  mt={-10}
+                  position={"relative"}
+                  transform={[
+                    "scale(0.4) translate(-35%)",
+                    "scale(0.5) translate(-25%)",
+                    "scale(0.8) translate(-15%)",
+                    "scale(1) translate(-10%)",
+                    "scale(1) translate(0%)",
+                  ]}
+                  transformOrigin={"center"}
+                >
+                  {emotions.map((emotion, emotionIdx) => {
+                    const { top, left, angle } = getPositionShift(
+                      width,
+                      height,
+                      emotionIdx,
+                      315
+                    );
+                    const answerRange = 6;
+                    return (
+                      <Fragment key={emotion}>
+                        <FastField name={emotion}>
+                          {({ field, form }: FieldProps<string>) => {
+                            // TODO: make dynamic calculations according to formulas https://docs.google.com/spreadsheets/d/1xM3PbcXFuv7EVcMSmpiFVCuJ5xqCXDHr3jqt1V3ZOtg/edit#gid=0
+                            // const origSize = 16;
+                            // const offset = 90;
+                            // const scales = emotions.map((_e, i) => 1 + i * 0.5);
+                            // const positions = [75, 91, 115, 147, 187, 235];
+                            // const positions = [100, 116, 140, 172, 212, 260];
+                            const positions = [100, 118, 145, 181, 226, 280];
 
-                          return (
-                            <RadioGroup
-                              {...field}
-                              onChange={(nextValue) =>
-                                form.setFieldValue(
-                                  String(field.name),
-                                  Number(nextValue)
-                                )
-                              }
-                              name={emotion}
-                            >
-                              {Array.from({ length: answerRange }).map(
-                                (_e, optionIdx) => {
-                                  const { top, left } = getPositionShift(
-                                    width,
-                                    height,
-                                    emotionIdx,
-                                    optionIdx === 0
-                                      ? positions[optionIdx] - 5
-                                      : positions[optionIdx]
-                                  );
-                                  return (
-                                    <Radio
-                                      colorScheme={"gray"}
-                                      border={"1px"}
-                                      key={optionIdx}
-                                      value={optionIdx}
-                                      position={"absolute"}
-                                      left={left}
-                                      top={top}
-                                      background={
-                                        coloured
-                                          ? colors[emotionIdx]
-                                          : undefined
-                                      }
-                                      borderRadius={optionIdx === 0 ? 0 : "50%"}
-                                      transform={`translate(-50%, -50%) scale(${
-                                        1 + optionIdx * 0.5
-                                      }) ${
-                                        optionIdx === 0
-                                          ? "rotate(" + -angle + "rad)"
-                                          : ""
-                                      }`}
-                                    />
-                                  );
+                            return (
+                              <RadioGroup
+                                {...field}
+                                onChange={(nextValue) =>
+                                  form.setFieldValue(
+                                    String(field.name),
+                                    Number(nextValue)
+                                  )
                                 }
-                              )}
-                            </RadioGroup>
-                          );
-                        }}
-                      </FastField>
-                      <Box
-                        position={"absolute"}
-                        top={top}
-                        left={left}
-                        transform={`translate(${-50 + Math.sin(angle) * 50}%, ${
-                          -50 + Math.cos(angle) * 50
-                        }%)`}
-                      >
-                        <Text fontSize={"lg"}>{t(`emotions|${emotion}`)}</Text>
-                      </Box>
-                    </Fragment>
-                  );
-                })}
-                <Button
-                  colorScheme={"gray"}
-                  size={"lg"}
-                  position={"absolute"}
-                  top={height / 2}
-                  left={width / 2}
-                  w={`${innerRadius * 2 + 2}px`}
-                  h={`${innerRadius}px`}
-                  pt={2}
-                  transform={`translate(-50%, -100%) scale(.94)`}
-                  borderRadius={`${innerRadius}px ${innerRadius}px 0 0`}
-                  onClick={() => setValues(initialFormValues)}
-                >
-                  {t("emotions|No emotions")}
-                </Button>
-                <Button
-                  colorScheme={"gray"}
-                  size={"lg"}
-                  position={"absolute"}
-                  top={height / 2}
-                  left={width / 2}
-                  w={`${innerRadius * 2 + 2}px`}
-                  h={`${innerRadius}px`}
-                  pb={2}
-                  transform={`translate(-50%, 0) scale(.94)`}
-                  borderRadius={`0 0 ${innerRadius}px ${innerRadius}px`}
-                  onClick={() => {
-                    const a = prompt(t("Indicate your emotion"), values.other);
-                    setFieldValue("other", a || "");
-                  }}
-                >
-                  {t("emotions|Other")}
-                </Button>
-              </Box>
-              <Box textAlign={"center"}>
+                                name={emotion}
+                              >
+                                {Array.from({ length: answerRange }).map(
+                                  (_e, optionIdx) => {
+                                    const { top, left } = getPositionShift(
+                                      width,
+                                      height,
+                                      emotionIdx,
+                                      optionIdx === 0
+                                        ? positions[optionIdx] - 5
+                                        : positions[optionIdx]
+                                    );
+                                    return (
+                                      <Radio
+                                        colorScheme={"gray"}
+                                        border={"1px"}
+                                        key={optionIdx}
+                                        value={optionIdx}
+                                        position={"absolute"}
+                                        left={left}
+                                        top={top}
+                                        background={
+                                          coloured
+                                            ? colors[emotionIdx]
+                                            : undefined
+                                        }
+                                        borderRadius={
+                                          optionIdx === 0 ? 0 : "50%"
+                                        }
+                                        transform={`translate(-50%, -50%) scale(${
+                                          1 + optionIdx * 0.5
+                                        }) ${
+                                          optionIdx === 0
+                                            ? "rotate(" + -angle + "rad)"
+                                            : ""
+                                        }`}
+                                      />
+                                    );
+                                  }
+                                )}
+                              </RadioGroup>
+                            );
+                          }}
+                        </FastField>
+                        <Box
+                          position={"absolute"}
+                          top={top}
+                          left={left}
+                          transform={`translate(${
+                            -50 + Math.sin(angle) * 50
+                          }%, ${-50 + Math.cos(angle) * 50}%)`}
+                        >
+                          <Text fontSize={"lg"}>
+                            {t(`emotions|${emotion}`)}
+                          </Text>
+                        </Box>
+                      </Fragment>
+                    );
+                  })}
+                  <Button
+                    colorScheme={"gray"}
+                    size={"lg"}
+                    position={"absolute"}
+                    top={height / 2}
+                    left={width / 2}
+                    w={`${innerRadius * 2 + 2}px`}
+                    h={`${innerRadius}px`}
+                    pt={2}
+                    transform={`translate(-50%, -100%) scale(.94)`}
+                    borderRadius={`${innerRadius}px ${innerRadius}px 0 0`}
+                    onClick={() => setValues(initialFormValues)}
+                  >
+                    {t("emotions|No emotions")}
+                  </Button>
+                  <Button
+                    colorScheme={"gray"}
+                    size={"lg"}
+                    position={"absolute"}
+                    top={height / 2}
+                    left={width / 2}
+                    w={`${innerRadius * 2 + 2}px`}
+                    h={`${innerRadius}px`}
+                    pb={2}
+                    transform={`translate(-50%, 0) scale(.94)`}
+                    borderRadius={`0 0 ${innerRadius}px ${innerRadius}px`}
+                    onClick={() => {
+                      const a = prompt(
+                        t("Indicate your emotion"),
+                        values.other
+                      );
+                      setFieldValue("other", a || "");
+                    }}
+                  >
+                    {t("emotions|Other")}
+                  </Button>
+                </Box>
+              </Flex>
+              <Flex
+                justifyContent={"center"}
+                textAlign={"center"}
+                // maxW={"sm"}
+                alignItems={"center"}
+              >
                 {/*<Box mb={3} color={"red.500"}>*/}
                 {/*  {errors.other}*/}
                 {/*  /!*<ErrorMessage name={"other"} />*!/*/}
                 {/*</Box>*/}
                 <Button
+                  mt={[
+                    `${600 * 0.4}px`,
+                    `${600 * 0.5}px`,
+                    `${600 * 0.8}px`,
+                    `600px`,
+                  ]}
                   isLoading={loading}
                   // disabled={!dirty}
                   type={"submit"}
                 >
                   {t("Submit")}
                 </Button>
-              </Box>
+              </Flex>
             </form>
           );
         }}
