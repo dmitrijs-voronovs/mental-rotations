@@ -100,7 +100,9 @@ const Home: NextPage = ({
             if (data.user.infoFilled) {
               return router.push("/status", "/status", { locale });
             }
-            return router.push("/forms/newUser", "/forms/newUser", { locale });
+            return router.push("/forms/userDetails", "/forms/userDetails", {
+              locale,
+            });
           }
           signIn(undefined, { callbackUrl: `/${locale}/status` });
         }}

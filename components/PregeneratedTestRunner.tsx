@@ -3,21 +3,13 @@ import { Prisma } from "@prisma/client";
 import { launchTimer, Timer } from "@utils/LaunchTimer";
 import { useRouter } from "next/dist/client/router";
 import { useImagePreloading } from "@utils/hooks/UseImagePreloading";
-import {
-  Box,
-  Button,
-  Center,
-  Heading,
-  Link,
-  Progress,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Heading, Link, Progress, VStack } from "@chakra-ui/react";
 import { TUTORIAL_TEST } from "../config/testNames";
 import { TestTask } from "@components/TestTask";
 import { TestCompleted } from "@components/TestCompleted";
 import { TestDetailsProps } from "../pages/tests/[id]";
-import { Navbar } from "@components/Navbar";
 import { useTranslation } from "next-i18next";
+import { NavbarCenter } from "@components/NavbarCenter";
 
 export type PregeneratedTestRunnerProps = TestDetailsProps & {
   start: () => void;
@@ -76,8 +68,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
 
   if (taskIdx < 0)
     return (
-      <Center height={"100vh"}>
-        <Navbar />
+      <NavbarCenter>
         <VStack mt={-10} spacing={2}>
           <Heading textTransform={"uppercase"}>
             {t(`other|${test.name}`)}
@@ -126,7 +117,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
             {t("Start")}
           </Button>
         </VStack>
-      </Center>
+      </NavbarCenter>
     );
 
   if (taskIdx < test.tasks.length)

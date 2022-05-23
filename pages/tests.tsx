@@ -1,7 +1,6 @@
 import { GetServerSideProps } from "next";
 import {
   Box,
-  Center,
   Heading,
   Link,
   List,
@@ -16,12 +15,12 @@ import {
   getFirstEmotionTest,
   getFirstMentalRotationTest,
 } from "@utils/status/statusHelpers";
-import { Navbar } from "@components/Navbar";
 import NextLink from "next/link";
 import { FC } from "react";
 import { Test } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { NavbarCenter } from "@components/NavbarCenter";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -81,8 +80,7 @@ const Tests: FC<{
 }> = ({ tests, locale }) => {
   const { t } = useTranslation(["common", "other"]);
   return (
-    <Center width={"100vw"} height={"100vh"}>
-      <Navbar />
+    <NavbarCenter>
       <Box maxW={"xl"} textAlign={"center"} mt={-10}>
         <VStack spacing={5}>
           <Heading textTransform={"uppercase"}>{t("Object rotation")}</Heading>
@@ -119,7 +117,7 @@ const Tests: FC<{
           </List>
         </VStack>
       </Box>
-    </Center>
+    </NavbarCenter>
   );
 };
 export default Tests;

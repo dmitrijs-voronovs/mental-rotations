@@ -1,13 +1,13 @@
 import { UserDetailsForm } from "@components/forms/UserDetailsForm";
-import { Center } from "@chakra-ui/react";
 import axios from "axios";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
 import { prisma } from "@lib/prisma";
 import { Prisma } from "@prisma/client";
 import { useRouter } from "next/dist/client/router";
-import { Navbar } from "@components/Navbar";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { reloadSession } from "@utils/reloadSession";
+import { NavbarCenter } from "@components/NavbarCenter";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await getSession(context);
@@ -31,22 +31,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default function NewUser({
+export default function UserDetails({
   userDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   return (
-    <Center minHeight={"100vh"} p={5}>
-      <Navbar />
+    <NavbarCenter>
       <UserDetailsForm
         onSubmit={async (value) => {
           await axios.post("/api/users/details", {
             info: value,
           } as Partial<Prisma.UserInfoCreateInput>);
+          reloadSession();
           router.push("/status", "/status", { locale: router.locale });
         }}
         initialValues={userDetails?.info}
       />
-    </Center>
+    </NavbarCenter>
   );
 }

@@ -79,7 +79,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       },
       {
         target: `#${TOP_ROW_ID}`,
-        placement: "bottom-start",
+        placement: "bottom",
         content: (
           <Text>
             {t(
@@ -107,8 +107,7 @@ const TestDetails: FC<TestDetailsProps> = ({ test }) => {
       },
       {
         target: `#${BOTTOM_ROW_ID}`,
-        placement: "top-start",
-        disableOverlayClose: true,
+        placement: "top",
         content: (
           <Text>
             {t("And pick the correct result out of 5.")}

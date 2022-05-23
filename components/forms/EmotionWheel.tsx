@@ -8,10 +8,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FastField, FieldProps, Formik } from "formik";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-const otherOptions = ["Nav emociju", "Citas emocijas"];
 const emotions = [
   "Interese",
   "Uzjautrinājums",
@@ -91,6 +90,7 @@ export function EmotionWheel({
   onSubmit,
   coloured = false,
 }: EmotionWheelProps) {
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation(["common", "emotions"]);
   return (
     <Box
@@ -104,7 +104,7 @@ export function EmotionWheel({
         <Heading size={"lg"}>{t("emotions|Geneva emotion wheel")}</Heading>
         <Text align={"center"} maxW={"lg"}>
           {t(
-            "emotions|Please indicate the emotion you have experienced during the last 2 weeks by choosing intensities for a single emotion or a blend of several emotions. There is an option to add your own emotion by pressing the &quot;other&quot; button."
+            "emotions|Please indicate the emotion(-s) you have experienced during the last 2 weeks and their intensities. Click on smaller circles to specify lower intensity and on bigger circles for bigger intensity. Also there is an option to add your own emotion by pressing the 'other' button."
           )}
         </Text>
       </VStack>
@@ -122,6 +122,7 @@ export function EmotionWheel({
         //   return errors;
         // }}
         onSubmit={(values) => {
+          setLoading(true);
           onSubmit(values);
         }}
       >
@@ -253,6 +254,7 @@ export function EmotionWheel({
                 {/*  /!*<ErrorMessage name={"other"} />*!/*/}
                 {/*</Box>*/}
                 <Button
+                  isLoading={loading}
                   // disabled={!dirty}
                   type={"submit"}
                 >

@@ -6,7 +6,15 @@ import { theme } from "@pagestyles/theme";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import i18nextConfig from "next-i18next.config";
 import Head from "next/head";
-import { SwitchToDesktopOverlay } from "@components/SwitchToDesktopOverlay";
+import dynamic from "next/dynamic";
+
+const SwitchToDesktopOverlay = dynamic(
+  async () =>
+    (await import("@components/RotateDeviceOverlay")).RotateDeviceOverlay,
+  {
+    ssr: false,
+  }
+);
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const { t } = useTranslation();

@@ -33,8 +33,9 @@ import {
   ModalOverlay,
 } from "@chakra-ui/modal";
 import { useTranslation } from "next-i18next";
+import { useState } from "react";
 
-type UserDetailsFormValues = {
+export type UserDetailsFormValues = {
   age: number;
   gender: string;
   occupation: string;
@@ -100,6 +101,7 @@ export function UserDetailsForm({
   onSubmit,
   initialValues = {},
 }: UserDetailsFormProps) {
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   return (
     <Box p="5" maxW={"lg"}>
@@ -120,6 +122,7 @@ export function UserDetailsForm({
         }}
         validateOnBlur
         onSubmit={(values) => {
+          setLoading(true);
           onSubmit(values);
         }}
       >
@@ -351,7 +354,7 @@ export function UserDetailsForm({
                   </FormControl>
                 )}
               </Field>
-              <Button type="submit" isFullWidth>
+              <Button type="submit" isFullWidth isLoading={loading}>
                 {t("Submit")}
               </Button>
             </VStack>
