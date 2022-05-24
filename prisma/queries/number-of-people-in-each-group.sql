@@ -1,0 +1,1 @@
+select "testGroup", count(*) from "UserInfo" group by "testGroup"
