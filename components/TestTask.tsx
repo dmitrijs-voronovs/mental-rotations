@@ -28,6 +28,11 @@ export const TestTask: FC<{
   } = task.images! as TestScreenshots;
   return (
     <Box className={s.blockGrid2}>
+      <div className={classNames(s.block_tutorial, s.block, s.text)}>
+        {t(
+          "Uzdevums: Izvēlieties dotajai figūrai atbilsošas figūras novietojumu pēc tā principa kā kreisā augšējā figūra ir novietota pret labo augšējo."
+        )}
+      </div>
       <img
         alt={"test image"}
         src={referenceShape}
