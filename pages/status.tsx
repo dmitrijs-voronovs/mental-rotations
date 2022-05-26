@@ -22,7 +22,7 @@ import {
 } from "@utils/status/statusHelpers";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-import { NavbarCenter } from "@components/NavbarCenter";
+import { CenteredContainer } from "@components/CenteredContainer";
 
 type Item = {
   done: boolean;
@@ -109,7 +109,7 @@ export default function Status({
   }, [items]);
 
   return (
-    <NavbarCenter>
+    <CenteredContainer showNavbar>
       <Box maxW={"xl"} mx={"auto"} my={5}>
         <VStack alignItems={"start"} spacing={5}>
           <Box mb={4}>
@@ -190,6 +190,6 @@ export default function Status({
           ref={canvasRef}
         />
       </Box>
-    </NavbarCenter>
+    </CenteredContainer>
   );
 }

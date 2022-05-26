@@ -20,7 +20,7 @@ import { FC } from "react";
 import { Test } from "@prisma/client";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { NavbarCenter } from "@components/NavbarCenter";
+import { CenteredContainer } from "@components/CenteredContainer";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -80,7 +80,7 @@ const Tests: FC<{
 }> = ({ tests, locale }) => {
   const { t } = useTranslation(["common", "other"]);
   return (
-    <NavbarCenter>
+    <CenteredContainer showNavbar>
       <Box maxW={"xl"} textAlign={"center"}>
         <VStack spacing={5}>
           <Heading textTransform={"uppercase"}>{t("Object rotation")}</Heading>
@@ -122,7 +122,7 @@ const Tests: FC<{
           </List>
         </VStack>
       </Box>
-    </NavbarCenter>
+    </CenteredContainer>
   );
 };
 export default Tests;
