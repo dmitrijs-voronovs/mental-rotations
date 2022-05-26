@@ -62,14 +62,18 @@ const Test: FC<{
   return (
     <>
       <div className={s.blockGrid}>
-        <div className={classNames(s.block1, s.block)}>
+        <div className={classNames(s.block1, s.block, s.dynamicBlock)}>
           {t("is rotated to")}
         </div>
-        <div className={classNames(s.block2, s.block)}>{t("as")}</div>
-        <div className={classNames(s.block3, s.block)}>
+        <div className={classNames(s.block2, s.block, s.dynamicBlock)}>
+          {t("as")}
+        </div>
+        <div className={classNames(s.block3, s.block, s.dynamicBlock)}>
           {t("is rotated to")}
         </div>
-        <div className={classNames(s.blockWithVariants, s.block)}>
+        <div
+          className={classNames(s.blockWithVariants, s.block, s.dynamicBlock)}
+        >
           <div>1</div>
           <div>2</div>
           <div>3</div>
