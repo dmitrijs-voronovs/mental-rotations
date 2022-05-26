@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Test = dynamic(() => import("@components/Games/Test"), { ssr: false });
 
-function App() {
+function DynamicTest() {
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
       <Test SceneFactory={DynamicSceneInitializer} />
@@ -21,4 +21,4 @@ function App() {
   );
 }
 
-export default App;
+export default DynamicTest;

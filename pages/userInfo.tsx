@@ -5,7 +5,7 @@ import { Button, Heading, Link, Text, VStack } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { NavbarCenter } from "@components/NavbarCenter";
+import { CenteredContainer } from "@components/CenteredContainer";
 import { prisma } from "@lib/prisma";
 import type { UserInfo as PrismaUserInfo } from "@prisma/client";
 import { UserDetailsFormValues } from "@components/forms/UserDetailsForm";
@@ -45,7 +45,7 @@ const UserInfo: FC<{ locale: string; info: PrismaUserInfo }> = ({
   if (!session?.data) return <Heading>{t("User is not logged in")}</Heading>;
 
   return (
-    <NavbarCenter>
+    <CenteredContainer showNavbar>
       <VStack
         spacing={5}
         alignItems={"start"}
@@ -90,7 +90,7 @@ const UserInfo: FC<{ locale: string; info: PrismaUserInfo }> = ({
           </Link>
         </NextLink>
       </VStack>
-    </NavbarCenter>
+    </CenteredContainer>
   );
 };
 

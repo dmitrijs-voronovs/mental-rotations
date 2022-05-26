@@ -65,6 +65,11 @@
   object-fit: scale-down;
 }
 
+.dynamicBlock {
+  width: auto;
+  height: auto;
+}
+
 .text {
   display: flex;
   align-items: center;

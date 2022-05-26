@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 import { useRouter } from "next/dist/client/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { reloadSession } from "@utils/reloadSession";
-import { NavbarCenter } from "@components/NavbarCenter";
+import { CenteredContainer } from "@components/CenteredContainer";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await getSession(context);
@@ -36,7 +36,7 @@ export default function UserDetails({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   return (
-    <NavbarCenter>
+    <CenteredContainer showNavbar>
       <UserDetailsForm
         onSubmit={async (value) => {
           await axios.post("/api/users/details", {
@@ -47,6 +47,6 @@ export default function UserDetails({
         }}
         initialValues={userDetails?.info}
       />
-    </NavbarCenter>
+    </CenteredContainer>
   );
 }

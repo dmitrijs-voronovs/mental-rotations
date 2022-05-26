@@ -9,7 +9,7 @@ import { TestTask } from "@components/TestTask";
 import { TestCompleted } from "@components/TestCompleted";
 import { TestDetailsProps } from "../pages/tests/[id]";
 import { useTranslation } from "next-i18next";
-import { NavbarCenter } from "@components/NavbarCenter";
+import { CenteredContainer } from "@components/CenteredContainer";
 
 export type PregeneratedTestRunnerProps = TestDetailsProps & {
   start: () => void;
@@ -68,7 +68,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
 
   if (taskIdx < 0)
     return (
-      <NavbarCenter>
+      <CenteredContainer showNavbar>
         <VStack spacing={2}>
           <Heading textTransform={"uppercase"}>
             {t(`other|${test.name}`)}
@@ -117,7 +117,7 @@ export const PregeneratedTestRunner: FC<PregeneratedTestRunnerProps> = ({
             {t("Start")}
           </Button>
         </VStack>
-      </NavbarCenter>
+      </CenteredContainer>
     );
 
   if (taskIdx < test.tasks.length)
