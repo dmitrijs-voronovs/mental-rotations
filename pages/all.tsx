@@ -27,6 +27,11 @@ const links = [
     text: "Test your mental rotation abilities",
   },
   {
+    link: "/data/users",
+    heading: "User data",
+    text: "Check user data",
+  },
+  {
     link: "/tests",
     heading: "Object rotation test",
     text: "Complete object rotation test and get the score",

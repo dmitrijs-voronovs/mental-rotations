@@ -32,7 +32,7 @@ const answers = {
   "Nearly every day": 3,
 };
 
-const getResults = (points: number) => {
+export const getResults = (points: number) => {
   switch (true) {
     case points <= 4:
       return "Scores ≤4 suggest minimal depression which may not require treatment.";

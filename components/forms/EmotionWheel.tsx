@@ -12,7 +12,7 @@ import { FastField, FieldProps, Formik } from "formik";
 import { Fragment, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-const emotions = [
+export const emotions = [
   "Interese",
   "Uzjautrinājums",
   "Lepnums",
@@ -34,6 +34,26 @@ const emotions = [
   "Naids",
   "Dusmas",
 ];
+
+export const getOverview = (
+  score: Record<string, number>
+): {
+  "Positive Valence": number;
+  "Negative Valence": number;
+  "High Control/Power": number;
+  "Low Control/Power": number;
+} => {
+  const values = emotions.map((e) => score[e]);
+  const sum = (arr: number[]) => arr.reduce((total, n) => total + n, 0);
+  const len = values.length;
+  return {
+    "Positive Valence": sum(values.slice(0, len / 2)),
+    "Negative Valence": sum(values.slice(len / 2)),
+    "High Control/Power":
+      sum(values.slice(0, len / 4)) + sum(values.slice((len / 4) * 3)),
+    "Low Control/Power": sum(values.slice(len / 4, (len / 4) * 3)),
+  };
+};
 
 const colors = [
   "#FF6600",
