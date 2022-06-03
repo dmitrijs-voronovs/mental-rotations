@@ -22,5 +22,9 @@
   "Geneva emotion wheel": "Geneva emotion wheel",
   "Please indicate the emotion(-s) you have experienced during the last 2 weeks and their intensities. Click on smaller circles to specify lower intensity and on bigger circles for bigger intensity. Also there is an option to add your own emotion by pressing the 'other' button.": "Please indicate the emotion(-s) you have experienced during the last 2 weeks and their intensities. Click on smaller circles to specify lower intensity and on bigger circles for bigger intensity. Also there is an option to add your own emotion by pressing the 'other' button.",
   "No emotions": "No emotions",
-  "Other": "Other"
+  "Other": "Other",
+  "Positive Valence": "Positive Valence",
+  "Negative Valence": "Negative Valence",
+  "High Control/Power": "High Control/Power",
+  "Low Control/Power": "Low Control/Power"
 }

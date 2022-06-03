@@ -22,5 +22,9 @@
   "Geneva emotion wheel": "Женевское колесо эмоций",
   "Please indicate the emotion(-s) you have experienced during the last 2 weeks and their intensities. Click on smaller circles to specify lower intensity and on bigger circles for bigger intensity. Also there is an option to add your own emotion by pressing the 'other' button.": "Пожалуйста, укажите эмоцию/-и, которые вы испытали за последние 2 недели, и их интенсивность. Нажмите на кружки поменьше, чтобы указать низкую интенсивность, и на большие - высокую. Также есть возможность добавить свою эмоцию, нажав на кнопку 'другая'.",
   "No emotions": "Без эмоций",
-  "Other": "Другая"
+  "Other": "Другая",
+  "Positive Valence": "Положительная валентность",
+  "Negative Valence": "Отрицательная валентность",
+  "High Control/Power": "Высокий контроль/сила",
+  "Low Control/Power": "Низкий контроль/сила"
 }

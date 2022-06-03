@@ -86,73 +86,80 @@ const UserData: FC<{
   depression: AdditionalTest | null;
   userInfo: UserInfo | null;
   locale: string;
-}> = ({ emotions, mentalRotations, depression, userInfo, locale }) => (
-  <CenteredContainer flexDirection={"column"}>
-    <Heading mb={8}>User data</Heading>
-    <VStack direction={"column"} spacing={8}>
-      {userInfo && (
-        <VStack>
-          <Heading size={"md"}>User info</Heading>
-          <pre>
-            {JSON.stringify(
-              {
-                id: userInfo.userId,
-                testGroup: userInfo.testGroup,
-                ...(userInfo.info as JsonObject),
-              },
-              null,
-              2
-            )}
-          </pre>
-        </VStack>
-      )}
-      <Divider />
-      <VStack>
-        <Heading size={"md"}>Emotions</Heading>
-        {emotions ? (
+}> = ({ emotions, mentalRotations, depression, userInfo, locale }) => {
+  const { t } = useTranslation();
+  return (
+    <CenteredContainer flexDirection={"column"}>
+      <Heading mb={8}>{t("User data")}</Heading>
+      <VStack direction={"column"} spacing={8}>
+        {userInfo && (
           <VStack>
-            {Object.entries(
-              getOverview(emotions.data as Record<string, number>)
-            ).map(([title, score]) => (
-              <Text key={title}>
-                <b>{title}:</b> {score}
-              </Text>
-            ))}
+            <Heading size={"md"}>{t("User info")}</Heading>
+            <pre>
+              {JSON.stringify(
+                {
+                  id: userInfo.userId,
+                  testGroup: userInfo.testGroup,
+                  ...(userInfo.info as JsonObject),
+                },
+                null,
+                2
+              )}
+            </pre>
           </VStack>
-        ) : (
-          <NotCompleted />
         )}
-      </VStack>
-      <Divider />
-      <VStack>
-        <Heading size={"md"}>Mental rotations</Heading>
-        {mentalRotations ? (
-          <TestResults data={mentalRotations.tasks} />
-        ) : (
-          <NotCompleted />
-        )}
-      </VStack>
-      <Divider />
-      <VStack>
-        <Heading size={"md"}>Depression</Heading>
-        {depression ? (
-          <Text maxW={"sm"} textAlign={"center"}>
-            <Text>Your score is: {(depression.data as JsonObject)!.total}</Text>
-            <Text>
-              {getResults(Number((depression.data as JsonObject)!.total) || 0)}
+        <Divider />
+        <VStack>
+          <Heading size={"md"}>{t("Emotions")}</Heading>
+          {emotions ? (
+            <VStack>
+              {Object.entries(
+                getOverview(emotions.data as Record<string, number>)
+              ).map(([title, score]) => (
+                <Text key={title}>
+                  <b>{t(title)}:</b> {score}
+                </Text>
+              ))}
+            </VStack>
+          ) : (
+            <NotCompleted />
+          )}
+        </VStack>
+        <Divider />
+        <VStack>
+          <Heading size={"md"}>{t("Mental rotations")}</Heading>
+          {mentalRotations ? (
+            <TestResults data={mentalRotations.tasks} />
+          ) : (
+            <NotCompleted />
+          )}
+        </VStack>
+        <Divider />
+        <VStack>
+          <Heading size={"md"}>{t("Depression")}</Heading>
+          {depression ? (
+            <Text maxW={"sm"} textAlign={"center"}>
+              <Text>
+                {t("Your score is")}: {(depression.data as JsonObject)!.total}
+              </Text>
+              <Text>
+                {getResults(
+                  Number((depression.data as JsonObject)!.total) || 0
+                )}
+              </Text>
             </Text>
-          </Text>
-        ) : (
-          <NotCompleted />
-        )}
+          ) : (
+            <NotCompleted />
+          )}
+        </VStack>
       </VStack>
-    </VStack>
-    <NextLink href={"/data/users"} locale={locale}>
-      <Button mt={8} mb={5}>
-        Go back
-      </Button>
-    </NextLink>
-  </CenteredContainer>
-);
+      <NextLink href={"/data/users"} locale={locale}>
+        <Button mt={8} mb={5}>
+          {t("Go back")}
+        </Button>
+      </NextLink>
+    </CenteredContainer>
+  );
+};
 
 export default UserData;
