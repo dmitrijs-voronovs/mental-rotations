@@ -113,5 +113,13 @@
   "Your id is": "Ваш идентификатор",
   "Name": "Имя",
   "Email": "Э-почта",
-  "Change": "Редактировать"
+  "Change": "Редактировать",
+  "Not completed yet": "Еще не закончен",
+  "User data": "Данные пользователя",
+  "Emotions": "Эмоции",
+  "Mental rotations": "Ментальные вращения",
+  "Depression": "Депрессия",
+  "Your score is": "Ваш счет",
+  "Go back": "Вернуться назад",
+  "search": "искать"
 }

@@ -22,5 +22,9 @@
   "Geneva emotion wheel": "Ženēvas emociju aplis",
   "Please indicate the emotion(-s) you have experienced during the last 2 weeks and their intensities. Click on smaller circles to specify lower intensity and on bigger circles for bigger intensity. Also there is an option to add your own emotion by pressing the 'other' button.": "Lūdzu, norādiet emociju(-as), kuras jūs esta izjūtis/usi pēdējo 2 nedēļu laikā, un to intensitāti. Noklikšķiniet uz mazākiem apļiem, lai norādītu zemāku intensitāti, un uz lielākiem apļiem - lielāku intensitāti. Ir papildus iespēja pievienot savu emociju, nospiežot pogu 'cita'.",
   "No emotions": "Nav emociju",
-  "Other": "Cita"
+  "Other": "Cita",
+  "Positive Valence": "Pozitīvā valence",
+  "Negative Valence": "Negatīvā valence",
+  "High Control/Power": "Augsta kontrole/vara",
+  "Low Control/Power": "Zema kontrole/vara"
 }

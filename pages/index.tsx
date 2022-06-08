@@ -10,6 +10,7 @@ import { useTranslation } from "next-i18next";
 import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/dist/client/router";
 import { CenteredContainer } from "@components/CenteredContainer";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -25,6 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Home: NextPage = ({
   locale,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data } = useSession();
   const { t } = useTranslation();
@@ -64,7 +66,9 @@ const Home: NextPage = ({
         )}
       </Box>
       <Button
+        isLoading={loading}
         onClick={() => {
+          setLoading(true);
           if (data?.user) {
             if (data.user.infoFilled) {
               return router.push("/status", "/status", { locale });

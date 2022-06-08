@@ -27,41 +27,16 @@ const links = [
     text: "Test your mental rotation abilities",
   },
   {
-    link: "/tests",
-    heading: "Object rotation test",
-    text: "Complete object rotation test and get the score",
-  },
-  {
-    link: "/forms/emotionTest",
-    heading: "Emotion test",
-    text: "Complete emotion wheel test",
-  },
-  {
-    link: "/forms/userDetails",
-    heading: "User details",
-    text: "Complete user details form and get the score",
-  },
-  {
-    link: "/forms/depressionTest",
-    heading: "Psychological test",
-    text: "Complete psychological test and get the score",
-  },
-  {
-    link: "/userInfo",
-    heading: "User info",
-    text: "Check your user info",
-  },
-  {
-    link: "/signIn",
-    heading: "Sing in",
-    text: "Sing into your account",
+    link: "/data/users",
+    heading: "User data",
+    text: "Check user data",
   },
 ];
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      ...(await serverSideTranslations(context.locale!, ["common"])),
+      ...(await serverSideTranslations(context.locale!, ["all"])),
       lang: context.locale,
     },
   };
@@ -70,14 +45,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
 const Home: NextPage = ({
   lang,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("all");
   return (
     <CenteredContainer showFooter flexDir={"column"}>
       <VStack textAlign={"center"}>
         <Heading py={5}>{t("Mental rotation digital test")}</Heading>
 
         <Text fontSize={"lg"}>
-          {t("Welcome to digitalized configurable PSVT:R")}.{" "}
+          {t("Welcome to digitalized configurable PSVT:R")}.<br />
           {t("Get started by visiting the following links:")}
         </Text>
       </VStack>
@@ -96,7 +71,7 @@ const Home: NextPage = ({
             <NextLink href={link} locale={lang}>
               <Link href={link}>
                 <Heading size={"md"} pb={2}>
-                  {heading}
+                  {t(heading)}
                 </Heading>
                 <Text>{text}</Text>
               </Link>
