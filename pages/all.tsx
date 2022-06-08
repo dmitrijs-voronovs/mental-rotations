@@ -17,12 +17,12 @@ const links = [
     text: "Build your own configuration",
   },
   {
-    link: "/dynamicTest",
+    link: "/dynamicTest2",
     heading: "Dynamic test",
     text: "Test your mental rotation abilities",
   },
   {
-    link: "/taskCreator",
+    link: "/taskCreator2",
     heading: "Task creator",
     text: "Test your mental rotation abilities",
   },
