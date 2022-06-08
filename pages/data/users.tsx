@@ -5,6 +5,7 @@ import { CenteredContainer } from "@components/CenteredContainer";
 import { Heading, Input, Link, ListItem, OrderedList } from "@chakra-ui/react";
 import { prisma } from "@lib/prisma";
 import NextLink from "next/link";
+import { useTranslation } from "next-i18next";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userIds = await prisma.user.findMany({
@@ -25,19 +26,19 @@ const DynamicTest: FC<{ userIds: { id: string }[]; locale: string }> = ({
   userIds,
   locale,
 }) => {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const ids = userIds.filter(({ id }) => id.includes(search));
 
-  console.log(userIds, ids);
   return (
     <CenteredContainer flexDirection={"column"} justifyContent={"flex-start"}>
       <Heading pb={5} textAlign={"center"}>
-        User data
+        {t("User data")}
       </Heading>
       <Input
         my={3}
         maxW={"2xs"}
-        placeholder={"search"}
+        placeholder={t("search")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
