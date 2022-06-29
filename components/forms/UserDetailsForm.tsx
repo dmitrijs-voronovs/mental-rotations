@@ -35,13 +35,28 @@ import {
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 
+type NeurodegenerativeIllnesses =
+  | "No"
+  | "Alzheimer"
+  | "Huntington"
+  | "Parkinson"
+  | "Epilepsy"
+  | "Another";
+
+type RheumatologicalDisease =
+  | "No"
+  | "Osteoarthritis"
+  | "Rheumatoid arthritis"
+  | "Another";
+
 export type UserDetailsFormValues = {
   age: number;
   gender: string;
   occupation: string;
   academicField: string;
   isRightHanded: boolean;
-  hasNeurodegenerativeIllnesses: boolean;
+  hasNeurodegenerativeIllnesses: NeurodegenerativeIllnesses;
+  hasRheumatologicalDisease: RheumatologicalDisease;
   hasAgreedToPolicy: boolean;
 };
 
@@ -109,14 +124,15 @@ export function UserDetailsForm({
         <Heading size={"lg"}>{t("Account details")}</Heading>
         <Text>{t("Please fill additional information about yourself")}</Text>
       </VStack>
-      <Formik
+      <Formik<UserDetailsFormValues>
         initialValues={{
           age: 15,
           gender: "Male",
           occupation: "",
           academicField: "",
           isRightHanded: true,
-          hasNeurodegenerativeIllnesses: false,
+          hasNeurodegenerativeIllnesses: "No",
+          hasRheumatologicalDisease: "No",
           hasAgreedToPolicy: false,
           ...initialValues,
         }}
@@ -289,14 +305,6 @@ export function UserDetailsForm({
                     <FormLabel htmlFor="hasNeurodegenerativeIllnesses">
                       {t("Do you have neurodegenerative disorder?")}
                     </FormLabel>
-                    {/*<Switch*/}
-                    {/*  {...field}*/}
-                    {/*  id="hasNeurodegenerativeIllnesses"*/}
-                    {/*  size={"sm"}*/}
-                    {/*  defaultChecked={*/}
-                    {/*    initialValues.hasNeurodegenerativeIllnesses*/}
-                    {/*  }*/}
-                    {/*/>*/}
                     <RadioGroup
                       defaultValue={"No"}
                       {...field}
@@ -314,12 +322,51 @@ export function UserDetailsForm({
                         </Radio>
                         <Radio value="Parkinson">
                           {t("Yes, Parkinson's Disease")}
-                        </Radio>
+                        </Radio>{" "}
+                        <Radio value="Epilepsy">{t("Yes, Epilepsy")}</Radio>
                         <Radio value="Another">{t("Yes, another")}</Radio>
                       </Stack>
                     </RadioGroup>
                     <FormErrorMessage>
                       {form.errors.hasNeurodegenerativeIllnesses}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name={"hasRheumatologicalDisease"}>
+                {({ field, form }: FieldProps<string>) => (
+                  <FormControl
+                    isRequired
+                    isInvalid={
+                      !!(
+                        form.touched.hasRheumatologicalDisease &&
+                        form.errors.hasRheumatologicalDisease
+                      )
+                    }
+                  >
+                    <FormLabel htmlFor="hasRheumatologicalDisease">
+                      {t("Do you have rheumatological disease?")}
+                    </FormLabel>
+                    <RadioGroup
+                      defaultValue={"No"}
+                      {...field}
+                      onChange={(nextValue) =>
+                        form.setFieldValue(field.name, nextValue)
+                      }
+                    >
+                      <Stack direction="column">
+                        <Radio value="No">{t("No")}</Radio>
+                        <Radio value="Osteoarthritis">
+                          {t("Yes, Osteoarthritis")}
+                        </Radio>
+                        <Radio value="Rheumatoid arthritis">
+                          {t("Yes, Rheumatoid arthritis")}
+                        </Radio>
+                        <Radio value="Another">{t("Yes, another")}</Radio>
+                      </Stack>
+                    </RadioGroup>
+                    <FormErrorMessage>
+                      {form.errors.hasRheumatologicalDisease}
                     </FormErrorMessage>
                   </FormControl>
                 )}
